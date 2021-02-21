@@ -1,0 +1,178 @@
+/* (A) UNIVERSAL */
+body, button, input, textarea, select {
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+}
+h1, h2, h3, h4 { margin: 5px 0; }
+h1 { font-size: 28px; }
+
+/* (B) INTERFACE SHARED */
+#page-loader, #page-loader-spin, #page-toast {
+  position: fixed;
+  transition: opacity 0.3s;
+}
+#page-loader, #page-toast {
+  z-index: 999;
+  visibility: hidden; opacity: 0;
+}
+#page-loader.open, #page-toast.open {
+  visibility: visible; opacity: 1;
+}
+
+/* (C) NOW LOADING */
+#page-loader {
+  top:0; left:0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+#page-loader-spin {
+  top: 50%; left: 50%;
+  margin: -50px 0 0 -50px;
+}
+
+/* (D) TOAST */
+#page-toast {
+  bottom: 20px; right: 20px;
+  background: rgba(21, 40, 110, 0.6);
+  color: #fff;
+  padding: 20px;
+}
+
+/* (E) PAGE LAYOUT */
+body {
+  margin: 0; padding: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+}
+#page-sidebar, #page-sidebar a, #page-nav { color: #fff; }
+
+/* (F) SIDE BAR *
+/* (F1) SIDEBAR LAYOUT ON BIG SCREEN */
+#page-sidebar {
+  min-width: 200px;
+  max-width: 200px;
+  transition: margin 0.2s;
+  background: #353535;
+}
+/* (F2) SIDEBAR ITEMS */
+#page-sidebar a {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-decoration: none;
+  border-bottom: 1px solid #555;
+}
+#page-sidebar a:hover { background: #222; }
+/* (F3) SIDEBAR ICONS */
+#page-sidebar .ico {
+  display: inline-block;
+  width: 25px;
+  font-size: 24px;
+  line-height: 24px;
+  text-align: center;
+  color: #f48042;
+}
+/* (F4) HIDE SIDEBAR ON SMALL SCREEN */
+@media (max-width: 768px) {
+  #page-sidebar { margin-left: -200px; }
+  #page-sidebar.open { margin-left: 0; }
+  #page-button-side { display: block !important; }
+}
+
+/* (G) PAGE MAIN */
+#page-main {
+  width: 100%;
+  background: #f7f9fa;
+}
+
+/* (H) NAVIGATION BAR */
+#page-nav {
+  position: relative;
+  height: 50px;
+  background: #474747;
+}
+#page-button-side, #page-button-out {
+  position: absolute; top: 0;
+  width: 50px; height: 50px; line-height: 50px;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  background: #87260e;
+  cursor: pointer;
+}
+#page-button-side {
+  display: none;
+  left: 0;
+}
+#page-button-out { right: 0; }
+
+/* (I) CONTENTS */
+#page-contents { padding: 20px; }
+
+/* (J) FORMS */
+/* (J1) INPUT FIELDS & BUTTONS */
+input, button, select, textarea {
+  box-sizing: border-box;
+  padding: 8px;
+  margin: 8px 2px;
+}
+button, input[type=button], input[type=submit] {
+  background: #87260e;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+}
+/* (J2) ZEBRA TABLE */
+table.zebra {
+  width: 100%;
+  border-collapse: collapse;
+}
+table.zebra th { text-align: left; }
+table.zebra td, table.zebra th { padding: 10px; }
+table.zebra td.right { text-align: right; }
+table.zebra tr:nth-child(odd) { background-color: #f1f1f1; }
+/* (J3) STANDARD FORM */
+form.standard, div.standard {
+  width: 320px; 
+  padding: 20px;
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+}
+form.standard label { color: #888; }
+form.standard label, form.standard input, form.standard select, form.standard textarea { width: 100%; }
+/* (J4) NAV BAR */
+div.bar, form.bar {
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #e4e4ff;
+  background: #ecf0ff;
+}
+
+/* (K) PAGINATION */
+nav.simple-pagination {
+  display: flex;
+  flex-wrap: wrap;
+}
+nav.simple-pagination a, nav.simple-pagination div {
+  background: #f2f2f2;
+  font-size: 18px;
+  text-decoration: none;
+  color: #000;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  cursor: pointer;
+}
+nav.simple-pagination a:hover, nav.simple-pagination div:hover {
+  background: #feffab;
+  color: #000;
+}
+nav.simple-pagination .current {
+  background: #C93131;
+  color: #fff;
+  border: 1px solid #C93131;
+}
+nav.simple-pagination .dots {
+  color: #aaa;
+}

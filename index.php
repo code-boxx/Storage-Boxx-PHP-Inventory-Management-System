@@ -1,55 +1,59 @@
 <?php
 // (A) LOAD CORE ENGINE
-require __DIR__ . DIRECTORY_SEPARATOR . "core" . DIRECTORY_SEPARATOR . "Core.php";
+require __DIR__ . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . "GO.php";
 
-// (B) STRIP PATH DOWN TO AN ARRAY
-// E.G. HTTP://SITE.COM/HELLO/WORLD/ > $_PATH = ["HELLO", "WORLD"]
-$_PATH = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if (substr($_PATH, 0, strlen(URL_PATH_BASE)) == URL_PATH_BASE) {
-  $_PATH = substr($_PATH, strlen(URL_PATH_BASE));
+// (B) GENERATE HTACCESS FILE
+$htaccess = PATH_BASE . ".htaccess";
+if (!file_exists($htaccess)) {
+  file_put_contents($htaccess, implode("\r\n", [
+    "RewriteEngine On",
+    "RewriteBase " . HOST_BASE_PATH,
+    "RewriteRule ^index\.php$ - [L]",
+    "RewriteCond %{REQUEST_FILENAME} !-f",
+    "RewriteCond %{REQUEST_FILENAME} !-d",
+    "RewriteRule . " . HOST_BASE_PATH . "index.php [L]"
+  ]));
+  header("Location: " . $_SERVER["REQUEST_URI"]);
+  exit();
 }
-$_PATH = rtrim($_PATH, '/');
+
+// (C) STRIP PATH DOWN TO AN ARRAY
+// E.G. HTTP://SITE.COM/HELLO/WORLD/ > $_PATH = ["HELLO", "WORLD"]
+$_PATH = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+if (substr($_PATH, 0, strlen(HOST_BASE_PATH)) == HOST_BASE_PATH) {
+  $_PATH = substr($_PATH, strlen(HOST_BASE_PATH));
+}
+$_PATH = rtrim($_PATH, "/");
 $_PATH = explode("/", $_PATH);
 
-// (C) API CALL
-// E.G. HTTP://SITE.COM/API/MODULE/ > $_PATH = ["API", "MODULE"]
-if ($_PATH[0]==URL_PATH_API) {
-  // (C1) INVALID URL PATH
-  if (count($_PATH) != 2) { $_CORE->respond(0, "Invalid API call"); }
+// (D) AJAX MODE
+$pgajax = $_PATH[0]=="a";
 
-  // (C2) INVALID API REQUEST OR INSUFFICIENT PERMISSION
-  if (!isset($_POST['req']) && !isset($_POST['reqA'])) { 
-    $_CORE->respond(0, "Invalid API Request"); 
-  }
-  if (isset($_POST['reqA']) && !isset($_SESSION['user'])) { 
-    $_CORE->respond(0, "No access permission");
-  }
-
-   // (C3) LOAD API MODULE
-  $_APIFILE = PATH_CORE . "API-" . $_PATH[1] . ".php";
-  if (file_exists($_APIFILE)) { require $_APIFILE; }
-  else { exit($_CORE->respond(0, "Invalid Module")); }
-}
-
-// (D) LOAD HTML PAGE
-else {
-  // (D1) NOT SIGNED IN
-  if (!isset($_SESSION['user']) && $_PATH[0]!="login") {
-    if (isset($_POST['ajax'])) { exit("BADSESS"); }
-    header('Location: '. URL_BASE .'login');
+// (D) LOGIN CHECK
+if (!isset($_SESSION["user"])) {
+  if ($pgajax) { exit("SE"); }
+  if (count($_PATH)>1 || $_PATH[0]!="login") {
+    header("Location: ". HOST_BASE ."login/");
     exit();
   }
-
-  // (D2) PAGE TO LOAD
-  // IF $_PATH == [], WILL LOAD PAGES/PAGE-HOME.HTML
-  // IF $_PATH == ["SINGLE"], WILL LOAD PAGES/PAGE-SINGLE.HTML
-  // If $_PATH == ["MANY", "SECTIONS"], WILL LOAD PAGES/PAGE-MANY-SECTIONS.HTML
-  $_HFILE = PATH_PAGES . "PAGE-";
-  if (count($_PATH)==1) { $_HFILE .= $_PATH[0]=="" ? "home" : $_PATH[0] ; }
-  else { $_HFILE .= implode("-", $_PATH) ; }
-  $_HFILE .= ".php";
-
-  // (D3) THROW 404 IF FILE NOT FOUND
-  if (file_exists($_HFILE)) { require $_HFILE; }
-  else { require PATH_PAGES . "PAGE-404.php"; }
 }
+if (isset($_SESSION["user"]) && $_PATH[0]=="login") {
+  header("Location: ". HOST_BASE);
+  exit();
+}
+
+// (E) LOAD PAGE
+// HTTP://SITE.COM/ >>> LOAD PAGE-HOME.PHP
+// HTTP://SITE.COM/FOO/ >>> LOAD PAGE-FOO.PHP
+// HTTP://SITE.COM/FOO/BAR/ >>> LOAD PAGE-FOO-BAR.PHP
+// NOT FOUND >>> LOAD PAGE-404.PHP
+$pgfile = PATH_PAGES . "PAGE-";
+$pgfile .= $_PATH[0]=="" ? "home.php" : implode("-", $_PATH) . ".php";
+$pgexist = file_exists($pgfile);
+if (!$pgexist) {
+  http_response_code(404);
+  if ($pgajax) { exit("PAGE NOT FOUND"); }
+}
+if (!$pgajax) { require PATH_PAGES . "TEMPLATE-top.php"; }
+require $pgexist ? $pgfile : PATH_PAGES . "PAGE-404.php";
+if (!$pgajax) { require PATH_PAGES . "TEMPLATE-bottom.php"; }

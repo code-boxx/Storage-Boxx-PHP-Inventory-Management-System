@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /api/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /api/index.php [L]

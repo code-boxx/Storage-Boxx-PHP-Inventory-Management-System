@@ -1,15 +1,21 @@
-<?php require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) JAVASCRIPT -->
-<script src="<?=URL_PUBLIC?>admin-users.js"></script>
+<script src="<?=HOST_ASSETS?>users.js"></script>
 
 <!-- (B) NAVIGATION -->
-<h1>MANAGE USERS</h1>
-<form class="bar" onsubmit="return usr.search()">
-  <input type="text" id="user-search"/>
-  <input type="submit" value="Search"/>
-  <input type="button" value="Add" onclick="usr.addEdit()"/>
-</form>
+<nav class="navbar text-white sb-grey">
+<div class="container-fluid">
+  <h4>Manage Users</h4>
+  <form class="d-flex" onsubmit="return usr.search()">
+    <input type="text" id="user-search" placeholder="Search" class="form-control form-control-sm"/>
+    <button class="btn btn-primary">
+      <span class="mi">search</span>
+    </button>
+    <button class="btn btn-primary" onclick="usr.addEdit()">
+      <span class="mi">add</span>
+    </button>
+  </form>
+</div>
+</nav>
 
 <!-- (C) USERS LIST -->
-<div id="user-list"></div>
-<?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>
+<div id="user-list" class="zebra my-4"></div>

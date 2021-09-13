@@ -1,15 +1,22 @@
-<?php require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) JAVASCRIPT -->
-<script src="<?=URL_PUBLIC?>admin-inventory.js"></script>
+<script src="<?=HOST_ASSETS?>inventory.js"></script>
+<script src="<?=HOST_ASSETS?>checker.js"></script>
 
 <!-- (B) NAVIGATION -->
-<h1>MANAGE INVENTORY</h1>
-<form class="bar" onsubmit="return inv.search()">
-  <input type="text" id="inv-search"/>
-  <input type="submit" value="Search"/>
-  <input type="button" value="Add" onclick="inv.addEdit()"/>
-</form>
+<nav class="navbar text-white sb-grey">
+<div class="container-fluid">
+  <h4>Manage Inventory</h4>
+  <form class="d-flex" onsubmit="return inv.search()">
+    <input type="text" id="inv-search" placeholder="Search" class="form-control form-control-sm"/>
+    <button class="btn btn-primary">
+      <span class="mi">search</span>
+    </button>
+    <button class="btn btn-primary" onclick="inv.addEdit()">
+      <span class="mi">add</span>
+    </button>
+  </form>
+</div>
+</nav>
 
 <!-- (C) INVENTORY LIST -->
-<div id="inv-list"></div>
-<?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>
+<div id="inv-list" class="zebra my-4"></div>

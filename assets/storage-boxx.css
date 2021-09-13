@@ -1,0 +1,21 @@
+/* (A) SHOW HIDE */
+#sb-loading { transition: opacity 0.3s; }
+.sb-hide { opacity: 0; visibility: hidden; height: 0; }
+.sb-pg-hide { display: none; }
+
+/* (B) NOW LOADING */
+#sb-loading {
+  width: 100vw; height: 100vh;
+  position: fixed; top: 0; left: 0; z-index: 999;
+  background: rgba(0, 0, 0, 0.7);
+}
+#sb-loading .spinner-border {
+  width: 80px; height: 80px;
+}
+
+/* (C) TOAST */
+#sb-toast { z-index: 99; }
+
+/* (D) CUSTOM COLORS */
+.sb-grey { background-color: #767b8e; }
+.zebra .row:nth-child(odd) { background-color: #f2f2f2; }

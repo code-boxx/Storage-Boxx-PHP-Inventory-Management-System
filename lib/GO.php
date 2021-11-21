@@ -38,23 +38,35 @@ session_start();
 require PATH_LIB . "LIB-Core.php";
 $_CORE = new CoreBoxx();
 
-// (B3) GLOBAL ERROR HANDLING (REMOVE IF NOT DESIRED)
+// (B3) PHP ERROR HANDLING
 error_reporting(E_ALL & ~E_NOTICE);
-ini_set("log_errors", 0);
+ini_set("display_errors", 0);
+// ini_set("log_errors", 0);
+// ini_set("error_log", "error.log");
+
+// (B4) GLOBAL ERROR HANDLING (CHANGE AS DESIRED)
+// SET ERR_SHOW TO FALSE ON LIVE SYSTEMS!
 define("ERR_SHOW", true);
 function _CORERR ($ex) {
   global $_CORE;
-  $_CORE->respond(0,
+  // CUSTOM ERROR CONTROL
+  if ($_CORE->loaded("BooBoo")) { $_CORE->BooBoo->ouch($ex); }
+
+  // OR JUST OUTPUT AN ERROR MESSAGE
+  else {
+    $_CORE->respond(0,
     ERR_SHOW ? $ex->getMessage() : "OPPS! An error has occured.",
     ERR_SHOW ? [
       "code" => $ex->getCode(),
       "file" => $ex->getFile(),
       "line" => $ex->getLine()
-    ] : null
-  );
+      ] : null
+    );
+  }
 }
 set_exception_handler("_CORERR");
 
-// (B4) DEFAULT MODULES TO LOAD
+// (B5) DEFAULT MODULES TO LOAD
+$_CORE->load("BooBoo");
 $_CORE->load("DB");
 // ADD MORE IF REQUIRED, E.G. $_CORE->load("User");

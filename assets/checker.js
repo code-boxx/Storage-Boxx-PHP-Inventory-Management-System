@@ -1,12 +1,12 @@
 var check = {
   // (A) LOAD MOVEMENT HISTORY "MAIN PAGE"
   //  sku : string, item sku
-  load : function (sku) {
+  load : (sku) => {
     sb.load({
       page : "icheck",
       target : "sb-page-2",
       data : { sku : sku },
-      onload : function () {
+      onload : () => {
         check.sku = sku;
         check.pg = 1;
         sb.page(2);
@@ -18,7 +18,7 @@ var check = {
   // (B) SHOW ITEM MOVEMENT HISTORY
   sku : null, // current item
   pg : 1, // current page
-  list : function () {
+  list : () => {
     sb.load({
       page : "icheck/list",
       target : "i-history",
@@ -31,20 +31,20 @@ var check = {
 
   // (C) GO TO PAGE
   //  pg : int, page number
-  goToPage : function (pg) { if (pg!=check.pg) {
+  goToPage : (pg) => { if (pg!=check.pg) {
     check.pg = pg;
     check.list();
   }},
 
   // (D) VERIFY VALID SKU BEFORE SHOW HISTORY
-  verify : function () {
+  verify : () => {
     var field = document.getElementById("mvt-check");
     sb.api({
       mod : "inventory",
       req : "get",
       data : { sku : field.value },
       passmsg : false,
-      onpass : function (res) {
+      onpass : (res) => {
         if (res.data===null) {
           sb.modal("Invalid Item", "SKU is not found in database.");
         } else {

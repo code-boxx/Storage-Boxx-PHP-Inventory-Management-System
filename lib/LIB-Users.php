@@ -82,7 +82,7 @@ class Users extends Core {
 
     // (F2) PASSWORD CHECK
     if ($pass) {
-      $pass = password_verify($password, $user['user_password']);
+      $pass = password_verify($password, $user["user_password"]);
     }
 
     // (F3) START SESSION - RUN SESSION_START() BEFORE THIS!

@@ -108,7 +108,7 @@ class CoreBoxx {
     if ($exit) { exit(); }
   }
 
-  // (I) PAGINATION CALCULATOR - PAGI-NATOR
+  // (I) PAGINATION CALCULATOR
   //  $entries : total number of entries
   //  $now : current page
   function paginator ($entries, $now=1) {

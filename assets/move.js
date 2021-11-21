@@ -1,6 +1,6 @@
 var move = {
   // (A) SAVE MOVEMENT
-  save : function () {
+  save : () => {
     // (A1) GET FORM FIELDS
     var sku = document.getElementById("mvt-sku"),
         direction = document.getElementById("mvt-direction"),
@@ -18,7 +18,7 @@ var move = {
         notes : notes.value
       },
       passmsg : "Stock Movement Saved",
-      onpass : function (res) {
+      onpass : (res) => {
         // ADD ENTRY TO HISTORY
         let d = {I:"In", O:"Out", T:"Take"};
         move.history(
@@ -39,7 +39,7 @@ var move = {
   //  title : movement title
   //  txt : movement text
   entries : 7, // max movement history entries
-  history : function (title, txt) {
+  history : (title, txt) => {
     // (B1) REMOVE OLD ENTRIES
     var target = document.getElementById("mvt-result"),
         all = target.querySelectorAll("li");

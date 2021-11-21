@@ -1,9 +1,12 @@
 <?php
 // (A) LOAD CORE
+// API MODE FLAG - USE THIS TO TWEAK YOUR SYSTEM BEHAVIORS
+// E.G. IF (DEFINED("API_MODE")) { JSON_ENCODE(ARRAY) } ELSE { ARRAY TO HTML }
+define("API_MODE", true);
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . "GO.php";
 
 // (B) ENFORCE HTTPS (RECOMMENDED)
-if (API_HTTPS && empty($_SERVER['HTTPS'])) {
+if (API_HTTPS && empty($_SERVER["HTTPS"])) {
   $_CORE->respond(0, "Please use HTTPS");
 }
 
@@ -23,7 +26,7 @@ if (!file_exists($htaccess)) {
 // (D) PARSE URL PATH INTO AN ARRAY
 // (D1) EXTRACT PATH FROM FULL URL
 // E.G. http://site.com/api/foo/bar/ >>> $path="/api/foo/bar/"
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
 // (D2) REMOVE "API" SEGMENT FROM PATH
 // E.G. $path="/api/foo/bar/" >>> $path="foo/bar/"

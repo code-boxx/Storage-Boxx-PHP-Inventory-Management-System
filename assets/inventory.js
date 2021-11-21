@@ -2,7 +2,7 @@ var inv = {
   // (A) LIST () : SHOW ALL ITEMS
   pg : 1, // CURRENT PAGE
   find : "", // CURRENT SEARCH
-  list : function ()  {
+  list : () => {
     sb.page(1);
     sb.load({
       page : "inventory/list",
@@ -16,13 +16,13 @@ var inv = {
 
   // (B) GO TO PAGE
   //  pg : page number
-  goToPage : function (pg) { if (pg!=inv.pg) {
+  goToPage : (pg) => { if (pg!=inv.pg) {
     inv.pg = pg;
     inv.list();
   }},
 
   // (C) SEARCH INVENTORY
-  search : function () {
+  search : () => {
     inv.find = document.getElementById("inv-search").value;
     inv.pg = 1;
     inv.list();
@@ -31,21 +31,21 @@ var inv = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // sku : item SKU, for edit only
-  addEdit : function (sku) {
+  addEdit : (sku) => {
     sb.load({
       page : "inventory/form",
       target : "sb-page-2",
       data : { sku : sku ? sku : "" },
-      onload : function () { sb.page(2); }
+      onload : () => { sb.page(2); }
     });
   },
 
   // (E) RANDOM SKU
   // Credits : https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
-  randomSKU : function () {
+  randomSKU : () => {
     let length = 8, // SET YOUR OWN
         result = "",
-        char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
+        char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
         clength = char.length;
     for (let i=0; i<length; i++) {
       result += char.charAt(Math.floor(Math.random() * clength));
@@ -54,12 +54,12 @@ var inv = {
   },
 
   // (F) SET UNIT OF MEASUREMENT
-  unit : function (u) {
+  unit : (u) => {
     document.getElementById("inv-unit").value = u;
   },
 
   // (G) SAVE ITEM
-  save : function () {
+  save : () => {
     // (G1) GET DATA
     var data = {
       sku : document.getElementById("inv-sku").value,
@@ -84,7 +84,7 @@ var inv = {
   // (H) DELETE ITEM
   //  sku : item SKU
   //  confirm : boolean, confirmed delete
-  del : function (sku, confirm) {
+  del : (sku, confirm) => {
     if (confirm) {
       sb.api({
         mod : "inventory",
@@ -94,14 +94,14 @@ var inv = {
         onpass : inv.list
       });
     } else {
-      sb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, function(){
+      sb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => {
         inv.del(sku, true);
       });
     }
   },
 
   // (I) GENERATE BAR CODE
-  barcode : function (sku) {
+  barcode : (sku) => {
     window.open(sbhost.base + "a/barcode/?sku="+sku);
   }
 };

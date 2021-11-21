@@ -2,7 +2,7 @@ var usr = {
   // (A) SHOW ALL USERS
   pg : 1, // CURRENT PAGE
   find : "", // CURRENT SEARCH
-  list : function ()  {
+  list : () => {
     sb.page(1);
     sb.load({
       page : "users/list",
@@ -16,13 +16,13 @@ var usr = {
 
   // (B) GO TO PAGE
   //  pg : int, page number
-  goToPage : function (pg) { if (pg!=usr.pg) {
+  goToPage : (pg) => { if (pg!=usr.pg) {
     usr.pg = pg;
     usr.list();
   }},
 
   // (C) SEARCH USER
-  search : function () {
+  search : () => {
     usr.find = document.getElementById("user-search").value;
     usr.pg = 1;
     usr.list();
@@ -31,17 +31,17 @@ var usr = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // id : user ID, for edit only
-  addEdit : function (id) {
+  addEdit : (id) => {
     sb.load({
       page : "users/form",
       target : "sb-page-2",
       data : { id : id ? id : "" },
-      onload : function () { sb.page(2); }
+      onload : () => { sb.page(2); }
     });
   },
 
   // (E) SAVE USER
-  save : function () {
+  save : () => {
     // (E1) GET DATA
     var data = {
       name : document.getElementById("user_name").value,
@@ -65,7 +65,7 @@ var usr = {
   // (F) DELETE USER
   //  id : int, user ID
   //  confirm : boolean, confirmed delete
-  del : function (id, confirm) {
+  del : (id, confirm) => {
     if (confirm) {
       sb.api({
         mod : "users",
@@ -75,7 +75,7 @@ var usr = {
         onpass : usr.list
       });
     } else {
-      sb.modal("Please confirm", "Delete user?", function(){
+      sb.modal("Please confirm", "Delete user?", () => {
         usr.del(id, true);
       });
     }

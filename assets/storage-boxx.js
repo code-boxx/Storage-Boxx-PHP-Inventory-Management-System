@@ -3,7 +3,7 @@ var sb = {
   // (A1) LOADING SPINNER
   //  show : boolean, show or hide spinner
   loady : null,
-  loading : function (show) {
+  loading : (show) => {
     if (show) {
       sb.loady.classList.remove("sb-hide");
     } else {
@@ -16,7 +16,7 @@ var sb = {
   //  head : string, title text
   //  body : string, body text
   toasty : null,
-  toast : function (status, head, body) {
+  toast : (status, head, body) => {
     // GET SECTIONS
     let ticon = document.getElementById("sb-toast-icon"),
         thead = document.getElementById("sb-toast-head"),
@@ -38,7 +38,7 @@ var sb = {
   //  body : string, body text
   //  foot : string, bottom text (function to auto generate yes/no buttons)
   mody : null,
-  modal : function (head, body, foot) {
+  modal : (head, body, foot) => {
     // GET SECTIONS
     let mhead = document.getElementById("sb-modal-head"),
         mbody = document.getElementById("sb-modal-body"),
@@ -79,7 +79,7 @@ var sb = {
 
   // (A4) CHANGE "LOCAL" PAGE
   //  num : int, page number (1 to 3)
-  page : function (num) {
+  page : (num) => {
     for (let i=1; i<=3; i++) {
       let pg = document.getElementById("sb-page-"+i);
       if (i==num) {
@@ -96,7 +96,7 @@ var sb = {
   //  onpass : function, run this function on server response
   //  onerr : optional function, run this function on error
   //  loading : boolean, show "now loading" screen? default true.
-  ajax : function (opt) {
+  ajax : (opt) => {
     // (B1) CHECKS
     let err = null;
     if (opt.url === undefined) { err = "Target URL is not set!"; }
@@ -116,25 +116,23 @@ var sb = {
 
     // (B5) AJAX REQUEST
     if (opt.loading) { sb.loading(1); } // NOW LOADING
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", opt.url);
-    xhr.onload = function () {
-      if (this.status==200) {
-        opt.onpass(this.response);
-      } else {
-        console.log(this.status);
-        console.log(this.response);
-        sb.modal("SERVER ERROR", "Bad server response");
+    fetch(opt.url, { method:"POST", body:data })
+    .then((res) => {
+      if (opt.loading) { sb.loading(0); } // DONE LOADING
+      if (res.status==200) { return res.text(); }
+      else {
+        sb.modal("SERVER ERROR", "Bad server response - " + res.status);
+        console.error(res.status, res);
         if (opt.onerr) { opt.onerr(); }
       }
-      if (opt.loading) { sb.loading(0); } // DONE LOADING
-    };
-    xhr.onerror = function () {
+    })
+    .then((txt) => { opt.onpass(txt); })
+    .catch((err) => {
       sb.modal("AJAX ERROR", "AJAX call error!");
+      console.error(err);
       if (opt.onerr) { opt.onerr(); }
       if (opt.loading) { sb.loading(0); } // DONE LOADING
-    };
-    xhr.send(data);
+    });
   },
 
   // (C) DO AN AJAX API CALL
@@ -148,7 +146,7 @@ var sb = {
   //  nofail : boolean, supress modal "failure message"? Default false.
   //  onpass : optional function, run this on API response pass.
   //  onfail : optional function, run this on API response fail.
-  api : function (opt) {
+  api : (opt) => {
     // (C1) INIT OPTIONS
     var options = {};
     options.url = sbhost.api + `${opt.mod}/${opt.req}/`;
@@ -158,11 +156,11 @@ var sb = {
     if (opt.nofail === undefined) { opt.nofail = false; }
 
     // (C2) ON AJAX LOAD
-    options.onpass = function (response) {
+    options.onpass = (res) => {
       // PARSE RESULTS
-      try { var res = JSON.parse(response); }
+      try { var res = JSON.parse(res); }
       catch (err) {
-        console.log(response);
+        console.error(res);
         sb.modal("AJAX ERROR", "Failed to parse JSON data.");
         return false;
       }
@@ -192,7 +190,7 @@ var sb = {
   //  data : object, data to send as above
   //  loading : boolean, show loading screen as above. Default false.
   //  onload : optional function, do this on loaded
-  load : function (opt) {
+  load : (opt) => {
     // (D1) INIT OPTIONS
     var options = {};
     options.url = sbhost.base + `a/${opt.page}/`;
@@ -200,7 +198,7 @@ var sb = {
     if (opt.data) { options.data = opt.data; }
 
     // (D2) ON AJAX LOAD
-    options.onpass = function (res) {
+    options.onpass = (res) => {
       if (res=="SE") { location.href = sbhost.base + "login/"; }
       else {
         document.getElementById(opt.target).innerHTML = res;
@@ -214,23 +212,21 @@ var sb = {
 
   // (E) SIGN OFF
   //  confirm : boolean, confirmed sign off
-  bye : function (confirm) {
+  bye : (confirm) => {
     if (confirm) {
       sb.api({
         mod : "session", req : "logout",
         nopass : true,
-        onpass : function () { location.href = sbhost.base + "login/"; }
+        onpass : () => { location.href = sbhost.base + "login/"; }
       });
     } else {
-      sb.modal("Please Confirm", "Sign off?", function(){
-        sb.bye(true);
-      });
+      sb.modal("Please Confirm", "Sign off?", () => { sb.bye(true); });
     }
   }
 };
 
 // (F) INIT INTERFACE
-window.addEventListener("load", function(){
+window.addEventListener("load", () => {
   sb.loady = document.getElementById("sb-loading");
   sb.toasty = new bootstrap.Toast(document.getElementById("sb-toast"), {
     delay: 3500

@@ -6,9 +6,9 @@ $items = $_CORE->autoCall("Inventory", "getAll");
 if (is_array($items["data"])) { foreach ($items["data"] as $sku=>$i) { ?>
 <div class="row p-1">
   <div class="col-7">
-    <strong>[<?=$sku?>] <?=$i['stock_name']?></strong><br>
-    <small><?=$i['stock_desc']?></small><br>
-    <small><?=$i['stock_qty']?> <?=$i['stock_unit']?></small>
+    <strong>[<?=$sku?>] <?=$i["stock_name"]?></strong><br>
+    <small><?=$i["stock_desc"]?></small><br>
+    <small><?=$i["stock_qty"]?> <?=$i["stock_unit"]?></small>
   </div>
   <div class="col text-end">
     <button class="btn btn-danger btn-sm" onclick="inv.del('<?=$sku?>')">

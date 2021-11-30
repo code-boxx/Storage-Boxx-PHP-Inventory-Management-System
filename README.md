@@ -27,7 +27,7 @@ SOFTWARE.
 ## INSTALLATION
 ---
 1) Create a new database and import lib/storage-boxx.sql.
-2) Update lib/Core.php - The host settings (A2), database settings (A3)
+2) Update lib/Core.php - The host settings (A2), database settings (A3), JWT settings (A6)
 3) Done! The default administrator account is admin@sb.com and password is 123456.
 
 

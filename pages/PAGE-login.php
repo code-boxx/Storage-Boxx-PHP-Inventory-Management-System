@@ -8,12 +8,12 @@
 
   <div class="mb-4">
     <label class="form-label" for="user_email">Email</label>
-    <input type="email" id="user_email" class="form-control form-control-lg" required value="admin@sb.com"/>
+    <input type="email" id="user_email" class="form-control form-control-lg" required/>
   </div>
 
   <div class="mb-4">
     <label class="form-label" for="user_password">Password</label>
-    <input type="password" id="user_password" class="form-control form-control-lg" required value="123456"/>
+    <input type="password" id="user_password" class="form-control form-control-lg" required/>
   </div>
 
   <input type="submit" class="btn btn-primary btn-lg btn-block" value="Sign in"/>

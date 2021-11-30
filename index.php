@@ -16,6 +16,7 @@ if (!file_exists($htaccess)) {
   header("Location: " . $_SERVER["REQUEST_URI"]);
   exit();
 }
+unset($htaccess);
 
 // (C) STRIP PATH DOWN TO AN ARRAY
 // E.G. HTTP://SITE.COM/HELLO/WORLD/ > $_PATH = ["HELLO", "WORLD"]
@@ -27,33 +28,45 @@ $_PATH = rtrim($_PATH, "/");
 $_PATH = explode("/", $_PATH);
 
 // (D) AJAX MODE
-$pgajax = $_PATH[0]=="a";
+$_AJAX = $_PATH[0]=="a";
 
 // (E) LOGIN CHECK
-if (!isset($_SESSION["user"])) {
-  if ($pgajax) { exit("SE"); }
+if ($_USER===false) {
+  if ($_AJAX) { exit("SE"); }
   if (count($_PATH)>1 || $_PATH[0]!="login") {
     header("Location: ". HOST_BASE ."login/");
     exit();
   }
 }
-if (isset($_SESSION["user"]) && $_PATH[0]=="login") {
+if ($_USER!==false && count($_PATH)==1 && $_PATH[0]=="login") {
   header("Location: ". HOST_BASE);
   exit();
 }
 
 // (F) LOAD PAGE
+// (F1) PHYSICAL PAGE TO LOAD
 // HTTP://SITE.COM/ >>> LOAD PAGE-HOME.PHP
 // HTTP://SITE.COM/FOO/ >>> LOAD PAGE-FOO.PHP
 // HTTP://SITE.COM/FOO/BAR/ >>> LOAD PAGE-FOO-BAR.PHP
-// NOT FOUND >>> LOAD PAGE-404.PHP
-$pgfile = PATH_PAGES . "PAGE-";
-$pgfile .= $_PATH[0]=="" ? "home.php" : implode("-", $_PATH) . ".php";
-$pgexist = file_exists($pgfile);
-if (!$pgexist) {
+$_PAGE = PATH_PAGES . "PAGE-";
+$_PAGE .= $_PATH[0]=="" ? "home.php" : implode("-", $_PATH) . ".php";
+
+// (F2) NOT FOUND
+if (!file_exists($_PAGE)) {
   http_response_code(404);
-  if ($pgajax) { exit("PAGE NOT FOUND"); }
+  if ($_AJAX) { echo "PAGE NOT FOUND"; }
+  else {
+    require PATH_PAGES . "TEMPLATE-top.php";
+    require PATH_PAGES . "PAGE-404.php";
+    require PATH_PAGES . "TEMPLATE-bottom.php";
+  }
+  exit();
 }
-if (!$pgajax) { require PATH_PAGES . "TEMPLATE-top.php"; }
-require $pgexist ? $pgfile : PATH_PAGES . "PAGE-404.php";
-if (!$pgajax) { require PATH_PAGES . "TEMPLATE-bottom.php"; }
+
+// (F3) LOAD PAGE
+// FLAGS THAT MAY BE USEFUL IN PAGES
+// $_AJAX : AJAX MODE
+// $_PAGE : CURRENT PHYSICAL PAGE
+if (!$_AJAX) { require PATH_PAGES . "TEMPLATE-top.php"; }
+require $_PAGE;
+if (!$_AJAX) { require PATH_PAGES . "TEMPLATE-bottom.php"; }

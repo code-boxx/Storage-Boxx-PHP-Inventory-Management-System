@@ -71,10 +71,10 @@ class Users extends Core {
   }
 
   // (F) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
+  // RETURNS USER ARRAY IF VALID, FALSE IF INVALID
   //  $email : user email
   //  $password : user password
-  //  $session : start user session?
-  function verify ($email, $password, $session=true) {
+  function verify ($email, $password) {
     // (F1) GET USER
     $user = $this->get($email);
     if ($user===false) { return false; }
@@ -82,19 +82,31 @@ class Users extends Core {
 
     // (F2) PASSWORD CHECK
     if ($pass) {
-      $pass = password_verify($password, $user["user_password"]);
+      $pass = password_verify($password, $user['user_password']);
     }
 
-    // (F3) START SESSION - RUN SESSION_START() BEFORE THIS!
-    if ($pass) {
-      $_SESSION["user"] = [];
-      foreach ($user as $k=>$v) {
-        if ($k!="user_password") { $_SESSION["user"][$k] = $v; }
-      }
+    // (F3) RESULTS
+    if (!$pass) {
+      $this->error = "Invalid user or password.";
+      return false;
     }
+    return $user;
+  }
 
-    // (F4) RESULTS
-    if (!$pass) { $this->error = "Invalid user or password."; }
-    return $pass;
+  // (G) LOGIN - JWT COOKIE
+  //  $email : user email
+  //  $password : user password
+  function inJWT ($email, $password) {
+    // (G1) ALREADY SIGNED IN
+    $this->core->load("JWT");
+    if ($this->core->JWT->verify(false)) { return true; }
+
+    // (G2) VERIFY EMAIL PASSWORD
+    $user = $this->verify($email, $password);
+    if ($user===false) { return false; }
+
+    // (G3) GENERATE TOKEN
+    $this->core->JWT->create($user);
+    return true;
   }
 }

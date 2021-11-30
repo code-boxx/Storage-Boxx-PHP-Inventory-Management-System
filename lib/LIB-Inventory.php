@@ -108,7 +108,7 @@ class Inventory extends Core {
   }
 
   // (F) ADD STOCK MOVEMENT
-  // NOTE: WILL AUTO-ADAPT USER ID FROM SESSION
+  // NOTE: WILL AUTO-ADAPT USER ID FROM GLOBALS
   // RETURNS NEW ITEM QUANTITY IF OK, FALSE IF FAIL
   //  $sku : item SKU
   //  $direction : "I"n, "O"ut, stock "T"ake
@@ -124,7 +124,8 @@ class Inventory extends Core {
       $this->error = "Invalid quantity";
       return false;
     }
-    if (!isset($_SESSION["user"])) {
+    global $_USER;
+    if ($_USER===false) {
       $this->error = "Please sign in first";
       return false;
     }
@@ -139,7 +140,7 @@ class Inventory extends Core {
     $this->DB->start();
     $pass = $this->DB->insert("stock_mvt",
       ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_notes"],
-      [$sku, date("Y-m-d H:i:s"), $direction, $_SESSION["user"]["user_id"], $qty, $notes]
+      [$sku, date("Y-m-d H:i:s"), $direction, $_USER["user_id"], $qty, $notes]
     );
 
     // (F3) UPDATE QUANTITY

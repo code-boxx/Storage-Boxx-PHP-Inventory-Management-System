@@ -23,7 +23,7 @@
 
     <!-- (A4) STORAGE BOXX CLIENT ENGINE -->
     <link rel="stylesheet" href="<?=HOST_ASSETS?>storage-boxx.css"/>
-    <script>var sbhost={base:"<?=HOST_BASE?>",assets:"<?=HOST_ASSETS?>",api:"<?=HOST_API_FULL?>"};</script>
+    <script>var sbhost={base:"<?=HOST_BASE?>",assets:"<?=HOST_ASSETS?>",api:"<?=HOST_API_BASE?>"};</script>
     <script async src="<?=HOST_ASSETS?>storage-boxx.js"></script>
   </head>
   <body>
@@ -58,7 +58,7 @@
       </div>
     </div></div></div>
 
-    <?php if (isset($_SESSION["user"])) { ?>
+    <?php if ($_USER !== false) { ?>
     <!-- (C) MAIN NAV BAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark"><div class="container-fluid">
       <!-- (C1) BRANDING LOGO

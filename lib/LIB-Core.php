@@ -24,7 +24,7 @@ class CoreBoxx {
     return isset($this->$module) && is_object($this->$module);
   }
 
-  // (D) AUTOCALL () : AUTO MAP $_POST OR $_GET TO MODULE FUNCTION
+  // (D) AUTO MAP $_POST OR $_GET TO MODULE FUNCTION
   //  $module : module to load
   //  $function : function to run
   //  $mode : POST or GET
@@ -52,7 +52,7 @@ class CoreBoxx {
     return $results;
   }
 
-  // (E) AUTOAPI () : AUTO MAP $_POST OR $_GET TO MODULE FUNCTION & API RESPOND
+  // (E) AUTO MAP $_POST OR $_GET TO MODULE FUNCTION & API RESPOND
   //  $module : module to load
   //  $function : function to run
   //  $mode : POST or GET
@@ -60,7 +60,7 @@ class CoreBoxx {
     $this->respond($this->autoCall($module, $function, $mode));
   }
 
-  // (F) AUTOGETAPI() : SAME AS ABOVE, BUT FOR "GET ENTRIES" API FUNCTIONS
+  // (F) SAME AS ABOVE, BUT FOR "GET ENTRIES" API FUNCTIONS
   //  $module : module to load
   //  $function : function to run
   //  $mode : POST or GET
@@ -73,7 +73,7 @@ class CoreBoxx {
     );
   }
 
-  // (G) RANDOM () : RANDOM STRING
+  // (G) GENERATE RANDOM STRING
   // CREDITS : https://stackoverflow.com/questions/4356289/php-random-string-generator
   // $length : number of characters to generate
   function random ($length=16) {

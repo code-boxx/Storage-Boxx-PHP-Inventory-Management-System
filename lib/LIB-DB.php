@@ -10,10 +10,9 @@ class DB extends Core {
     $this->pdo = new PDO(
       "mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=".DB_CHARSET,
       DB_USER, DB_PASSWORD, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-      ]
-    );
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
   }
 
   // (C) DESTRUCTOR - CLOSE DATABASE CONNECTION
@@ -23,9 +22,7 @@ class DB extends Core {
   }
 
   // (D) AUTO-COMMIT OFF
-  function start () {
-    $this->pdo->beginTransaction();
-  }
+  function start () { $this->pdo->beginTransaction(); }
 
   // (E) COMMIT OR ROLLBACK?
   //  $pass : commit or rollback?

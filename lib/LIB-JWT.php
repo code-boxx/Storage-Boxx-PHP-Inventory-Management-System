@@ -1,8 +1,9 @@
 <?php
 class JWT extends Core {
   // (A) CREATE JWT TOKEN
-  //  $user : user data
-  function create ($user) {
+  //  $data : custom data array, include your own data if required
+  //          but make sure "user_id" is included
+  function create ($data) {
     require PATH_LIB . "/jwt/autoload.php";
     $now = strtotime("now");
     $token = [
@@ -11,18 +12,15 @@ class JWT extends Core {
       "jti" => base64_encode(random_bytes(16)), // JSON TOKEN ID
       "iss" => JWT_ISSUER, // ISSUER
       "aud" => HOST_NAME, // AUDIENCE
-      "data" => []
+      "data" => $data // ADDITIONAL DATA
     ];
-    if (JWT_EXPIRE > 0) { $token["exp"] = $now + JWT_EXPIRE; }
-    foreach ($user as $k=>$v) {
-      if ($k!="user_password") { $token["data"][$k] = $v; }
-    }
+    if (JWT_EXPIRE > 0) { $token["exp"] = $now + JWT_EXPIRE; } // EXPIRY
     $token = Firebase\JWT\JWT::encode($token, JWT_SECRET, JWT_ALGO);
     setcookie("jwt", $token, 0, "/", HOST_NAME, API_HTTPS);
   }
 
   // (B) VERIFY JWT TOKEN
-  //  $set : SET THE USER DATA INTO $GLOBALS["_USER"]
+  //  $set : set the user data into $globals["_user"]
   function verify ($set=true) {
     // (B1) JWT COOKIE SET?
     $valid = isset($_COOKIE["jwt"]);
@@ -32,7 +30,7 @@ class JWT extends Core {
       require PATH_LIB . "/jwt/autoload.php";
       try { $token = Firebase\JWT\JWT::decode($_COOKIE["jwt"], JWT_SECRET, [JWT_ALGO]); }
       catch (Exception $e) { $valid = false; }
-      $valid = is_object($token);
+      if ($valid) { $valid = is_object($token); }
     }
 
     // (B3) EXPIRED? VALID ISSUER? VALID AUDIENCE?
@@ -48,7 +46,13 @@ class JWT extends Core {
 
     // (B4) OK - "REGISTER" USER?
     if ($valid) {
-      if ($set) { $GLOBALS["_USER"] = (array) $token->data; }
+      if ($set) {
+        $GLOBALS["_USER"] = $this->DB->fetch(
+          "SELECT * FROM `users` WHERE `user_id`=?",
+          [$token->data->user_id]
+        );
+        unset($GLOBALS["_USER"]["user_password"]);
+      }
       return true;
     } else {
       $this->error = "Invalid or expired token";

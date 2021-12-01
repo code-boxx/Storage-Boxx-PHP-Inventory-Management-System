@@ -116,9 +116,8 @@ var sb = {
 
     // (B5) AJAX REQUEST
     if (opt.loading) { sb.loading(1); } // NOW LOADING
-    fetch(opt.url, { method:"POST", body:data })
+    fetch(opt.url, { method:"POST", credentials:"include", body:data })
     .then((res) => {
-      if (opt.loading) { sb.loading(0); } // DONE LOADING
       if (res.status==200) { return res.text(); }
       else {
         sb.modal("SERVER ERROR", "Bad server response - " + res.status);
@@ -128,9 +127,11 @@ var sb = {
     })
     .then((txt) => { opt.onpass(txt); })
     .catch((err) => {
-      sb.modal("AJAX ERROR", "AJAX call error!");
+      sb.modal("AJAX ERROR", err.message);
       console.error(err);
       if (opt.onerr) { opt.onerr(); }
+    })
+    .finally(() => {
       if (opt.loading) { sb.loading(0); } // DONE LOADING
     });
   },

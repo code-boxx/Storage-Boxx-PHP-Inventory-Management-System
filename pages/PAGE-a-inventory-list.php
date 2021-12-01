@@ -17,7 +17,7 @@ if (is_array($items["data"])) { foreach ($items["data"] as $sku=>$i) { ?>
     <button class="btn btn-primary btn-sm" onclick="inv.addEdit('<?=$sku?>')">
       <span class="mi">edit</span>
     </button>
-    <button class="btn btn-primary btn-sm" onclick="inv.barcode('<?=$sku?>')">
+    <button class="btn btn-primary btn-sm" onclick="inv.qrcode('<?=$sku?>')">
       <span class="mi">print</span>
     </button>
     <button class="btn btn-primary btn-sm" onclick="check.load('<?=$sku?>')">

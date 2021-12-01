@@ -81,6 +81,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>check">
+              <span class="mi mi-big">qr_code_scanner</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>inventory">
               <span class="mi mi-big">inventory_2</span>
             </a>

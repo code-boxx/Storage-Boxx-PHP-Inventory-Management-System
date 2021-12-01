@@ -106,7 +106,7 @@ class Users extends Core {
     if ($user===false) { return false; }
 
     // (G3) GENERATE TOKEN
-    $this->core->JWT->create($user);
+    $this->core->JWT->create(["user_id" => $user["user_id"]]);
     return true;
   }
 }

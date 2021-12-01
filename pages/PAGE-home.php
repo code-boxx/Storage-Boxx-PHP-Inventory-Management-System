@@ -1,18 +1,12 @@
 <!-- (A) SCRIPTS -->
-<script src="<?=HOST_ASSETS?>move.js"></script>
-<script src="<?=HOST_ASSETS?>checker.js"></script>
+<script src="<?=HOST_ASSETS?>html5-qrcode.min.js"></script>
+<script defer src="<?=HOST_ASSETS?>move.js"></script>
 
 <!-- (B) STOCK MOVEMENT -->
 <!-- (B1) HEADER -->
 <nav class="navbar text-white sb-grey mb-4">
 <div class="container-fluid">
   <h4>Stock Movement</h4>
-  <form class="d-flex" onsubmit="return check.verify()">
-    <input type="text" id="mvt-check" placeholder="Check SKU" class="form-control form-control-sm"/>
-    <button class="btn btn-primary">
-      <span class="mi">history</span>
-    </button>
-  </form>
 </div>
 </nav>
 
@@ -42,6 +36,7 @@
       <label class="form-label" for="mvt-sku">SKU (Enter or Scan)</label>
       <input type="text" class="form-control" id="mvt-sku" required autofocus/>
     </div>
+    <div class="p-4" style="width:500px;margin:0 auto 1.5rem auto" id="reader"></div>
 
     <input type="submit" class="btn btn-primary" value="Save"/>
   </form>

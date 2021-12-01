@@ -54,3 +54,15 @@ var move = {
     target.prepend(entry);
   }
 };
+
+// (C) WEBCAM SCANNER
+window.addEventListener("DOMContentLoaded", () => {
+  var scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+  scanner.render(
+    (txt, res) => {
+      let buttons = document.querySelectorAll("#reader button");
+      buttons[1].click();
+      document.getElementById("mvt-sku").value = txt;
+      move.save();
+    });
+});

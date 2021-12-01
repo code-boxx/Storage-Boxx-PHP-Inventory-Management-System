@@ -100,9 +100,9 @@ var inv = {
     }
   },
 
-  // (I) GENERATE BAR CODE
-  barcode : (sku) => {
-    window.open(sbhost.base + "a/barcode/?sku="+sku);
+  // (I) GENERATE QR CODE
+  qrcode : (sku) => {
+    window.open(sbhost.base + "a/qrcode/?sku="+sku);
   }
 };
 window.addEventListener("load", inv.list);

@@ -44,3 +44,10 @@ SOFTWARE.
 ## DOCUMENTATION
 ---
 Please visit https://code-boxx.com/storage-boxx/ for the documentation.
+
+
+---
+## CREDITS
+---
+HTML5 QRCode Scanner https://github.com/mebjashtml5-qrcode
+QRCode Generator https://davidshimjs.github.io/qrcodejs/

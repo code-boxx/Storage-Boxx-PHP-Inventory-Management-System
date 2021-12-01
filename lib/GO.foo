@@ -13,8 +13,8 @@ define("PATH_PAGES", PATH_BASE . "pages" . DIRECTORY_SEPARATOR);
 define("HOST_BASE", "http://localhost/"); // CHANGE TO YOUR OWN!
 define("HOST_NAME", parse_url(HOST_BASE, PHP_URL_HOST));
 define("HOST_BASE_PATH", parse_url(HOST_BASE, PHP_URL_PATH));
-define("HOST_API", "/api/");
-define("HOST_API_BASE", trim(HOST_BASE, "/") . HOST_API);
+define("HOST_API", HOST_BASE_PATH . "api/");
+define("HOST_API_BASE", HOST_BASE . "api/");
 define("HOST_ASSETS", HOST_BASE . "assets/");
 
 // (A3) DATABASE SETTINGS - CHANGE TO YOUR OWN!

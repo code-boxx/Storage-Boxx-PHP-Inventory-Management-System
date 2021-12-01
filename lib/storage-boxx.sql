@@ -22,9 +22,6 @@ CREATE TABLE `users` (
   `user_password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `users` (`user_id`, `user_name`, `user_email`, `user_password`) VALUES
-(1, 'Administrator', 'admin@sb.com', '$2y$10$KQCKY53f02kaIPVwk5o4.eJh2KdquVfMszB/NWO4FCynEjMssl4.i');
-
 ALTER TABLE `stock`
   ADD PRIMARY KEY (`stock_sku`);
 
@@ -39,5 +36,5 @@ ALTER TABLE `users`
   ADD KEY `user_name` (`user_name`);
 
 ALTER TABLE `users`
-  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 COMMIT;

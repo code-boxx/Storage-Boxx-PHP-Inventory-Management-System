@@ -43,36 +43,23 @@ if ($_OGN_HOST != HOST_NAME) {
   header("Access-Control-Allow-Credentials: true");
 }
 
-// (F) AUTO REGENERATE HTACCESS IF NOT FOUND
-$htaccess = PATH_API . ".htaccess";
-if (!file_exists($htaccess)) {
-  file_put_contents($htaccess, implode("\r\n", [
-    "RewriteEngine On",
-    "RewriteBase " . HOST_API,
-    "RewriteRule ^index\.php$ - [L]",
-    "RewriteCond %{REQUEST_FILENAME} !-f",
-    "RewriteCond %{REQUEST_FILENAME} !-d",
-    "RewriteRule . " . HOST_API . "index.php [L]"
-  ]));
-}
-
-// (G) PARSE URL PATH INTO AN ARRAY
-// (G1) EXTRACT PATH FROM FULL URL
+// (F) PARSE URL PATH INTO AN ARRAY
+// (F1) EXTRACT PATH FROM FULL URL
 // e.g. http://site.com/api/foo/bar/ >>> $path="/api/foo/bar/"
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
-// (G2) REMOVE "API" SEGMENT FROM PATH
+// (F2) REMOVE "API" SEGMENT FROM PATH
 // e.g. $path="/api/foo/bar/" >>> $path="foo/bar/"
 if (substr($path, 0, strlen(HOST_API)) == HOST_API) {
   $path = substr($path, strlen(HOST_API));
 }
 
-// (G3) EXPLODE INTO AN ARRAY
+// (F3) EXPLODE INTO AN ARRAY
 // e.g. $path="foo/bar/" >>> $path=["foo", "bar"]
 $path = explode("/", rtrim($path, "/"));
 
-// (H) MANAGE REQUEST
-// (H1) VALID API REQUEST?
+// (G) MANAGE REQUEST
+// (G1) VALID API REQUEST?
 $valid = count($path)==2;
 if ($valid) { $valid = $path[0]!="index"; }
 if ($valid) {
@@ -81,7 +68,7 @@ if ($valid) {
   $valid = file_exists(PATH_API . "API-$_MOD.php");
 }
 
-// (H2) LOAD API HANDLER
+// (G2) LOAD API HANDLER
 if ($valid) {
   // CLEAN UP
   unset($access); unset($htaccess); unset($path); unset($valid);

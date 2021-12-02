@@ -26,14 +26,13 @@ SOFTWARE.
 ---
 ## INSTALLATION
 ---
-1) Create a new database and import lib/storage-boxx.sql.
-2) Access the site, follow through the installer.
+Just access your website, follow through the installer.
 
 
 ---
 ## TROUBLE?
 ---
-1) Changed the path? Change .htaccess in both the root and api folder.
+1) Changed the path? Change .htaccess in both the root and api folders.
 2) Lost password? Write a simple script to update the user.
   - $_CORE->load("User");
   - $_CORE->User->save("NAME", "EMAIL", "PASSWORD", ID);

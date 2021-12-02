@@ -18,6 +18,8 @@ $pALL = [$pBASE, $pAPI, $pLIB, $pBASE."index.foo", $pLIB."GO.foo", $pLIB."storag
 // (A4) URL
 $uHTTPS = isset($_SERVER["HTTPS"]);
 $uHOST = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+$uIDX = strpos($uHOST, "index.php");
+if ($uIDX!==false) { $uHOST = substr($uHOST, 0, $uIDX); }
 $uHOST = rtrim($uHOST, "/") . "/";
 $uFULL = $uHTTPS ? "https://" : "http://" . $uHOST;
 
@@ -64,7 +66,7 @@ if ($mode=="B") {
   // (B6) ALL GREEN
   $mode = "C";
 }
-unset($pALL);
+unset($uIDX); unset($pALL);
 
 // (C) SHOW INSTALL HTML
 if ($mode == "C") { ?>
@@ -98,7 +100,10 @@ if ($mode == "C") { ?>
       data.append("install", "1");
 
       // AJAX FETCH
-      fetch("<?=$uFULL?>", { method:"POST", body:data })
+      var url = (document.getElementsByName("https")[0].value=="0" ? "http" : "https")
+              + "://"
+              + document.getElementsByName("host")[0].value;
+      fetch(url, { method:"POST", body:data })
       .then((res) => {
         if (res.status!=200) {
           alert("SERVER ERROR - ${res.status}");
@@ -141,12 +146,12 @@ if ($mode == "C") { ?>
     <form id="iForm" onsubmit="return install()">
       <div class="iSec">
         <h1>HOST</h1>
-        <label>Enforce HTTPS?</label>
+        <label>HTTP or HTTPS</label>
         <select name="https">
           <option value="0">http://</option>
           <option value="1"<?=$uHTTPS?" selected":""?>>https://</option>
         </select>
-        <label>Host Name</label>
+        <label>Host (Change this only if wrong, include the path if not deployed in root. E.G. site.com/storage-boxx/)</label>
         <input type="text" name="host" required value="<?=$uHOST?>"/>
       </div>
 

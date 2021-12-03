@@ -76,14 +76,15 @@ if ($mode == "C") { ?>
     <title>Storage Boxx Installation</title>
     <style>
     *{font-family: arial, sans-serif}
-    label,select,input{font-size:18px} h1{font-size:24px;margin:0 0 20px 0}
+    label,select,input{font-size:20px} h1{font-size:26px;margin:0 0 20px 0}
     h1,label,select,input{box-sizing:border-box;display:block;width:100%}
     form{max-width:500px;margin:20px auto 20px auto}
     .iSec{background:#f5f5f5;border:1px solid #dbdbdb;padding:20px;margin-bottom:20px}
     input,select{padding:10px}
-    label{margin:10px 0;color:#5a63d7}
+    label{margin:10px 0;color:#7968ff}
     input[type=submit]{background:#4e89f5;border:0;color:#fff}
     .danger{padding:20px;margin-bottom:30px;background:#5542f3;color:#fff;font-weight:700;font-size:20px;line-height:28px}
+    .notes{font-size:17px;color:#585858;padding:10px 0}
     </style>
     <script>
     function install () {
@@ -151,8 +152,25 @@ if ($mode == "C") { ?>
           <option value="0">http://</option>
           <option value="1"<?=$uHTTPS?" selected":""?>>https://</option>
         </select>
-        <label>Host (Change this only if wrong, include the path if not deployed in root. E.G. site.com/storage-boxx/)</label>
+        <label>Domain AND Path</label>
         <input type="text" name="host" required value="<?=$uHOST?>"/>
+        <div class="notes">Change this only if wrong, include the path if not deployed in root. E.G. site.com/storage-boxx/</div>
+      </div>
+
+      <div class="iSec">
+        <h1>API ENDPOINT</h1>
+        <label>Enforce HTTPS?</label>
+        <select name="apihttps">
+          <option value="0">No</option>
+          <option value="1"<?=$uHTTPS?" selected":""?>>Yes</option>
+        </select>
+        <div class="notes">If enforced, API will only respond to HTTPS calls - Recommended to set "yes" for live servers.</div>
+        <label>CORS</label>
+        <select name="apicors">
+          <option value="0">Disallow</option>
+          <option value="1">Allow</option>
+        </select>
+        <div class="notes">Set "allow" if you intend to develop your own mobile app.</div>
       </div>
 
       <div class="iSec">
@@ -171,8 +189,9 @@ if ($mode == "C") { ?>
         <h1>JSON WEB TOKEN</h1>
         <label>Secret Key <span onclick="rnd()">[RANDOM]</span></label>
         <input type="text" name="jwtkey" required/>
-        <label>Issuer (Your company name or domain name)</label>
+        <label>Issuer</label>
         <input type="text" name="jwyiss" required value="<?=$_SERVER["HTTP_HOST"]?>"/>
+        <div class="notes">Your company name or domain name.</div>
       </div>
 
       <div class="iSec">
@@ -233,19 +252,18 @@ if ($mode=="D") {
     "DB_NAME" => $_POST["dbname"],
     "DB_USER" => $_POST["dbuser"],
     "DB_PASSWORD" => $_POST["dbpass"],
-    "API_HTTPS" => ($_POST["https"]=="1" ? "true" : "false"),
+    "API_CORS" => ($_POST["apicors"]=="1" ? "true" : "false"),
+    "API_HTTPS" => ($_POST["apihttps"]=="1" ? "true" : "false"),
     "JWT_SECRET" => $_POST["jwtkey"],
     "JWT_ISSUER" => $_POST["jwyiss"]
   ];
-  unset($_POST["aname"]); unset($_POST["aemail"]);
-  unset($_POST["apass"]); unset($_POST["apassc"]);
-  unset($_POST["install"]);
+  unset($_POST);
 
   // (D6) CREATE LIB/GO.PHP
   $go = file($pLIB . "GO.foo") or exit("Cannot read $pLIB" . "GO.foo");
   foreach ($go as $j=>$line) { foreach ($replace as $k=>$v) {
     if (strpos($line, "\"$k\"") !== false) {
-      if ($k!="API_HTTPS") { $v = "\"$v\""; }
+      if ($k!="API_HTTPS" && $k!="API_CORS") { $v = "\"$v\""; }
       $go[$j] = "define(\"$k\", $v); // CHANGED BY INSTALLER\r\n";
       unset($replace[$k]);
       if (count($replace)==0) { break; }

@@ -17,16 +17,17 @@ define("HOST_API", HOST_BASE_PATH . "api/");
 define("HOST_API_BASE", HOST_BASE . "api/");
 define("HOST_ASSETS", HOST_BASE . "assets/");
 
-// (A3) DATABASE SETTINGS - CHANGE TO YOUR OWN!
+// (A3) DATABASE - CHANGE TO YOUR OWN!
 define("DB_HOST", "localhost");
 define("DB_NAME", "test");
 define("DB_CHARSET", "utf8");
 define("DB_USER", "root");
 define("DB_PASSWORD", "");
 
-// (A4) API ENDPOINT SETTINGS
+// (A4) API ENDPOINT
 define("API_HTTPS", false); // enforce https for api endpoint
-define("API_CORS", false); // no cors, accept host_name only
+define("API_CORS", false);
+// define("API_CORS", false); // no cors, accept host_name only
 // define("API_CORS", true); // any domain + mobile apps
 // define("API_CORS", "site-a.com"); // this domain only
 // define("API_CORS", ["site-a.com", "site-b.com"]); // multiple domains
@@ -35,7 +36,6 @@ define("API_CORS", false); // no cors, accept host_name only
 define("PAGE_PER", 20); // 20 ENTRIES PER PAGE BY DEFAULT
 
 // (A6) JSON WEB TOKEN - CHANGE TO YOUR OWN!
-// ENABLE THESE IF USING JWT IN USER MODULE LOGIN
 define("JWT_SECRET", "YOUR-SECRET-KEY");
 define("JWT_ISSUER", "YOUR-NAME");
 define("JWT_ALGO", "HS256");
@@ -73,7 +73,7 @@ function _CORERR ($ex) {
 }
 set_exception_handler("_CORERR");
 
-// (B4) DEFAULT MODULES TO LOAD
+// (B4) LOAD DEFAULT MODULES
 $_CORE->load("BooBoo");
 $_CORE->load("DB");
 if (isset($_COOKIE["jwt"])) {

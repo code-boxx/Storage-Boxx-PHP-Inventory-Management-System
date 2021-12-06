@@ -3,7 +3,7 @@
 <script src="<?=HOST_ASSETS?>check.js"></script>
 
 <!-- (B) CHECK ITEM -->
-<nav class="navbar text-white sb-grey mb-4">
+<nav class="navbar cb-grey mb-4">
 <div class="container-fluid">
   <h4>CHECK ITEM</h4>
 </div>

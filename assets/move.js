@@ -8,7 +8,7 @@ var move = {
         notes = document.getElementById("mvt-notes");
 
     // (A2) SEND TO API
-    sb.api({
+    cb.api({
       mod : "inventory",
       req : "move",
       data : {

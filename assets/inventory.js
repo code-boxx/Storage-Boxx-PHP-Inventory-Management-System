@@ -3,8 +3,8 @@ var inv = {
   pg : 1, // CURRENT PAGE
   find : "", // CURRENT SEARCH
   list : () => {
-    sb.page(1);
-    sb.load({
+    cb.page(1);
+    cb.load({
       page : "inventory/list",
       target : "inv-list",
       data : {
@@ -32,11 +32,11 @@ var inv = {
   // (D) SHOW ADD/EDIT DOCKET
   // sku : item SKU, for edit only
   addEdit : (sku) => {
-    sb.load({
+    cb.load({
       page : "inventory/form",
-      target : "sb-page-2",
+      target : "cb-page-2",
       data : { sku : sku ? sku : "" },
-      onload : () => { sb.page(2); }
+      onload : () => { cb.page(2); }
     });
   },
 
@@ -71,7 +71,7 @@ var inv = {
     if (osku!="") { data.osku = osku; }
 
     // (G2) AJAX
-    sb.api({
+    cb.api({
       mod : "inventory",
       req : "save",
       data : data,
@@ -86,7 +86,7 @@ var inv = {
   //  confirm : boolean, confirmed delete
   del : (sku, confirm) => {
     if (confirm) {
-      sb.api({
+      cb.api({
         mod : "inventory",
         req : "del",
         data : { sku : sku },
@@ -94,7 +94,7 @@ var inv = {
         onpass : inv.list
       });
     } else {
-      sb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => {
+      cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => {
         inv.del(sku, true);
       });
     }
@@ -102,7 +102,7 @@ var inv = {
 
   // (I) GENERATE QR CODE
   qrcode : (sku) => {
-    window.open(sbhost.base + "a/qrcode/?sku="+sku);
+    window.open(cbhost.base + "a/qrcode/?sku="+sku);
   }
 };
 window.addEventListener("load", inv.list);

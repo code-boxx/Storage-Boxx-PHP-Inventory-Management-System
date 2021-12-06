@@ -4,13 +4,13 @@
 
 <!-- (B) STOCK MOVEMENT -->
 <!-- (B1) HEADER -->
-<nav class="navbar text-white sb-grey mb-4">
+<nav class="navbar cb-grey mb-4">
 <div class="container-fluid">
   <h4>Stock Movement</h4>
 </div>
 </nav>
 
-<div class="row">
+<div class="container"><div class="row">
   <!-- (B2) MOVEMENT FORM -->
   <form class="col bg-light border p-4 m-1" autocomplete="off" onsubmit="return move.save()">
     <div class="mb-4">
@@ -45,4 +45,4 @@
   <div class="col bg-light border p-4 m-1">
     <ul class="list-group list-group-flush" id="mvt-result"></ul>
   </div>
-</div>
+</div></div>

@@ -1,14 +1,11 @@
-var sb = {
+var cb = {
   // (A) HTML INTERFACE
   // (A1) LOADING SPINNER
   //  show : boolean, show or hide spinner
   loady : null,
   loading : (show) => {
-    if (show) {
-      sb.loady.classList.remove("sb-hide");
-    } else {
-      sb.loady.classList.add("sb-hide");
-    }
+    if (show) { cb.loady.classList.remove("cb-hide"); }
+    else { cb.loady.classList.add("cb-hide"); }
   },
 
   // (A2) TOAST MESSAGE
@@ -18,9 +15,9 @@ var sb = {
   toasty : null,
   toast : (status, head, body) => {
     // GET SECTIONS
-    let ticon = document.getElementById("sb-toast-icon"),
-        thead = document.getElementById("sb-toast-head"),
-        tbody = document.getElementById("sb-toast-body");
+    let ticon = document.getElementById("cb-toast-icon"),
+        thead = document.getElementById("cb-toast-head"),
+        tbody = document.getElementById("cb-toast-body");
 
     // SET ICON HEADER BODY
     if (status==1 || status=="1" || status==true) { ticon.innerHTML = "thumb_up"; }
@@ -30,7 +27,7 @@ var sb = {
     tbody.innerHTML = body;
 
     // SHOW
-    sb.toasty.show();
+    cb.toasty.show();
   },
 
   // (A3) MODAL DIALOG BOX
@@ -40,9 +37,9 @@ var sb = {
   mody : null,
   modal : (head, body, foot) => {
     // GET SECTIONS
-    let mhead = document.getElementById("sb-modal-head"),
-        mbody = document.getElementById("sb-modal-body"),
-        mfoot = document.getElementById("sb-modal-foot");
+    let mhead = document.getElementById("cb-modal-head"),
+        mbody = document.getElementById("cb-modal-body"),
+        mfoot = document.getElementById("cb-modal-foot");
 
     // SET HEADER & BODY
     if (head===undefined || head===null) { head = ""; }
@@ -50,9 +47,11 @@ var sb = {
     mhead.innerHTML = head;
     mbody.innerHTML = body;
 
-    // SET FOOTER
+    // SET FOOTER (NONE)
     if (foot===undefined || foot===null) { foot = ""; }
-    if (typeof foot == "function") {
+
+    // SET FOOTER (FUNCTION)
+    else if (typeof foot == "function") {
       // AUTO GENERATE NO BUTTON
       mfoot.innerHTML = "";
       let btn = document.createElement("button");
@@ -68,41 +67,39 @@ var sb = {
       btn.setAttribute("data-bs-dismiss", "modal");
       btn.addEventListener("click", foot);
       mfoot.appendChild(btn);
-    } else {
-      // SET TEXT
-      mfoot.innerHTML = foot;
     }
 
+    // SET FOOTER (STRING)
+    else { mfoot.innerHTML = foot; }
+
     // SHOW
-    sb.mody.show();
+    cb.mody.show();
   },
 
   // (A4) CHANGE "LOCAL" PAGE
-  //  num : int, page number (1 to 3)
+  //  num : int, page number (1 to 5)
   page : (num) => {
-    for (let i=1; i<=3; i++) {
-      let pg = document.getElementById("sb-page-"+i);
-      if (i==num) {
-        pg.classList.remove("sb-pg-hide");
-      } else {
-        pg.classList.add("sb-pg-hide");
-      }
+    for (let i=1; i<=5; i++) {
+      let pg = document.getElementById("cb-page-"+i);
+      if (i==num) { pg.classList.remove("cb-pg-hide"); }
+      else { pg.classList.add("cb-pg-hide"); }
     }
   },
 
   // (B) AJAX CALL
   //  url : string, target URL
   //  data : optional object, data to send
+  //  loading : boolean, show "now loading" screen? default true.
+  //  debug : boolean, debug mode. default false.
   //  onpass : function, run this function on server response
   //  onerr : optional function, run this function on error
-  //  loading : boolean, show "now loading" screen? default true.
   ajax : (opt) => {
     // (B1) CHECKS
     let err = null;
     if (opt.url === undefined) { err = "Target URL is not set!"; }
     if (opt.onpass === undefined) { err = "Function to call on onpass is not set!"; }
     if (err !== null) {
-      sb.modal("AJAX ERROR", err);
+      cb.modal("AJAX ERROR", err);
       return false;
     }
 
@@ -115,44 +112,52 @@ var sb = {
     for (var key in opt.data) { data.append(key, opt.data[key]); }
 
     // (B5) AJAX REQUEST
-    if (opt.loading) { sb.loading(1); } // NOW LOADING
+    if (opt.loading) { cb.loading(true); } // NOW LOADING
     fetch(opt.url, { method:"POST", credentials:"include", body:data })
     .then((res) => {
+      if (opt.debug) { console.log(res); }
       if (res.status==200) { return res.text(); }
       else {
-        sb.modal("SERVER ERROR", "Bad server response - " + res.status);
+        cb.modal("SERVER ERROR", "Bad server response - " + res.status);
         console.error(res.status, res);
         if (opt.onerr) { opt.onerr(); }
       }
     })
-    .then((txt) => { opt.onpass(txt); })
+    .then((txt) => {
+      if (opt.debug) { console.log(txt); }
+      opt.onpass(txt);
+    })
     .catch((err) => {
-      sb.modal("AJAX ERROR", err.message);
+      cb.modal("AJAX ERROR", err.message);
       console.error(err);
       if (opt.onerr) { opt.onerr(); }
     })
     .finally(() => {
-      if (opt.loading) { sb.loading(0); } // DONE LOADING
+      if (opt.loading) { cb.loading(false); } // DONE LOADING
     });
   },
 
   // (C) DO AN AJAX API CALL
   //  mod : string, module to call
   //  req : string, request
-  //  data : object, data to send as above
-  //  loading : object, show loading screen as above?
+  //  data : object, data to send
+  //  loading : boolean, show loading screen?
+  //  debug : boolean, optional debug mode. default false.
   //  passmsg : boolean false to supress toast "success message".
   //            boolean true to use server response message.
   //            string to override "OK" message.
   //  nofail : boolean, supress modal "failure message"? Default false.
   //  onpass : optional function, run this on API response pass.
   //  onfail : optional function, run this on API response fail.
+  //  onerr : optional function, run this on ajax call error.
   api : (opt) => {
     // (C1) INIT OPTIONS
     var options = {};
-    options.url = sbhost.api + `${opt.mod}/${opt.req}/`;
+    options.url = cbhost.api + `${opt.mod}/${opt.req}/`;
     if (opt.data) { options.data = opt.data; }
     if (opt.loading) { options.loading = opt.loading; }
+    if (opt.debug) { options.debug = opt.debug; }
+    if (opt.onerr) { options.onerr = opt.onerr; }
     if (opt.passmsg === undefined) { opt.passmsg = "OK"; }
     if (opt.nofail === undefined) { opt.nofail = false; }
 
@@ -162,45 +167,47 @@ var sb = {
       try { var res = JSON.parse(res); }
       catch (err) {
         console.error(res);
-        sb.modal("AJAX ERROR", "Failed to parse JSON data.");
+        cb.modal("AJAX ERROR", "Failed to parse JSON data.");
         return false;
       }
 
       // RESULTS FEEBACK
-      if (res.status=="E") { location.href = sbhost.base + "login/"; }
+      if (res.status=="E") { location.href = cbhost.base + "login/"; }
       else if (res.status) {
         if (opt.passmsg !== false) {
-          sb.toast(1, "Success",
-            opt.passmsg===true ? res.message : opt.passmsg
-          );
+          cb.toast(1, "Success", opt.passmsg===true ? res.message : opt.passmsg);
         }
         if (opt.onpass) { opt.onpass(res); }
       } else {
-        if (!opt.nofail) { sb.modal("ERROR", res.message); }
-        if (opt.onfail) { opt.onfail(); }
+        if (!opt.nofail) { cb.modal("ERROR", res.message); }
+        if (opt.onfail) { opt.onfail(res.message); }
       }
     };
 
     // (C3) GO!
-    sb.ajax(options);
+    cb.ajax(options);
   },
 
   // (D) AJAX LOAD HTML PAGE
   //  page : string, http://site.com/a/PAGE/
   //  target : string, ID of target HTML element
-  //  data : object, data to send as above
-  //  loading : boolean, show loading screen as above. Default false.
+  //  data : object, data to send
+  //  loading : boolean, show loading screen? Default false.
+  //  debug : boolean, optional debug mode. default false.
   //  onload : optional function, do this on loaded
+  //  onerr : optional function, do this on ajax error
   load : (opt) => {
     // (D1) INIT OPTIONS
     var options = {};
-    options.url = sbhost.base + `a/${opt.page}/`;
+    options.url = cbhost.base + `a/${opt.page}/`;
     options.loading = opt.loading ? opt.loading : false;
+    if (opt.debug) { options.debug = opt.debug; }
+    if (opt.onerr) { options.onerr = opt.onerr; }
     if (opt.data) { options.data = opt.data; }
 
     // (D2) ON AJAX LOAD
     options.onpass = (res) => {
-      if (res=="SE") { location.href = sbhost.base + "login/"; }
+      if (res=="SE") { location.href = cbhost.base + "login/"; }
       else {
         document.getElementById(opt.target).innerHTML = res;
         if (opt.onload) { opt.onload(); }
@@ -208,29 +215,27 @@ var sb = {
     };
 
     // (D3) GO!
-    sb.ajax(options);
+    cb.ajax(options);
   },
 
   // (E) SIGN OFF
   //  confirm : boolean, confirmed sign off
   bye : (confirm) => {
     if (confirm) {
-      sb.api({
+      cb.api({
         mod : "session", req : "logout",
         nopass : true,
-        onpass : () => { location.href = sbhost.base + "login/"; }
+        onpass : () => { location.href = cbhost.base + "login/"; }
       });
     } else {
-      sb.modal("Please Confirm", "Sign off?", () => { sb.bye(true); });
+      cb.modal("Please Confirm", "Sign off?", () => { cb.bye(true); });
     }
   }
 };
 
 // (F) INIT INTERFACE
 window.addEventListener("load", () => {
-  sb.loady = document.getElementById("sb-loading");
-  sb.toasty = new bootstrap.Toast(document.getElementById("sb-toast"), {
-    delay: 3500
-  });
-  sb.mody = new bootstrap.Modal(document.getElementById("sb-modal"));
+  cb.loady = document.getElementById("cb-loading");
+  cb.toasty = new bootstrap.Toast(document.getElementById("cb-toast"), { delay: 3500 });
+  cb.mody = new bootstrap.Modal(document.getElementById("cb-modal"));
 });

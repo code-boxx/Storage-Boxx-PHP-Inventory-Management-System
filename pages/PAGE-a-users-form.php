@@ -25,6 +25,6 @@ if ($edit) {
     <input type="password" class="form-control" id="user_password" required/>
   </div>
 
-  <input type="button" class="col btn btn-danger btn-lg" value="Back" onclick="sb.page(1)"/>
+  <input type="button" class="col btn btn-danger btn-lg" value="Back" onclick="cb.page(1)"/>
   <input type="submit" class="col btn btn-primary btn-lg" value="Save"/>
 </form>

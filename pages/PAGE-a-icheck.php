@@ -4,14 +4,14 @@ $item = $_CORE->autoCall("Inventory", "get");
 ?>
 
 <!-- (B) NAVIGATION -->
-<nav class="navbar text-white sb-grey">
+<nav class="navbar cb-grey">
 <div class="container-fluid">
   <div>
     <div class="fw-bold text-uppercase"><?=$item["stock_name"]?></div>
     <div><?=$item["stock_sku"]?></div>
   </div>
   <div class="d-flex">
-    <button class="btn btn-danger" onclick="sb.page(1)">
+    <button class="btn btn-danger" onclick="cb.page(1)">
       <span class="mi">undo</span>
     </button>
   </div>
@@ -19,4 +19,4 @@ $item = $_CORE->autoCall("Inventory", "get");
 </nav>
 
 <!-- (C) ITEM MOVEMENT HISTORY -->
-<div id="i-history" class="zebra my-4"></div>
+<div id="i-history" class="container zebra my-4"></div>

@@ -26,16 +26,16 @@ SOFTWARE.
 ---
 ## INSTALLATION
 ---
-Just access your website, follow through the installer.
+Just access your website and walk through the installer.
 
 
 ---
-## TROUBLE?
+## REQUIREMENTS
 ---
-1) Changed the path? Change .htaccess in both the root and api folders.
-2) Lost password? Write a simple script to update the user.
-  - $_CORE->load("User");
-  - $_CORE->User->save("NAME", "EMAIL", "PASSWORD", ID);
+1) Not extensively tested, but should work with at least PHP 7.4.
+2) PHP PDO extension.
+3) Apache server with MOD REWRITE enabled.
+4) "Grade A" browser.
 
 
 ---

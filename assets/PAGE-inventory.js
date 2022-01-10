@@ -102,7 +102,7 @@ var inv = {
 
   // (I) GENERATE QR CODE
   qrcode : (sku) => {
-    window.open(cbhost.base + "a/qrcode/?sku="+sku);
+    window.open(cbhost.base + "qrcode/?sku="+sku);
   }
 };
 window.addEventListener("load", inv.list);

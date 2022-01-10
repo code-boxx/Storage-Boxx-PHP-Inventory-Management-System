@@ -1,7 +1,7 @@
 <?php
-// (A) MUST BE SIGNED IN
-if ($_USER===false) {
-  $_CORE->respond("E", "Please sign in first", null, null, 403);
+// (A) REGISTERED USERS ONLY
+if (!isset($_SESS["user"])) {
+  $_CORE->respond(0, "Please sign in first", null, null, 403);
 }
 
 switch ($_REQ) {

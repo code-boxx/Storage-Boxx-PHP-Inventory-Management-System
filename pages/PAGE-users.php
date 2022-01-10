@@ -1,8 +1,10 @@
-<!-- (A) JAVASCRIPT -->
-<script src="<?=HOST_ASSETS?>users.js"></script>
-
-<!-- (B) NAVIGATION -->
-<!-- (B1) PAGE HEADER -->
+<?php
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-users.js", "defer"]
+]];
+require PATH_PAGES . "TEMPLATE-top.php"; ?>
+<!-- (A) NAVIGATION -->
+<!-- (A1) PAGE HEADER -->
 <nav class="navbar cb-grey"><div class="container-fluid">
   <h4>Manage Users</h4>
   <div class="d-flex">
@@ -12,7 +14,7 @@
   </div>
 </div></nav>
 
-<!-- (B2) SEARCH BAR -->
+<!-- (A2) SEARCH BAR -->
 <div class="searchBar"><form class="d-flex" onsubmit="return usr.search()">
   <input type="text" id="user-search" placeholder="Search" class="form-control form-control-sm"/>
   <button class="btn btn-primary">
@@ -20,5 +22,6 @@
   </button>
 </form></div>
 
-<!-- (C) USERS LIST -->
+<!-- (B) USERS LIST -->
 <div id="user-list" class="container zebra my-4"></div>
+<?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

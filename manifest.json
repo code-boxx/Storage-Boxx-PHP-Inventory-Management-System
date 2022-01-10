@@ -1,0 +1,18 @@
+{
+  "short_name": "Storage Boxx",
+  "name": "Storage Boxx",
+  "icons": [{
+     "src": "assets/favicon.png",
+     "sizes": "64x64",
+     "type": "image/png"
+  }, {
+    "src": "assets/ico-512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "start_url": "/",
+  "scope": "/",
+  "background_color": "white",
+  "theme_color": "white",
+  "display": "standalone"
+}

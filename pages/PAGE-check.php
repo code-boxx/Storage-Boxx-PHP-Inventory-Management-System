@@ -1,8 +1,10 @@
-<!-- (A) SCRIPTS -->
-<script src="<?=HOST_ASSETS?>html5-qrcode.min.js"></script>
-<script src="<?=HOST_ASSETS?>check.js"></script>
-
-<!-- (B) CHECK ITEM -->
+<?php
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."html5-qrcode.min.js"],
+  ["s", HOST_ASSETS."PAGE-check.js", "defer"]
+]];
+require PATH_PAGES . "TEMPLATE-top.php"; ?>
+<!-- (A) CHECK ITEM -->
 <nav class="navbar cb-grey mb-4">
 <div class="container-fluid">
   <h4>CHECK ITEM</h4>
@@ -10,7 +12,7 @@
 </nav>
 
 <div class="row">
-  <!-- (C) SCANNER -->
+  <!-- (B) SCANNER -->
   <div class="p-4" style="width:500px;margin:0 auto 1.5rem auto" id="reader"></div>
 
   <!-- (D) MANUAL FORM -->
@@ -22,3 +24,4 @@
     <input type="submit" class="btn btn-primary" value="Check"/>
   </form>
 </div>
+<?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

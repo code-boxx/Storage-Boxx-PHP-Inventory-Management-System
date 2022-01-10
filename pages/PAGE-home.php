@@ -1,9 +1,11 @@
-<!-- (A) SCRIPTS -->
-<script src="<?=HOST_ASSETS?>html5-qrcode.min.js"></script>
-<script defer src="<?=HOST_ASSETS?>move.js"></script>
-
-<!-- (B) STOCK MOVEMENT -->
-<!-- (B1) HEADER -->
+<?php
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."html5-qrcode.min.js"],
+  ["s", HOST_ASSETS."PAGE-move.js", "defer"]
+]];
+require PATH_PAGES . "TEMPLATE-top.php"; ?>
+<!-- (A) STOCK MOVEMENT -->
+<!-- (A1) HEADER -->
 <nav class="navbar cb-grey mb-4">
 <div class="container-fluid">
   <h4>Stock Movement</h4>
@@ -11,7 +13,7 @@
 </nav>
 
 <div class="container"><div class="row">
-  <!-- (B2) MOVEMENT FORM -->
+  <!-- (A2) MOVEMENT FORM -->
   <form class="col bg-light border p-4 m-1" autocomplete="off" onsubmit="return move.save()">
     <div class="mb-4">
       <label class="form-label" for="mvt-direction">Direction</label>
@@ -41,8 +43,9 @@
     <input type="submit" class="btn btn-primary" value="Save"/>
   </form>
 
-  <!-- (B3) MOVEMENT HISTORY (FOR CURRENT SESSION) -->
+  <!-- (A3) MOVEMENT HISTORY (FOR CURRENT SESSION) -->
   <div class="col bg-light border p-4 m-1">
     <ul class="list-group list-group-flush" id="mvt-result"></ul>
   </div>
 </div></div>
+<?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

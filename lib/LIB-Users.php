@@ -12,20 +12,49 @@ class Users extends Core {
 
     // (A2) ADD/UPDATE USER
     if ($id===null) {
-      return $this->DB->insert("users", $fields, $data);
+      $this->DB->insert("users", $fields, $data);
     } else {
       $data[] = $id;
-      return $this->DB->update("users", $fields, "`user_id`=?", $data);
+      $this->DB->update("users", $fields, "`user_id`=?", $data);
     }
+    return true;
   }
 
-  // (B) DELETE USER
+  // (B) REGISTER USER - RESTRICTED VERSION OF "SAVE" FOR FRONT-END
+  //  $name : user name
+  //  $email : user email
+  //  $password : user password
+  function register ($name, $email, $password) {
+    // (B1) ALREADY SIGNED IN
+    global $_SESS;
+    if (isset($_SESS["user"])) {
+      $this->error = "You are already signed in.";
+      return false;
+    }
+
+    // (B2) CHECK USER EXIST
+    if (is_array($this->get($email))) {
+      $this->error = "$email is already registered.";
+      return false;
+    }
+
+    // (B3) ADD YOUR OWN CHECKS
+    // PASSWORD LENGTH?
+    // USER ROLE?
+
+    // (B4) SAVE
+    $this->save($name, $email, $password);
+    return true;
+  }
+
+  // (C) DELETE USER
   //  $id : user id
   function del ($id) {
-    return $this->DB->query("DELETE FROM `users` WHERE `user_id`=?", [$id]);
+    $this->DB->delete("users", "`user_id`=?", [$id]);
+    return true;
   }
 
-  // (C) GET USER
+  // (D) GET USER
   //  $id : user id or email
   function get ($id) {
     return $this->DB->fetch(
@@ -34,40 +63,31 @@ class Users extends Core {
     );
   }
 
-  // (D) COUNT (FOR SEARCH & PAGINATION)
-  //  $search : optional, user name or email
-  function count ($search=null) {
-    $sql = "SELECT COUNT(*) FROM `users`";
-    $data = null;
-    if ($search != null) {
-      $sql .= " WHERE `user_name` LIKE ? OR `user_email` LIKE ?";
-      $data = ["%$search%", "%$search%"];
-    }
-    return $this->DB->fetchCol($sql, $data);
-  }
-
   // (E) GET ALL OR SEARCH USERS
   //  $search : optional, user name or email
   //  $page : optional, current page number
-  function getAll ($search=null, $page=1) {
-    // (E1) PAGINATION
-    $entries = $this->count($search);
-    if ($entries===false) { return false; }
-    $pgn = $this->core->paginator($entries, $page);
-
-    // (E2) GET USERS
-    $sql = "SELECT `user_id`, `user_name`, `user_email` FROM `users`";
+  function getAll ($search=null, $page=null) {
+    // (E1) PARITAL USERS SQL + DATA
+    $sql = "FROM `users`";
     $data = null;
     if ($search != null) {
       $sql .= " WHERE `user_name` LIKE ? OR `user_email` LIKE ?";
       $data = ["%$search%", "%$search%"];
     }
-    $sql .= " LIMIT {$pgn["x"]}, {$pgn["y"]}";
-    $users = $this->DB->fetchAll($sql, $data, "user_id");
-    if ($users===false) { return false; }
+
+    // (E2) PAGINATION
+    if ($page != null) {
+      $pgn = $this->core->paginator(
+        $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
+      );
+      $sql .= " LIMIT {$pgn["x"]}, {$pgn["y"]}";
+    }
 
     // (E3) RESULTS
-    return ["data" => $users, "page" => $pgn];
+    $users = $this->DB->fetchAll("SELECT * $sql", $data, "user_id");
+    return $page != null
+     ? ["data" => $users, "page" => $pgn]
+     : $users ;
   }
 
   // (F) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
@@ -77,12 +97,11 @@ class Users extends Core {
   function verify ($email, $password) {
     // (F1) GET USER
     $user = $this->get($email);
-    if ($user===false) { return false; }
     $pass = is_array($user);
 
     // (F2) PASSWORD CHECK
     if ($pass) {
-      $pass = password_verify($password, $user['user_password']);
+      $pass = password_verify($password, $user["user_password"]);
     }
 
     // (F3) RESULTS
@@ -93,20 +112,32 @@ class Users extends Core {
     return $user;
   }
 
-  // (G) LOGIN - JWT COOKIE
+  // (G) LOGIN
   //  $email : user email
   //  $password : user password
-  function inJWT ($email, $password) {
+  function login ($email, $password) {
     // (G1) ALREADY SIGNED IN
-    $this->core->load("JWT");
-    if ($this->core->JWT->verify(false)) { return true; }
+    global $_SESS;
+    if (isset($_SESS["user"])) { return true; }
 
     // (G2) VERIFY EMAIL PASSWORD
     $user = $this->verify($email, $password);
     if ($user===false) { return false; }
 
-    // (G3) GENERATE TOKEN
-    $this->core->JWT->create(["user_id" => $user["user_id"]]);
+    // (G3) SESSION START
+    $_SESS["user"] = $user;
+    $this->core->Session->create();
+    return true;
+  }
+
+  // (H) LOGOUT
+  function logout () {
+    // (H1) ALREADY SIGNED OFF
+    global $_SESS;
+    if (!isset($_SESS["user"])) { return true; }
+
+    // (H2) END SESSION
+    $this->core->Session->destroy();
     return true;
   }
 }

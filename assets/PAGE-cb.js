@@ -48,7 +48,7 @@ var cb = {
     mbody.innerHTML = body;
 
     // SET FOOTER (NONE)
-    if (foot===undefined || foot===null) { foot = ""; }
+    if (foot===undefined || foot===null) { mfoot.innerHTML = ""; }
 
     // SET FOOTER (FUNCTION)
     else if (typeof foot == "function") {
@@ -81,8 +81,8 @@ var cb = {
   page : (num) => {
     for (let i=1; i<=5; i++) {
       let pg = document.getElementById("cb-page-"+i);
-      if (i==num) { pg.classList.remove("cb-pg-hide"); }
-      else { pg.classList.add("cb-pg-hide"); }
+      if (i==num) { pg.classList.remove("d-none"); }
+      else { pg.classList.add("d-none"); }
     }
   },
 
@@ -155,8 +155,8 @@ var cb = {
     var options = {};
     options.url = cbhost.api + `${opt.mod}/${opt.req}/`;
     if (opt.data) { options.data = opt.data; }
-    if (opt.loading) { options.loading = opt.loading; }
-    if (opt.debug) { options.debug = opt.debug; }
+    if (opt.loading!=undefined) { options.loading = opt.loading; }
+    if (opt.debug!=undefined) { options.debug = opt.debug; }
     if (opt.onerr) { options.onerr = opt.onerr; }
     if (opt.passmsg === undefined) { opt.passmsg = "OK"; }
     if (opt.nofail === undefined) { opt.nofail = false; }
@@ -189,7 +189,7 @@ var cb = {
   },
 
   // (D) AJAX LOAD HTML PAGE
-  //  page : string, http://site.com/a/PAGE/
+  //  page : string, http://site.com/PAGE/
   //  target : string, ID of target HTML element
   //  data : object, data to send
   //  loading : boolean, show loading screen? Default false.
@@ -199,11 +199,14 @@ var cb = {
   load : (opt) => {
     // (D1) INIT OPTIONS
     var options = {};
-    options.url = cbhost.base + `a/${opt.page}/`;
-    options.loading = opt.loading ? opt.loading : false;
-    if (opt.debug) { options.debug = opt.debug; }
+    options.url = cbhost.base + `${opt.page}/`;
+    if (opt.loading!=undefined) { options.loading = opt.loading; }
+    if (opt.debug!=undefined) { options.debug = opt.debug; }
     if (opt.onerr) { options.onerr = opt.onerr; }
-    if (opt.data) { options.data = opt.data; }
+    if (opt.data) {
+      opt.data["ajax"] = 1;
+      options.data = opt.data;
+    } else { options.data = { "ajax" : 1 }; }
 
     // (D2) ON AJAX LOAD
     options.onpass = (res) => {

@@ -1,7 +1,8 @@
-<!-- (A) JAVASCRIPT -->
-<script src="<?=HOST_ASSETS?>login.js"></script>
-
-<!-- (B) LOGIN FORM -->
+<?php
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-login.js", "defer"]
+]];
+require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <form onsubmit="return signin();" class="col-md-6 offset-md-3 bg-light border p-4">
 <div class="row justify-content-center">
   <h4 class="mb-4">ADMIN SIGN IN</h4>
@@ -19,3 +20,4 @@
   <input type="submit" class="btn btn-primary btn-lg btn-block" value="Sign in"/>
 </div>
 </form>
+<?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

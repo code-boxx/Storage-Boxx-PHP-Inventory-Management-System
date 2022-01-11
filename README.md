@@ -3,6 +3,14 @@ Storage Boxx is a simple PHP Inventory Management System. This is not the “sup
 <br><br>
 
 
+## SCREENSHOTS
+<p float="left">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-0.jpg">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-1.jpg">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-2.jpg">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-3.jpg">
+</p><br>
+
 ## INSTALLATION & DOCUMENTATION
 Just access index.php and walk through the installer.
 

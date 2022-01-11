@@ -51,7 +51,7 @@
     /* NOW LOADING */
     #cb-loading{width:100vw;height:100vh;position:fixed;top:0;left:0;z-index:999;background:rgba(0,0,0,.7)}#cb-loading .spinner-border{width:80px;height:80px}
     /* COMMON FORM */
-    .searchBar{padding:0 .8rem .5rem .8rem}.cb-grey,.searchBar{background-color:#efefef}.zebra .row:nth-child(odd){background-color:#f2f2f2}
+    .zebra .d-flex:nth-child(odd){background-color:#efefef}#reader video{height:400px}.pagination{background:#f0f8ff}
     </style>
 
     <!-- (A10) COMMON INTERFACE -->
@@ -68,7 +68,7 @@
     }}
     if (isset($_PMETA)) { unset($_PMETA); } ?>
   </head>
-  <body>
+  <body class="bg-light">
     <!-- (B) COMMON SHARED INTERFACE -->
     <!-- (B1) NOW LOADING -->
     <div id="cb-loading" class="d-flex justify-content-center align-items-center cb-hide">
@@ -79,7 +79,7 @@
 
     <!-- (B2) TOAST MESSAGE -->
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index:11">
-      <div id="cb-toast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+      <div id="cb-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <span id="cb-toast-icon" class="mi"></span>
           <strong id="cb-toast-head" class="me-auto p-1"></strong>
@@ -90,7 +90,7 @@
     </div>
 
     <!-- (B3) MODAL DIALOG BOX -->
-    <div id="cb-modal" class="modal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
+    <div id="cb-modal" class="modal" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content">
       <div class="modal-header">
         <h5 id="cb-modal-head" class="modal-title"></h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -118,16 +118,6 @@
         <!-- (C2-2) LEFT MENU ITEMS -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>">
-              <span class="mi mi-smol">local_shipping</span> Movement
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>check">
-              <span class="mi mi-smol">qr_code_scanner</span> Check
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>inventory">
               <span class="mi mi-smol">inventory_2</span> Items
             </a>
@@ -142,8 +132,11 @@
 
       <!-- (C3) RIGHT ITEMS -->
       <div class="d-flex align-items-center">
-        <button class="btn btn-danger btn-sm" onclick="cb.bye()">
-          <span class="mi">logout</span>
+        <a class="btn btn-primary btn-sm mx-2 mi" href="<?=HOST_BASE?>check">
+          qr_code_scanner
+        </a>
+        <button class="btn btn-danger btn-sm mi" onclick="cb.bye()">
+          logout
         </button>
       </div>
     </div></nav>

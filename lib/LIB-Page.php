@@ -6,7 +6,7 @@ class Page {
   //  $mode : "J"avascript function or "A"nchor links
   //  $adj : number of adjcent page squares
   function draw ($pgn, $action, $mode="J", $adj=1) {
-    echo "<ul class='pagination mt-4'>";
+    echo "<ul class='pagination p-3 m-0'>";
 
     // (A1) ENOUGH PAGES TO HIDE - DRAW WITH ... SQUARES
     if ($pgn["total"]>5 + ($adj*2)) {

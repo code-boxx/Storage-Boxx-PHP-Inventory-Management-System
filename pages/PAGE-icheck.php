@@ -1,22 +1,15 @@
 <?php
 // (A) GET ITEM
-$item = $_CORE->autoCall("Inventory", "get");
-?>
-
+$item = $_CORE->autoCall("Inventory", "get"); ?>
 <!-- (B) NAVIGATION -->
-<nav class="navbar cb-grey">
-<div class="container-fluid">
-  <div>
-    <div class="fw-bold text-uppercase"><?=$item["stock_name"]?></div>
+<nav class="d-flex align-items-center bg-white border mb-3 p-3">
+  <div class="flex-grow-1">
+    <h3 class="text-uppercase"><?=$item["stock_name"]?></h3>
     <div><?=$item["stock_sku"]?></div>
   </div>
-  <div class="d-flex">
-    <button class="btn btn-danger" onclick="cb.page(1)">
-      <span class="mi">undo</span>
-    </button>
-  </div>
-</div>
+  <button class="btn btn-danger" onclick="cb.page(1)">
+  <span class="mi">undo</span>
 </nav>
 
 <!-- (C) ITEM MOVEMENT HISTORY -->
-<div id="i-history" class="container zebra my-4"></div>
+<div id="i-history" class="bg-white border zebra my-4"></div>

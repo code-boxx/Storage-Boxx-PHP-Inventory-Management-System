@@ -3,21 +3,31 @@ $_PMETA = ["load" => [
   ["s", HOST_ASSETS."PAGE-login.js", "defer"]
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
-<form onsubmit="return signin();" class="col-md-6 offset-md-3 bg-light border p-4">
 <div class="row justify-content-center">
-  <h4 class="mb-4">ADMIN SIGN IN</h4>
+<div class="col-md-10 bg-white border">
+  <div class="row">
+    <div class="col-4" style="background:url('<?=HOST_ASSETS?>desk.jpg') center"></div>
+    <form class="col-8 p-5" onsubmit="return signin();">
+      <img src="<?=HOST_ASSETS?>favicon.png" class="p-1 bg-primary rounded-circle"/>
+      <h3 class="my-4">PLEASE SIGN IN</h3>
 
-  <div class="mb-4">
-    <label class="form-label" for="user_email">Email</label>
-    <input type="email" id="user_email" class="form-control form-control-lg" required/>
+      <div class="input-group mb-4">
+        <div class="input-group-prepend">
+          <span class="input-group-text mi">email</span>
+        </div>
+        <input type="email" id="user_email" class="form-control" placeholder="Email" required/>
+      </div>
+
+      <div class="input-group mb-4">
+        <div class="input-group-prepend">
+          <span class="input-group-text mi">lock</span>
+        </div>
+        <input type="password" id="user_password" class="form-control" placeholder="Password" required/>
+      </div>
+
+      <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in"/>
+    </div>
   </div>
-
-  <div class="mb-4">
-    <label class="form-label" for="user_password">Password</label>
-    <input type="password" id="user_password" class="form-control form-control-lg" required/>
-  </div>
-
-  <input type="submit" class="btn btn-primary btn-lg btn-block" value="Sign in"/>
 </div>
-</form>
+</div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

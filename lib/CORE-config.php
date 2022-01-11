@@ -2,7 +2,7 @@
 // SEARCH FOR @CHANGE AND UPDATE THE SETTINGS TO YOUR OWN!
 
 // (A) HOST
-define("HOST_BASE", "http://localhost/"); // @CHANGE
+define("HOST_BASE", "http://localhost/"); // CHANGED BY INSTALLER
 define("HOST_NAME", parse_url(HOST_BASE, PHP_URL_HOST));
 define("HOST_BASE_PATH", parse_url(HOST_BASE, PHP_URL_PATH));
 define("HOST_API", HOST_BASE_PATH . "api/");
@@ -10,11 +10,11 @@ define("HOST_API_BASE", HOST_BASE . "api/");
 define("HOST_ASSETS", HOST_BASE . "assets/");
 
 // (B) DATABASE - @CHANGE
-define("DB_HOST", "localhost");
-define("DB_NAME", "storageboxx");
+define("DB_HOST", "localhost"); // CHANGED BY INSTALLER
+define("DB_NAME", "coreboxx"); // CHANGED BY INSTALLER
 define("DB_CHARSET", "utf8");
-define("DB_USER", "root");
-define("DB_PASSWORD", "");
+define("DB_USER", "root"); // CHANGED BY INSTALLER
+define("DB_PASSWORD", ""); // CHANGED BY INSTALLER
 
 // (C) ERROR HANDLING
 /* @CHANGE - DON'T DISPLAY ERRORS BUT KEEP IN ERROR LOG ON LIVE SYSTEMS
@@ -32,14 +32,14 @@ ini_set("log_errors", 0);
 define("ERR_SHOW", true);
 
 // (D) JSON WEB TOKEN
-define("JWT_SECRET", "YOUR-SECRET-KEY");
-define("JWT_ISSUER", "YOUR-NAME");
+define("JWT_SECRET", "l_weBgIp8~~8I6jMvtGz=txmqJkfY!CFF5.rT8AzLbN77y=c"); // CHANGED BY INSTALLER
+define("JWT_ISSUER", "localhost"); // CHANGED BY INSTALLER
 define("JWT_ALGO", "HS256");
 define("JWT_EXPIRE", 0); // in seconds, 0 for none
 
 // (E) API ENDPOINT
-define("API_HTTPS", false); // enforce https for api endpoint
-define("API_CORS", false);
+define("API_HTTPS", false); // CHANGED BY INSTALLER
+define("API_CORS", false); // CHANGED BY INSTALLER
 // define("API_CORS", false); // no cors, accept host_name only
 // define("API_CORS", true); // any domain + mobile apps
 // define("API_CORS", "site-a.com"); // this domain only

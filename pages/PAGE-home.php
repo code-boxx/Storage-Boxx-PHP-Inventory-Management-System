@@ -4,19 +4,17 @@ $_PMETA = ["load" => [
   ["s", HOST_ASSETS."PAGE-move.js", "defer"]
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
-<!-- (A) STOCK MOVEMENT -->
-<!-- (A1) HEADER -->
-<nav class="navbar cb-grey mb-4">
-<div class="container-fluid">
-  <h4>Stock Movement</h4>
-</div>
-</nav>
+<div class="bg-white border p-4">
+  <!-- (A) QR SCANNER -->
+  <h4 class="mb-4">STOCK MOVEMENT</h4>
+  <div id="reader" class="mb-4"></div>
 
-<div class="container"><div class="row">
-  <!-- (A2) MOVEMENT FORM -->
-  <form class="col bg-light border p-4 m-1" autocomplete="off" onsubmit="return move.save()">
-    <div class="mb-4">
-      <label class="form-label" for="mvt-direction">Direction</label>
+  <!-- (B) MOVEMENT FORM -->
+  <form autocomplete="off" onsubmit="return move.save()">
+    <div class="input-group mb-4">
+      <div class="input-group-prepend">
+        <span class="input-group-text mi">compare_arrows</span>
+      </div>
       <select class="form-control" id="mvt-direction">
         <option value="I">Stock In (Receive)</option>
         <option value="O">Stock Out (Release)</option>
@@ -24,28 +22,32 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       </select>
     </div>
 
-    <div class="mb-4">
-      <label class="form-label" for="mvt-qty">Quantity</label>
-      <input type="number" class="form-control" id="mvt-qty" step="0.01" value="1.00" required/>
+    <div class="input-group mb-4">
+      <div class="input-group-prepend">
+        <span class="input-group-text mi">confirmation_number</span>
+      </div>
+      <input type="number" class="form-control" id="mvt-qty" step="0.01" value="1.00" required placeholder="Quantity"/>
     </div>
 
-    <div class="mb-4">
-      <label class="form-label" for="mvt-notes">Notes (If Any)</label>
-      <textarea class="form-control" id="mvt-notes"></textarea>
+    <div class="input-group mb-4">
+      <div class="input-group-prepend">
+        <span class="input-group-text mi">speaker_notes</span>
+      </div>
+      <input type="text" class="form-control" id="mvt-notes" placeholder="Notes (if any)"/>
     </div>
 
-    <div class="mb-4">
-      <label class="form-label" for="mvt-sku">SKU (Enter or Scan)</label>
-      <input type="text" class="form-control" id="mvt-sku" required autofocus/>
+    <div class="input-group mb-4">
+      <div class="input-group-prepend">
+        <span class="input-group-text mi">qr_code</span>
+      </div>
+      <input type="text" class="form-control" id="mvt-sku" required autofocus placeholder="Item SKU (enter or scan)"/>
     </div>
-    <div class="p-4" style="width:500px;margin:0 auto 1.5rem auto" id="reader"></div>
 
     <input type="submit" class="btn btn-primary" value="Save"/>
   </form>
 
-  <!-- (A3) MOVEMENT HISTORY (FOR CURRENT SESSION) -->
-  <div class="col bg-light border p-4 m-1">
+  <div class="col bg-light border mt-4" style="max-height:200px;overflow:auto">
     <ul class="list-group list-group-flush" id="mvt-result"></ul>
   </div>
-</div></div>
+</div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

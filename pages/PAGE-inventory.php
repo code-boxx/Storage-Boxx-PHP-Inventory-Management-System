@@ -5,23 +5,24 @@ $_PMETA = ["load" => [
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) NAVIGATION -->
-<nav class="navbar cb-grey"><div class="container-fluid">
-  <h4>Manage Inventory</h4>
-  <div class="d-flex">
+<nav class="bg-white border mb-3">
+  <!-- (A1) HEADER -->
+  <div class="d-flex align-items-center p-3 pb-0">
+    <h3 class="flex-grow-1">MANAGE INVENTORY</h3>
     <button class="btn btn-primary" onclick="inv.addEdit()">
       <span class="mi">add</span>
     </button>
   </div>
-</div></nav>
 
-<!-- (B) SEARCH BAR -->
-<div class="searchBar"><form class="d-flex" onsubmit="return inv.search()">
-  <input type="text" id="inv-search" placeholder="Search" class="form-control form-control-sm"/>
-  <button class="btn btn-primary">
-    <span class="mi">search</span>
-  </button>
-</form></div>
+  <!-- (A2) SEARCH BAR -->
+  <form class="d-flex align-items-stretch p-3" onsubmit="return inv.search()">
+    <input type="text" id="inv-search" placeholder="Search" class="form-control form-control-sm"/>
+    <button class="btn btn-primary">
+      <span class="mi">search</span>
+    </button>
+  </form>
+</nav>
 
-<!-- (C) INVENTORY LIST -->
-<div id="inv-list" class="container zebra my-4"></div>
+<!-- (B) INVENTORY LIST -->
+<div id="inv-list" class="bg-white border zebra my-4"></div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

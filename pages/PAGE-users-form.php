@@ -6,23 +6,29 @@ if ($edit) {
 }
 
 // (B) USER FORM ?>
-<form class="col-md-6 offset-md-3 bg-light border p-4" onsubmit="return usr.save()">
-  <h4 class="mb-4"><?=$edit?"EDIT":"ADD"?> USER</h4>
+<form class="bg-white border p-4" onsubmit="return usr.save()">
+  <h3 class="mb-4"><?=$edit?"EDIT":"ADD"?> USER</h3>
   <input type="hidden" id="user_id" value="<?=isset($user)?$user["user_id"]:""?>"/>
 
-  <div class="mb-4">
-    <label for="user_name" class="form-label">Name</label>
-    <input type="text" class="form-control" id="user_name" required value="<?=isset($user)?$user["user_name"]:""?>"/>
+  <div class="input-group mb-4">
+    <div class="input-group-prepend">
+      <span class="input-group-text mi">person</span>
+    </div>
+    <input type="text" class="form-control" id="user_name" required value="<?=isset($user)?$user["user_name"]:""?>" placeholder="Name"/>
   </div>
 
-  <div class="mb-4">
-    <label for="user_email" class="form-label">Email</label>
-    <input type="email" class="form-control" id="user_email" required value="<?=isset($user)?$user["user_email"]:""?>"/>
+  <div class="input-group mb-4">
+    <div class="input-group-prepend">
+      <span class="input-group-text mi">email</span>
+    </div>
+    <input type="email" class="form-control" id="user_email" required value="<?=isset($user)?$user["user_email"]:""?>" placeholder="Email"/>
   </div>
 
-  <div class="mb-4">
-    <label for="user_pass" class="form-label">Password</label>
-    <input type="password" class="form-control" id="user_password" required/>
+  <div class="input-group mb-4">
+    <div class="input-group-prepend">
+      <span class="input-group-text mi">lock</span>
+    </div>
+    <input type="password" id="user_password" class="form-control" placeholder="Password" required/>
   </div>
 
   <input type="button" class="col btn btn-danger btn-lg" value="Back" onclick="cb.page(1)"/>

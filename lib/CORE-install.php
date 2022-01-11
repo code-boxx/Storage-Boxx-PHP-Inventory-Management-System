@@ -15,7 +15,7 @@ define("I_API", I_BASE . "api" . DIRECTORY_SEPARATOR);
 define("I_ASSETS", I_BASE . "assets" . DIRECTORY_SEPARATOR);
 define("I_LIB", I_BASE . "lib" . DIRECTORY_SEPARATOR);
 define("I_ALL", [
-  I_BASE, I_API, I_LIB, I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo",
+  I_BASE, I_API, I_ASSETS, I_LIB, I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo",
   I_LIB . "SQL-storage-boxx.sql"
 ]);
 

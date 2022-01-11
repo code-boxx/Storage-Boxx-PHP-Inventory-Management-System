@@ -21,7 +21,7 @@ define("I_ALL", [
 
 // (A4) DATABASE DEFAULTS
 define("I_DB_HOST", "localhost");
-define("I_DB_NAME", "coreboxx");
+define("I_DB_NAME", "storageboxx");
 define("I_DB_USER", "root");
 define("I_DB_PASS", "");
 

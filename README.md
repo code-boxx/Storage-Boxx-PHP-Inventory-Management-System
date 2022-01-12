@@ -12,7 +12,7 @@ Storage Boxx is a simple PHP Inventory Management System. This is not the “sup
 </p><br>
 
 ## INSTALLATION & DOCUMENTATION
-Just access index.php and walk through the installer.
+Just access `index.php` and walk through the installer.
 
 Visit https://code-boxx.com/storage-boxx-php-inventory-system/ for the documentation.
 <br><br>

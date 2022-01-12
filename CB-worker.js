@@ -6,9 +6,10 @@ cFiles = [
   "assets/bootstrap.bundle.min.js.map",
   "assets/bootstrap.min.css",
   "assets/bootstrap.min.css.map",
-  // (A2) ICONS
+  // (A2) ICONS + IMAGES
   "assets/favicon.png",
   "assets/ico-512.png",
+  "assets/desk.jpg",
   // (A3) COMMON INTERFACE
   "assets/PAGE-cb.js",
   "assets/maticon.woff2",

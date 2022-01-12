@@ -8,8 +8,11 @@ $_CORE->Route->run(function ($_PATH) {
   // (B1) REDIRECT TO LOGIN PAGE IF NOT SIGNED IN
   global $_SESS;
   if (!isset($_SESS["user"]) && $_PATH!="login/") {
-    header("Location: ".HOST_BASE."login");
-    exit();
+    if (isset($_POST["ajax"])) { exit("E"); }
+    else {
+      header("Location: ".HOST_BASE."login");
+      exit();
+    }
   }
 
   // (B2) RETURN $_PATH

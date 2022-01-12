@@ -210,7 +210,7 @@ var cb = {
 
     // (D2) ON AJAX LOAD
     options.onpass = (res) => {
-      if (res=="SE") { location.href = cbhost.base + "login/"; }
+      if (res=="E") { location.href = cbhost.base + "login/"; }
       else {
         document.getElementById(opt.target).innerHTML = res;
         if (opt.onload) { opt.onload(); }

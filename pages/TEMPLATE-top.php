@@ -23,7 +23,7 @@
     <meta name="msapplication-TileImage" content="<?=HOST_ASSETS?>icon-512.png">
     <meta name="msapplication-TileColor" content="#ffffff">
 
-    <?php if (isset($_SESSION["user"])) { ?>
+    <?php if (isset($_SESS["user"])) { ?>
     <!-- (A5) WEB APP MANIFEST -->
     <!-- https://web.dev/add-manifest/ -->
     <link rel="manifest" href="<?=HOST_BASE?>manifest.json">

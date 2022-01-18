@@ -1,16 +1,28 @@
 <?php
 class Users extends Core {
-  // (A) ADD OR UPDATE USER
+  // (A) PASSWORD CHECKER
+  //  $password : password to check
+  //  $pattern : regex pattern check (at least 8 characters, alphanumeric)
+  function checker ($password, $pattern='/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i') {
+    if (preg_match($pattern, $password)) { return true; }
+    else {
+      $this->error = "Password must be at least 8 characters alphanumeric.";
+      return false;
+    }
+  }
+
+  // (B) ADD OR UPDATE USER
   //  $name : user name
   //  $email : user email
   //  $password : user password
   //  $id : user id (for updating only)
   function save ($name, $email, $password, $id=null) {
-    // (A1) DATA SETUP
+    // (B1) DATA SETUP + PASSWORD CHECK
+    if (!$this->checker($password)) { return false; }
     $fields = ["user_name", "user_email", "user_password"];
     $data = [$name, $email, password_hash($password, PASSWORD_DEFAULT)];
 
-    // (A2) ADD/UPDATE USER
+    // (B2) ADD/UPDATE USER
     if ($id===null) {
       $this->DB->insert("users", $fields, $data);
     } else {
@@ -20,41 +32,40 @@ class Users extends Core {
     return true;
   }
 
-  // (B) REGISTER USER - RESTRICTED VERSION OF "SAVE" FOR FRONT-END
+  // (C) REGISTER USER - RESTRICTED VERSION OF "SAVE" FOR FRONT-END
   //  $name : user name
   //  $email : user email
   //  $password : user password
   function register ($name, $email, $password) {
-    // (B1) ALREADY SIGNED IN
+    // (C1) ALREADY SIGNED IN
     global $_SESS;
     if (isset($_SESS["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }
 
-    // (B2) CHECK USER EXIST
+    // (C2) CHECK USER EXIST
     if (is_array($this->get($email))) {
       $this->error = "$email is already registered.";
       return false;
     }
 
-    // (B3) ADD YOUR OWN CHECKS
-    // PASSWORD LENGTH?
+    // (C3) ADD YOUR OWN CHECKS
     // USER ROLE?
 
-    // (B4) SAVE
+    // (C4) SAVE
     $this->save($name, $email, $password);
     return true;
   }
 
-  // (C) DELETE USER
+  // (D) DELETE USER
   //  $id : user id
   function del ($id) {
     $this->DB->delete("users", "`user_id`=?", [$id]);
     return true;
   }
 
-  // (D) GET USER
+  // (E) GET USER
   //  $id : user id or email
   function get ($id) {
     return $this->DB->fetch(
@@ -63,11 +74,11 @@ class Users extends Core {
     );
   }
 
-  // (E) GET ALL OR SEARCH USERS
+  // (F) GET ALL OR SEARCH USERS
   //  $search : optional, user name or email
   //  $page : optional, current page number
   function getAll ($search=null, $page=null) {
-    // (E1) PARITAL USERS SQL + DATA
+    // (F1) PARITAL USERS SQL + DATA
     $sql = "FROM `users`";
     $data = null;
     if ($search != null) {
@@ -75,7 +86,7 @@ class Users extends Core {
       $data = ["%$search%", "%$search%"];
     }
 
-    // (E2) PAGINATION
+    // (F2) PAGINATION
     if ($page != null) {
       $pgn = $this->core->paginator(
         $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
@@ -83,28 +94,28 @@ class Users extends Core {
       $sql .= " LIMIT {$pgn["x"]}, {$pgn["y"]}";
     }
 
-    // (E3) RESULTS
+    // (F3) RESULTS
     $users = $this->DB->fetchAll("SELECT * $sql", $data, "user_id");
     return $page != null
      ? ["data" => $users, "page" => $pgn]
      : $users ;
   }
 
-  // (F) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
+  // (G) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
   // RETURNS USER ARRAY IF VALID, FALSE IF INVALID
   //  $email : user email
   //  $password : user password
   function verify ($email, $password) {
-    // (F1) GET USER
+    // (G1) GET USER
     $user = $this->get($email);
     $pass = is_array($user);
 
-    // (F2) PASSWORD CHECK
+    // (G2) PASSWORD CHECK
     if ($pass) {
       $pass = password_verify($password, $user["user_password"]);
     }
 
-    // (F3) RESULTS
+    // (G3) RESULTS
     if (!$pass) {
       $this->error = "Invalid user or password.";
       return false;
@@ -112,31 +123,31 @@ class Users extends Core {
     return $user;
   }
 
-  // (G) LOGIN
+  // (H) LOGIN
   //  $email : user email
   //  $password : user password
   function login ($email, $password) {
-    // (G1) ALREADY SIGNED IN
+    // (H1) ALREADY SIGNED IN
     global $_SESS;
     if (isset($_SESS["user"])) { return true; }
 
-    // (G2) VERIFY EMAIL PASSWORD
+    // (H2) VERIFY EMAIL PASSWORD
     $user = $this->verify($email, $password);
     if ($user===false) { return false; }
 
-    // (G3) SESSION START
+    // (H3) SESSION START
     $_SESS["user"] = $user;
     $this->core->Session->create();
     return true;
   }
 
-  // (H) LOGOUT
+  // (I) LOGOUT
   function logout () {
-    // (H1) ALREADY SIGNED OFF
+    // (I1) ALREADY SIGNED OFF
     global $_SESS;
     if (!isset($_SESS["user"])) { return true; }
 
-    // (H2) END SESSION
+    // (I2) END SESSION
     $this->core->Session->destroy();
     return true;
   }

@@ -38,7 +38,8 @@ class Route extends Core {
 
   // (D) RESOLVE URL ROUTE
   //  $before : function, use this to tweak the path or do permission check
-  function run ($before=null) {
+  //  $prefix : file prefix, defaults to "page"
+  function run ($before=null, $prefix="PAGE") {
     // (D1) GET URL PATH
     // HTTP://SITE.COM/ > "/"
     // HTTP://SITE.COM/HELLO/WORLD/ > "HELLO/WORLD/"
@@ -76,7 +77,7 @@ class Route extends Core {
     }
 
     // (D5) WILL AUTO RESOLVE OTHERWISE
-    if (!$loaded) { $this->pathload($_PATH); }
+    if (!$loaded) { $this->pathload($_PATH, $prefix); }
   }
 
   // (E) LOAD PAGE FROM GIVEN PATH

@@ -222,21 +222,23 @@ var cb = {
   },
 
   // (E) SIGN OFF
-  //  confirm : boolean, confirmed sign off
-  bye : (confirm) => {
-    if (confirm) {
+  bye : () => {
+    cb.modal("Please Confirm", "Sign off?", () => {
       cb.api({
         mod : "session", req : "logout",
-        nopass : true,
+        passmsg : false,
         onpass : () => { location.href = cbhost.base + "login/"; }
       });
-    } else {
-      cb.modal("Please Confirm", "Sign off?", () => { cb.bye(true); });
-    }
+    });
+  },
+
+  // (F) PASSWORD/HASH STRENGTH CHECKER
+  checker : (hash) => {
+    return /^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(hash);
   }
 };
 
-// (F) INIT INTERFACE
+// (G) INIT INTERFACE
 window.addEventListener("load", () => {
   cb.loady = document.getElementById("cb-loading");
   cb.toasty = new bootstrap.Toast(document.getElementById("cb-toast"), { delay: 3500 });

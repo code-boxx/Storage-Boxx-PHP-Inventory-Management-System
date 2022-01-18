@@ -112,6 +112,13 @@ if ($_IMODE == "C") { ?>
         return false;
       }
 
+      // PASSWORD STRENGTH - AT LEAST 8 CHARACTERS ALPHANUMERIC
+      if (!/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(pass.value)) {
+        go.disabled = false;
+        alert("Password must be at least 8 characters alphanumeric");
+        return false;
+      }
+
       // FORM DATA
       var data = new FormData(document.getElementById("iForm"));
       data.append("install", "1");

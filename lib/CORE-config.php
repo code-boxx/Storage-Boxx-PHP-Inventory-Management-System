@@ -11,7 +11,7 @@ define("HOST_ASSETS", HOST_BASE . "assets/");
 
 // (B) DATABASE - @CHANGE
 define("DB_HOST", "localhost"); // CHANGED BY INSTALLER
-define("DB_NAME", "coreboxx"); // CHANGED BY INSTALLER
+define("DB_NAME", "storageboxx"); // CHANGED BY INSTALLER
 define("DB_CHARSET", "utf8");
 define("DB_USER", "root"); // CHANGED BY INSTALLER
 define("DB_PASSWORD", ""); // CHANGED BY INSTALLER
@@ -32,7 +32,7 @@ ini_set("log_errors", 0);
 define("ERR_SHOW", true);
 
 // (D) JSON WEB TOKEN
-define("JWT_SECRET", "l_weBgIp8~~8I6jMvtGz=txmqJkfY!CFF5.rT8AzLbN77y=c"); // CHANGED BY INSTALLER
+define("JWT_SECRET", "9.L7Hoe_qph-=j0=u-Sr!0mziYgtd6pSDEx=AdvGD8Rb3046"); // CHANGED BY INSTALLER
 define("JWT_ISSUER", "localhost"); // CHANGED BY INSTALLER
 define("JWT_ALGO", "HS256");
 define("JWT_EXPIRE", 0); // in seconds, 0 for none

@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta name="description" content="<?=isset($_PMETA["desc"])?$_PMETA["desc"]:"Storage Boxx - Inventory Management System"?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <meta name="robots" content="noindex">
     <link rel="icon" href="<?=HOST_ASSETS?>favicon.png" type="image/png">
 
     <!-- (A2) ANDROID/CHROME -->

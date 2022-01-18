@@ -1,4 +1,8 @@
 <?php
+// (A) ALREADY SIGNED IN
+if (isset($_SESS["user"])) { $_CORE->redirect(); }
+
+// (B) LOGIN PAGE
 $_PMETA = ["load" => [
   ["s", HOST_ASSETS."PAGE-login.js", "defer"]
 ]];

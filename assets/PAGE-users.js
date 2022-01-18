@@ -51,7 +51,13 @@ var usr = {
     var id = document.getElementById("user_id").value;
     if (id!="") { data.id = id; }
 
-    // (E2) AJAX
+    // (E2) PASSWORD STRENGTH
+    if (!cb.checker(data.password)) {
+      cb.modal("Error", "Password must be at least 8 characters alphanumeric");
+      return false;
+    }
+
+    // (E3) AJAX
     cb.api({
       mod : "users",
       req : "save",

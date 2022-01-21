@@ -57,7 +57,22 @@ class DB extends Core {
     return count($results)>0 ? $results : null ;
   }
 
-  // (H) FETCH (SINGLE ROW)
+  // (H) FETCH ALL (KEY => VALUE)
+  //  $sql : SQL query
+  //  $data : array of parameters for query
+  //  $key : use this field as the array key
+  //  $value : use this field as the value
+  //  * returns null if no results
+  function fetchKV ($sql, $data, $key, $value) {
+    $this->query($sql, $data);
+    $results = [];
+    while ($row = $this->stmt->fetch()) {
+      $results[$row[$key]] = $row[$value];
+    }
+    return count($results)>0 ? $results : null ;
+  }
+
+  // (I) FETCH (SINGLE ROW)
   //  $sql : SQL query
   //  $data : array of parameters for query
   //  * returns null if no results
@@ -67,7 +82,7 @@ class DB extends Core {
     return $result===false ? null : $result ;
   }
 
-  // (I) FETCH (SINGLE COLUMN)
+  // (J) FETCH (SINGLE COLUMN)
   //  $sql : SQL query
   //  $data : array of parameters for query
   //  * returns null if no results
@@ -77,14 +92,14 @@ class DB extends Core {
     return $result===false ? null : $result ;
   }
 
-  // (J) INSERT OR REPLACE SQL HELPER
+  // (K) INSERT OR REPLACE SQL HELPER
   //  $table : table to insert into
   //  $fields : array of fields to insert
   //  $data : data array to insert
   //  $replace : replace instead of insert?
   // * simply throws exception on sql error, no return results.
   function insert ($table, $fields, $data, $replace=false) {
-    // (J1) QUICK CHECK
+    // (K1) QUICK CHECK
     $cfields = count($fields);
     $cdata = count($data);
     $segments = $cdata / $cfields;
@@ -92,7 +107,7 @@ class DB extends Core {
       throw new Exception("Number of data elements do not match with number of fields");
     }
 
-    // (J2) FORM SQL
+    // (K2) FORM SQL
     $sql = $replace ? "REPLACE" : "INSERT" ;
     $sql .= " INTO `$table` (";
     foreach ($fields as $f) { $sql .= "`$f`,"; }
@@ -100,7 +115,7 @@ class DB extends Core {
     $sql .= str_repeat("(". substr(str_repeat("?,", $cfields), 0, -1) ."),", $segments);
     $sql = substr($sql, 0, -1).";";
 
-    // (J3) RUN QUERY
+    // (K3) RUN QUERY
     $this->query($sql, $data);
     if (!$replace) {
       $this->lastID = $this->pdo->lastInsertId();
@@ -108,13 +123,13 @@ class DB extends Core {
     }
   }
 
-  // (K) REPLACE
+  // (L) REPLACE
   //  * simply reuses "insert" above, but with $replace flag
   function replace ($table, $fields, $data) {
     $this->insert($table, $fields, $data, true);
   }
 
-  // (L) UPDATE SQL HELPER
+  // (M) UPDATE SQL HELPER
   //  $table : table to update
   //  $fields : array of fields to update
   //  $where : where clause for update SQL
@@ -128,7 +143,7 @@ class DB extends Core {
     $this->lastRows = $this->stmt->rowCount();
   }
 
-  // (M) DELETE SQL HELPER
+  // (N) DELETE SQL HELPER
   //  $table : table to update
   //  $where : where clause for delete SQL
   //  $data : data array

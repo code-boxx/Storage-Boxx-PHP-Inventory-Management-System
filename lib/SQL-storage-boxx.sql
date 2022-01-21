@@ -1,3 +1,10 @@
+CREATE TABLE `options` (
+  `option_name` varchar(255) NOT NULL,
+  `option_description` varchar(255) DEFAULT NULL,
+  `option_value` varchar(255) NOT NULL,
+  `option_group` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `stock` (
   `stock_sku` varchar(255) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL,
   `stock_name` varchar(255) NOT NULL,
@@ -37,4 +44,7 @@ ALTER TABLE `users`
 
 ALTER TABLE `users`
   MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-COMMIT;
+
+INSERT INTO `options` (`option_name`, `option_description`, `option_value`, `option_group`) VALUES
+  ('EMAIL_FROM', 'System email from.', 'sys@site.com', 1),
+  ('PAGE_PER', 'Number of entries per page.', '20', 1);

@@ -51,8 +51,9 @@
     #cb-loading{transition:opacity .3s}.cb-hide{opacity:0;visibility:hidden;height:0}.cb-pg-hide{display:none}
     /* NOW LOADING */
     #cb-loading{width:100vw;height:100vh;position:fixed;top:0;left:0;z-index:999;background:rgba(0,0,0,.7)}#cb-loading .spinner-border{width:80px;height:80px}
-    /* COMMON FORM */
-    .zebra .d-flex:nth-child(odd){background-color:#efefef}#reader video{height:400px}.pagination{background:#f0f8ff}
+    /* COMMON & FORM */
+    #cb-body,body{min-height:100vh}#cb-toggle{display:none}#cb-side{min-width:170px}#cb-side a{color:#fff}#cb-side .mi{color:#6a6a6a}@media screen and (max-width:768px){#cb-toggle{display:block}#cb-side{display:none}#cb-side.show{display:block}}
+    .zebra .d-flex:nth-child(odd){background:#f7f7f7}#reader video{height:400px}.pagination{border:1px solid #c7daf7;background:#f0f6ff}
     </style>
 
     <!-- (A9) COMMON INTERFACE -->
@@ -101,48 +102,65 @@
       </div>
     </div></div></div>
 
-    <?php if (isset($_SESS["user"])) { ?>
-    <!-- (C) MAIN NAV BAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top"><div class="container-fluid">
-      <!-- (C1) MENU TOGGLE BUTTON -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- (C2) COLLAPSABLE WRAPPER -->
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!-- (C2-1) BRANDING LOGO -->
-        <a class="navbar-brand" href="<?=HOST_BASE?>">
-          <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32"/>
-        </a>
-
-        <!-- (C2-2) LEFT MENU ITEMS -->
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <!-- (C) MAIN INTERFACE -->
+    <div id="cb-body" class="d-flex">
+      <?php if (isset($_SESS["user"])) { ?>
+      <!-- (C1) LEFT SIDEBAR -->
+      <nav id="cb-side" class="bg-dark text-white p-3">
+        <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32"/>
+        <hr>
+        <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>inventory">
+            <a class="nav-link" href="<?=HOST_BASE?>">
+              <i class="mi mi-smol">move_up</i> Movement
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?=HOST_BASE?>inventory">
               <span class="mi mi-smol">inventory_2</span> Items
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="<?=HOST_BASE?>users">
+            <a class="nav-link" href="<?=HOST_BASE?>users">
               <span class="mi mi-smol">people</span> Users
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?=HOST_BASE?>settings">
+              <span class="mi mi-smol">settings</span> Settings
+            </a>
+          </li>
         </ul>
-      </div>
+        <hr>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="<?=HOST_BASE?>about">
+              <i class="mi mi-smol">info</i> About
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <?php } ?>
 
-      <!-- (C3) RIGHT ITEMS -->
-      <div class="d-flex align-items-center">
-        <a class="btn btn-primary btn-sm mx-2 mi" href="<?=HOST_BASE?>check">
-          qr_code_scanner
-        </a>
-        <button class="btn btn-danger btn-sm mi" onclick="cb.bye()">
-          logout
-        </button>
-      </div>
-    </div></nav>
-    <?php } ?>
+      <!-- (C2) RIGHT CONTENTS -->
+      <div class="flex-grow-1">
+        <?php if (isset($_SESS["user"])) { ?>
+        <!-- (C2-1) TOP NAV -->
+        <nav class="d-flex bg-dark text-white p-1">
+          <div class="flex-grow-1">
+            <button id="cb-toggle" class="btn btn-sm mi text-white" onclick="cb.toggle()">
+              menu
+            </button>
+          </div>
+          <a class="btn btn-sm me-1 text-white mi" href="<?=HOST_BASE?>check">
+            qr_code_scanner
+          </a>
+          <button class="btn btn-sm text-white mi" onclick="cb.bye()">
+            logout
+          </button>
+        </nav>
+        <?php } ?>
 
-    <!-- (D) MAIN PAGE -->
-    <div class="container pt-4">
-      <div id="cb-page-1">
+        <!-- (C2-2) CONTENTS -->
+        <div class="p-4">
+          <div id="cb-page-1">

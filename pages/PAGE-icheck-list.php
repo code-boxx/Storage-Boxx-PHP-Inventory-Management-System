@@ -14,7 +14,7 @@ $mv = ["I"=>"login", "O"=>"logout", "T"=>"done_all"];
 </div>
 
 <?php if (is_array($move["data"])) { foreach ($move["data"] as $m) { ?>
-<div class="d-flex align-items-center p-2">
+<div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
     <div class="fw-bold">
       <?=$m["mvt_date"]?> (<?=$m["user_name"]?>)
@@ -28,7 +28,7 @@ $mv = ["I"=>"login", "O"=>"logout", "T"=>"done_all"];
   </div>
 </div>
 <?php }} else { ?>
-<div class="d-flex align-items-center p-2">No movement history.</div>
+<div class="d-flex align-items-center border p-2">No movement history.</div>
 <?php }
 
 // (C) PAGINATION

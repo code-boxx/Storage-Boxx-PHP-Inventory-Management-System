@@ -86,6 +86,11 @@ var cb = {
     }
   },
 
+  // (A5) TOGGLE SIDEBAR
+  toggle : () => {
+    document.getElementById("cb-side").classList.toggle("show");
+  },
+
   // (B) AJAX CALL
   //  url : string, target URL
   //  data : optional object, data to send

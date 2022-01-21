@@ -32,7 +32,7 @@ ini_set("log_errors", 0);
 define("ERR_SHOW", true);
 
 // (D) JSON WEB TOKEN
-define("JWT_SECRET", "9.L7Hoe_qph-=j0=u-Sr!0mziYgtd6pSDEx=AdvGD8Rb3046"); // CHANGED BY INSTALLER
+define("JWT_SECRET", "M7lWydOxnQIeQeK_YbLbjMO2LT2s2zAghML-lekJkVrBhyMw"); // CHANGED BY INSTALLER
 define("JWT_ISSUER", "localhost"); // CHANGED BY INSTALLER
 define("JWT_ALGO", "HS256");
 define("JWT_EXPIRE", 0); // in seconds, 0 for none
@@ -51,9 +51,3 @@ define("PATH_BASE", dirname(PATH_LIB) . DIRECTORY_SEPARATOR);
 define("PATH_API", PATH_BASE . "api" . DIRECTORY_SEPARATOR);
 define("PATH_ASSETS", PATH_BASE . "assets" . DIRECTORY_SEPARATOR);
 define("PATH_PAGES", PATH_BASE . "pages" . DIRECTORY_SEPARATOR);
-
-// (G) EMAIL - ENABLE IF USING MAIL MODULE
-// define("EMAIL_FROM", "sys@core-boxx.com");
-
-// (H) MISC
-define("PAGE_PER", 20); // 20 entries per page by default

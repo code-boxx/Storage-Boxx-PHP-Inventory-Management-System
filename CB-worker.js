@@ -20,7 +20,9 @@ cFiles = [
   "assets/PAGE-check.js",
   "assets/PAGE-checker.js",
   "assets/PAGE-inventory.js",
+  "assets/PAGE-login.js",
   "assets/PAGE-move.js",
+  "assets/PAGE-settings.js",
   "assets/PAGE-users.js"
 ];
 

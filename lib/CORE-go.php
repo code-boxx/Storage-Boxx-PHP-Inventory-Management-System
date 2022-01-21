@@ -10,4 +10,5 @@ set_exception_handler("_CORERR");
 
 // (C) LOAD DEFAULT MODULES + STARTING SEQUENCE
 $_CORE->load("DB");
+$_CORE->load("Options");
 $_CORE->load("Session");

@@ -1,86 +1,128 @@
 <?php
-// (A) SETTINGS
-// (A1) TURN ON ERROR REPORTING
+/* (PHASE A) PRE-FLIGHT + PHASE SETTER */
+// (A1) SET PHASE
+$_PHASE = isset($_POST["install"]) ? "E" : "B";
+
+// (A2) TURN ON ERROR REPORTING
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors", 1);
 ini_set("log_errors", 0);
 
-// (A2) SYSTEM REQUIREMENTS
-define("I_MIN_PHP", "7.4.0");
-define("I_APACHE", apache_get_version() !== false);
-
-// (A3) IMPORTANT FILES & FOLDERS
+// (A3) PROJECT FOLDERS
 define("I_BASE", dirname(__DIR__) . DIRECTORY_SEPARATOR);
 define("I_API", I_BASE . "api" . DIRECTORY_SEPARATOR);
 define("I_ASSETS", I_BASE . "assets" . DIRECTORY_SEPARATOR);
 define("I_LIB", I_BASE . "lib" . DIRECTORY_SEPARATOR);
-define("I_ALL", [
-  I_BASE, I_API, I_ASSETS, I_LIB, I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo",
-  I_LIB . "SQL-storage-boxx.sql"
+define("I_PAGES", I_BASE . "pages" . DIRECTORY_SEPARATOR);
+
+// (A4) PROJECT VERSION CODE
+define("I_CODE", "STOREBOXX_VER");
+
+// (A5) SQL FILES - FROM OLDEST TO NEWEST VERSIONS
+// WILL GET VERSION FROM DATABSE & PROGRESSIVE UPDATE HENCEFORTH
+// @TODO - SET PROJECT SQL FILES
+define("I_DB_SQL", [
+  "SQL-storage-boxx.sql" //, SQL-coreboxx-1.sql, SQL-coreboxx-2.sql
 ]);
 
-// (A4) DATABASE DEFAULTS
-define("I_DB_HOST", "localhost");
-define("I_DB_NAME", "storageboxx");
-define("I_DB_USER", "root");
-define("I_DB_PASS", "");
+// (A6) HELPER FOR IMPORTING SQL
+function import ($pdo, $from=0) {
+  // (A6-1) IMPORT SQL FILES
+  for ($i=$from; $i<count(I_DB_SQL); $i++) {
+    try {
+      $pdo->exec(file_get_contents(I_LIB . I_DB_SQL[$i]));
+    } catch (Exception $ex) {
+      exit("Unable to import SQL - " . $ex->getMessage());
+    }
+  }
 
-// (A5) URL
-$uHOST = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-$uIDX = strpos($uHOST, "index.php");
-if ($uIDX!==false) { $uHOST = substr($uHOST, 0, $uIDX); }
-$uHOST = rtrim($uHOST, "/") . "/";
+  // (A6-2) UPDATE VERSION
+  $stmt = $pdo->prepare("REPLACE INTO `options` (`option_name`, `option_value`, `option_group`) VALUES (?,?,?)");
+  $stmt->execute([I_CODE, count(I_DB_SQL), 0]);
+}
 
-define("I_HTTPS", isset($_SERVER["HTTPS"]));
-define("I_HOST", $uHOST);
-unset($uHOST); unset($uIDX);
+/* (PHASE B) UPGRADE OR INSTALL NEW? */
+if ($_PHASE == "B") {
+  // (B1) UPGRADE
+  try {
+    // (B1-1) IF CONNECT TO DATABASE OK - IT'S A POSSIBLE UPDATE
+    require I_LIB . "CORE-config.php";
+    require I_LIB . "LIB-Core.php";
+    $_CORE = new CoreBoxx();
+    $_CORE->load("DB");
 
-// (A6) MODE SELECTOR
-// (B) PRE-CHECKS
-// (C) SHOW INSTALLATION HTML
-// (D) ACTUAL INSTALLATION
-$_IMODE = isset($_POST["install"]) ? "D" : "B";
+    // (B1-2) CHECK VERSION + AUTO PATCH
+    $ver = $_CORE->DB->fetchCol("SELECT `option_value` FROM `options` WHERE `option_name`=?", [I_CODE]);
+    $newest = count(I_DB_SQL);
+    if ($ver < $newest) { import($_CORE->DB->pdo, $ver); }
 
-// (B) PRE CHECKS
-if ($_IMODE=="B") {
-  // (B1) PHP VERSION
+    // (B1-3) DONE!
+    $_RELOAD = true;
+    $_PHASE = "F";
+  }
+
+  // (B-2) NOPE - NEW INSTALLATION
+  catch (Exception $ex) { $_PHASE = "C"; }
+}
+
+/* (PHASE C) PRE-INSTALL CHECKS */
+if ($_PHASE == "C") {
+  // (C1) SYSTEM REQUIREMENTS + FLAGS
+  define("I_MIN_PHP", "7.4.0");
+  define("I_APACHE", apache_get_version() !== false);
+  define("I_ALL", [
+    I_BASE, I_API, I_ASSETS, I_LIB, I_PAGES,
+    I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo"
+  ]);
+
+  // (C2) PHP VERSION
   if (version_compare(PHP_VERSION, I_MIN_PHP, "<")) {
     exit("At least PHP ".I_MIN_PHP." is required. You are using ". PHP_VERSION);
   }
 
-  // (B2) MYSQL PDO
+  // (C3) MYSQL PDO
   if (!extension_loaded("pdo_mysql")) {
     exit("PDO MYSQL extension is not enabled.");
   }
 
-  // (B3) APACHE MOD REWRITE
+  // (C4) APACHE MOD REWRITE
   if (I_APACHE && !in_array("mod_rewrite", apache_get_modules())) {
     exit("Please enable Apache MOD_REWRITE.");
   }
 
-  // (B4) FILES & FOLDERS EXIST + READ WRITE PERMISSIONS
+  // (C5) FILES & FOLDERS EXIST + READ WRITE PERMISSIONS
   foreach (I_ALL as $p) {
     if (!file_exists($p)) { exit("$p does not exist!"); }
     if (!is_readable($p)) { exit("Please give PHP read permission to $p"); }
     if (!is_writable($p)) { exit("Please give PHP write permission to $p"); }
   }
-
-  // (B5) REMOVE OLD COPIES OF HTACCESS
-  $htaccess = I_BASE . ".htaccess";
-  if (file_exists($htaccess)) {
-    if (!unlink($htaccess)) { exit("Failed to delete $htaccess - Please delete this file manually"); }
-  }
-  $htaccess = I_API . ".htaccess";
-  if (file_exists($htaccess)) {
-    if (!unlink($htaccess)) { exit("Failed to delete $htaccess - Please delete this file manually"); }
+  foreach (I_DB_SQL as $p) {
+    if (!file_exists(I_LIB . $p)) { exit("$p does not exist!"); }
+    if (!is_readable(I_LIB . $p)) { exit("Please give PHP read permission to $p"); }
   }
 
-  // (B6) ALL GREEN
-  $_IMODE = "C";
+  // (C6) ALL GREEN
+  $_PHASE = "D";
 }
 
-// (C) SHOW INSTALL HTML
-if ($_IMODE == "C") { ?>
+/* (PHASE D) HTML USER INPUT */
+if ($_PHASE == "D") {
+  // (D1) DATABASE DEFAULTS
+  define("I_DB_HOST", "localhost");
+  define("I_DB_NAME", "storageboxx");
+  define("I_DB_USER", "root");
+  define("I_DB_PASS", "");
+
+  // (D2) URL YOGA
+  $uHOST = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+  $uIDX = strpos($uHOST, "index.php");
+  if ($uIDX!==false) { $uHOST = substr($uHOST, 0, $uIDX); }
+  $uHOST = rtrim($uHOST, "/") . "/";
+  define("I_HTTPS", isset($_SERVER["HTTPS"]));
+  define("I_HOST", $uHOST);
+  unset($uHOST); unset($uIDX);
+
+  // (D3) HTML OUTPUT ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -130,7 +172,7 @@ if ($_IMODE == "C") { ?>
       fetch(url, { method:"POST", body:data })
       .then((res) => {
         if (res.status!=200) {
-          alert("SERVER ERROR - ${res.status}");
+          alert(`SERVER ${res.status} ERROR - Are you sure the host setting is correct?`);
           console.error(res);
         } else { return res.text(); }
       })
@@ -138,7 +180,7 @@ if ($_IMODE == "C") { ?>
         if (txt=="OK") {
           alert("Installation complete, this page will now reload.");
           location.reload();
-        } else { alert(txt); }
+        } else if (txt!=undefined) { alert(txt); }
       })
       .catch((err) => {
         alert(`Fetch error - ${err.message}`);
@@ -175,7 +217,7 @@ if ($_IMODE == "C") { ?>
       </div>
 
       <div class="iSec">
-        <h2>HOST</h2>
+        <h1>HOST</h1>
         <label>HTTP or HTTPS</label>
         <select name="https">
           <option value="0">http://</option>
@@ -187,7 +229,7 @@ if ($_IMODE == "C") { ?>
       </div>
 
       <div class="iSec">
-        <h2>API ENDPOINT</h2>
+        <h1>API ENDPOINT</h1>
         <label>Enforce HTTPS?</label>
         <select name="apihttps">
           <option value="0">No</option>
@@ -203,7 +245,7 @@ if ($_IMODE == "C") { ?>
       </div>
 
       <div class="iSec">
-        <h2>DATABASE</h2>
+        <h1>DATABASE</h1>
         <label>Host</label>
         <input type="text" name="dbhost" required value="<?=I_DB_HOST?>"/>
         <label>Name</label>
@@ -215,7 +257,7 @@ if ($_IMODE == "C") { ?>
       </div>
 
       <div class="iSec">
-        <h2>JSON WEB TOKEN</h2>
+        <h1>JSON WEB TOKEN</h1>
         <label>Secret Key <span onclick="rnd()">[RANDOM]</span></label>
         <input type="text" name="jwtkey" required/>
         <label>Issuer</label>
@@ -224,7 +266,13 @@ if ($_IMODE == "C") { ?>
       </div>
 
       <div class="iSec">
-        <h2>ADMIN USER</h2>
+        <h1>EMAIL</h1>
+        <label>Sent From</label>
+        <input type="email" name="mailfrom" value="sys@site.com" required/>
+      </div>
+
+      <div class="iSec">
+        <h1>ADMIN USER</h1>
         <label>Name</label>
         <input type="text" name="aname" required value="Admin"/>
         <label>Email</label>
@@ -241,9 +289,9 @@ if ($_IMODE == "C") { ?>
 </html>
 <?php }
 
-// (D) INSTALLATION
-if ($_IMODE=="D") {
-  // (D1) TRY CONNECT TO DATABASE
+/* (PHASE E) INSTALLATION */
+if ($_PHASE == "E") {
+  // (E1) TRY CONNECT TO DATABASE
   try {
     $pdo = new PDO(
       "mysql:host=".$_POST["dbhost"].";charset=utf8",
@@ -253,18 +301,16 @@ if ($_IMODE=="D") {
     ]);
   } catch (Exception $ex) { exit("Unable to connect to database - " . $ex->getMessage()); }
 
-  // (D2) CREATE DATABASE
+  // (E2) CREATE DATABASE
   try {
     $pdo->exec("CREATE DATABASE `".$_POST["dbname"]."`");
     $pdo->exec("USE `".$_POST["dbname"]."`");
   } catch (Exception $ex) { exit("Unable to create database - " . $ex->getMessage()); }
 
-  // (D3) IMPORT SQL FILE
-  try {
-    $pdo->exec(file_get_contents(I_LIB . "SQL-storage-boxx.sql"));
-  } catch (Exception $ex) { exit("Unable to create database - " . $ex->getMessage()); }
+  // (E3) IMPORT SQL FILE(S)
+  import($pdo);
 
-  // (D4) CREATE ADMIN USER
+  // (E4) CREATE ADMIN USER
   try {
     $stmt = $pdo->prepare("REPLACE INTO `users` (`user_name`, `user_email`, `user_password`) VALUES (?,?,?)");
     $stmt->execute([$_POST["aname"], $_POST["aemail"], password_hash($_POST["apass"], PASSWORD_DEFAULT)]);
@@ -272,7 +318,15 @@ if ($_IMODE=="D") {
     exit("Error creating admin user - " . $ex->getMessage());
   }
 
-  // (D5) SETTINGS TO UPDATE
+  // (E5) EMAIL FROM
+  try {
+    $stmt = $pdo->prepare("UPDATE `options` SET `option_value`=? WHERE `option_name`='EMAIL_FROM'");
+    $stmt->execute([$_POST["mailfrom"]]);
+  } catch (Exception $ex) {
+    exit("Error creating admin user - " . $ex->getMessage());
+  }
+
+  // (E6) SETTINGS TO UPDATE
   $hbase = ($_POST["https"]=="1" ? "https://" : "http://") . $_POST["host"];
   $hbase = rtrim($hbase, "/") . "/";
   $replace = [
@@ -288,12 +342,12 @@ if ($_IMODE=="D") {
   ];
   unset($_POST); unset($hbase);
 
-  // (D6) BACKUP LIB/CORE-CONFIG.PHP
+  // (E7) BACKUP LIB/CORE-CONFIG.PHP
   if (!copy(I_LIB . "CORE-config.php", I_LIB . "CORE-config.bak")) {
     exit("Failed to backup config file - " . I_LIB . "CORE-config.bak");
   }
 
-  // (D7) UPDATE LIB/CORE-CONFIG.PHP
+  // (E8) UPDATE LIB/CORE-CONFIG.PHP
   $go = file(I_LIB . "CORE-config.php") or exit("Cannot read". I_LIB ."CORE-config.php");
   foreach ($go as $j=>$line) { foreach ($replace as $k=>$v) {
     if (strpos($line, "\"$k\"") !== false) {
@@ -310,16 +364,23 @@ if ($_IMODE=="D") {
   }
   unset($go);
 
-  // (D8) GENERATE HTACCESS
+  // (E9) ALMOST DONE...
   require I_LIB . "CORE-go.php";
+  $_PHASE = "F";
+}
+
+/* (PHASE F) CLEAN UP */
+if ($_PHASE == "F") {
+  // (F1) REGENERATE HTACCESS
   $_CORE->load("Route");
   $_CORE->Route->init();
 
-  // (D9) SWAP OUT INDEX
+  // (F2) SWAP OUT INDEX
   if (!copy(I_LIB . "INSTALL-index.foo", I_BASE . "index.php")) {
     exit("Failed to create - " . I_BASE . "index.php");
   }
 
-  // (D10) DONE!
-  echo "OK";
+  // (F3) INSTALL COMPLETE!
+  if (isset($_RELOAD)) { $_CORE->redirect(); }
+  else { echo "OK"; }
 }

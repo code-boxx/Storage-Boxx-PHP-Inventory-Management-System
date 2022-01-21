@@ -19,8 +19,8 @@ Visit https://code-boxx.com/storage-boxx-php-inventory-system/ for the documenta
 
 
 ## UPDATING
-* If your existing copy has an `options` table - Just override all the existing files and access `index.php` - The installer will take care of the datebase updates automatically (if any).
-* If not, you will have to manually import the `options` table from `SQL-storage-boxx.sql`. Create a `STOREBOXX_VER` entry with value of `0` and group `0` - Thereafter, just copy the new files and let the installer do the automagic.
+* If your existing copy has an `options` table - Just override all the existing files and access `index.php` - The installer will take care of the daaebase updates automatically (if any).
+* If not, you will have to manually import the `options` table from `SQL-storage-boxx.sql`. Create a `STOREBOXX_VER` entry with value of `0` and group `0` - Thereafter, just copy the new files and let the installer do the auto magic.
 <br><br>
 
 

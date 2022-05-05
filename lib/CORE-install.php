@@ -69,7 +69,7 @@ if ($_PHASE == "B") {
 if ($_PHASE == "C") {
   // (C1) SYSTEM REQUIREMENTS + FLAGS
   define("I_MIN_PHP", "7.4.0");
-  define("I_APACHE", apache_get_version() !== false);
+  define("I_APACHE", function_exists("apache_get_version"));
   define("I_ALL", [
     I_BASE, I_API, I_ASSETS, I_LIB, I_PAGES,
     I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo"
@@ -86,8 +86,10 @@ if ($_PHASE == "C") {
   }
 
   // (C4) APACHE MOD REWRITE
-  if (I_APACHE && !in_array("mod_rewrite", apache_get_modules())) {
-    exit("Please enable Apache MOD_REWRITE.");
+  if (I_APACHE && function_exists("apache_get_version")) {
+    if (!in_array("mod_rewrite", apache_get_modules())) {
+      exit("Please enable Apache MOD_REWRITE.");
+    }
   }
 
   // (C5) FILES & FOLDERS EXIST + READ WRITE PERMISSIONS
@@ -205,8 +207,9 @@ if ($_PHASE == "D") {
   <body>
     <?php if (I_APACHE === false) { ?>
     <div class="danger">
-      You are not running Apache Web Server.
-      This will still work, but you need to manually enable URL rewrite and "translate" /.htaccess and /api/.htaccess on your own.
+      Installer cannot verify if you are running Apache Web Server.<br>
+      If you are using Apache, make sure MOD_REWRITE is enabled.<br>
+      If not, you will need to "translate" /.htaccess and /api/.htaccess on your own.
     </div>
     <?php } ?>
 

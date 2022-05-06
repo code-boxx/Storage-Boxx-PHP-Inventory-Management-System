@@ -68,8 +68,8 @@ if ($_PHASE == "B") {
 /* (PHASE C) PRE-INSTALL CHECKS */
 if ($_PHASE == "C") {
   // (C1) SYSTEM REQUIREMENTS + FLAGS
-  define("I_MIN_PHP", "7.4.0");
-  define("I_APACHE", str_contains(strtolower($_SERVER["SERVER_SOFTWARE"]), "apache"));
+  define("I_MIN_PHP", "8.0.0");
+  define("I_APACHE", strpos(strtolower($_SERVER["SERVER_SOFTWARE"]), "apache")!==false);
   define("I_ALL", [
     I_BASE, I_API, I_ASSETS, I_LIB, I_PAGES,
     I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo"

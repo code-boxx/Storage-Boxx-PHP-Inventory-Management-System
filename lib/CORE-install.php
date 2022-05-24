@@ -68,26 +68,26 @@ if ($_PHASE == "B") {
 /* (PHASE C) PRE-INSTALL CHECKS */
 if ($_PHASE == "C") {
   // (C1) SYSTEM REQUIREMENTS + FLAGS
-  define("I_MIN_PHP", "7.4.0");
-  define("I_APACHE", apache_get_version() !== false);
+  define("I_MIN_PHP", "8.0.0");
+  define("I_APACHE", strpos(strtolower($_SERVER["SERVER_SOFTWARE"]), "apache")!==false);
   define("I_ALL", [
     I_BASE, I_API, I_ASSETS, I_LIB, I_PAGES,
     I_LIB . "CORE-config.php", I_LIB . "INSTALL-index.foo"
   ]);
 
-  // (C2) PHP VERSION
+  // (C2) APACHE MOD REWRITE
+  if (I_APACHE && function_exists("apache_get_version")) {
+    define("I_REWRITE", in_array("mod_rewrite", apache_get_modules()));
+  } else { define("I_REWRITE", false); }
+
+  // (C3) PHP VERSION
   if (version_compare(PHP_VERSION, I_MIN_PHP, "<")) {
     exit("At least PHP ".I_MIN_PHP." is required. You are using ". PHP_VERSION);
   }
 
-  // (C3) MYSQL PDO
+  // (C4) MYSQL PDO
   if (!extension_loaded("pdo_mysql")) {
     exit("PDO MYSQL extension is not enabled.");
-  }
-
-  // (C4) APACHE MOD REWRITE
-  if (I_APACHE && !in_array("mod_rewrite", apache_get_modules())) {
-    exit("Please enable Apache MOD_REWRITE.");
   }
 
   // (C5) FILES & FOLDERS EXIST + READ WRITE PERMISSIONS
@@ -205,8 +205,13 @@ if ($_PHASE == "D") {
   <body>
     <?php if (I_APACHE === false) { ?>
     <div class="danger">
-      You are not running Apache Web Server.
-      This will still work, but you need to manually enable URL rewrite and "translate" /.htaccess and /api/.htaccess on your own.
+      Installer cannot verify if you are running Apache Web Server.
+    </div>
+    <?php } ?>
+    <?php if (I_REWRITE === false) { ?>
+    <div class="danger">
+      If you are using Apache, make sure MOD_REWRITE is enabled.<br>
+      If not, you will need to "translate" /.htaccess and /api/.htaccess on your own.
     </div>
     <?php } ?>
 

@@ -14,7 +14,10 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <div class="row">
       <div class="col-4" style="background:url('<?= HOST_ASSETS ?>desk.jpg') center"></div>
       <form class="col-8 p-5" onsubmit="return signin();">
-        <img src="<?= HOST_ASSETS ?>favicon.png" class="p-1 bg-primary rounded-circle" />
+        <div style="display: flex">
+          <img src="<?= HOST_ASSETS ?>favicon.png" class="p-1 bg-primary rounded-circle" />
+          <h3 style="display: flex; align-Items: center; justify-Content: center;">Storage-Boxx</h3>
+        </div>
         <h3 class="my-4">PLEASE SIGN IN</h3>
 
         <div class="input-group mb-4">
@@ -28,11 +31,15 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
           <button class="btn btn-outline-secondary" type="button" onclick="toggleVisibility()"><span class="mi" id="visibility">visibility</span></button>
         </div>
 
-        <div style="text-align:right;">
-          <span><a href="<?=HOST_BASE?>forgotpassword">Forgot password</a></span>
-        </div>
+        <div style="display: flow-root;">
+          <div style="float:left;">
+            <span><a href="<?=HOST_BASE?>forgotpassword" style="text-decoration: none;">Forgot password?</a></span>
+          </div>
 
-        <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in" />
+          <div style="float: right;">
+            <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in" />
+          </div>
+        </div>
     </div>
   </div>
 </div>

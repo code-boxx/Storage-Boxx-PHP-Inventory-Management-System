@@ -108,7 +108,10 @@
       <?php if (isset($_SESS["user"])) { ?>
       <!-- (C1) LEFT SIDEBAR -->
       <nav id="cb-side" class="bg-dark text-white p-3">
-        <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32"/>
+        <div style="display: flex">
+          <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32"/>
+          <h3>Storage-Boxx</h3>
+        </div>
         <hr>
         <ul class="navbar-nav">
           <li class="nav-item">

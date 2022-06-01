@@ -20,6 +20,8 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     </div>
   <?php } ?>
   </div>
-  <input type="submit" class="btn btn-primary" value="Save"/>
+  <div style="display: flex; justify-Content: flex-end; align-Items: flex-end;">
+    <input type="submit" class="btn btn-primary" value="Save"/>
+  </div>
 </form>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

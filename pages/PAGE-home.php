@@ -45,7 +45,9 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <input type="text" class="form-control" id="mvt-sku" required autofocus placeholder="Item SKU (enter or scan)"/>
     </div>
 
-    <input type="submit" class="btn btn-primary" value="Save"/>
+    <div style="display: flex; justify-Content: flex-end; align-Items: flex-end;">
+      <input type="submit" class="btn btn-primary" value="Save"/>
+    </div>
   </form>
 </div>
 

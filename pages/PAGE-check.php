@@ -8,7 +8,9 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <div class="bg-white border p-4">
 
   <!-- (A) SCANNER -->
-  <div class="mb-3" id="reader"></div>
+  <div class="center mb-3">
+    <div id="reader" style="width: 500px"></div>
+  </div>
 
   <!-- (B) MANUAL FORM -->
   <form autocomplete="off" onsubmit="return check.verify()">

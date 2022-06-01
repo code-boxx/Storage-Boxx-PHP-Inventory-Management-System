@@ -54,6 +54,7 @@
     /* COMMON & FORM */
     #cb-body,body{min-height:100vh}#cb-toggle{display:none}#cb-side{min-width:170px}#cb-side a{color:#fff}#cb-side .mi{color:#6a6a6a}@media screen and (max-width:768px){#cb-toggle{display:block}#cb-side{display:none}#cb-side.show{display:block}}
     .zebra .d-flex:nth-child(odd){background:#f7f7f7}#reader video{height:400px}.pagination{border:1px solid #c7daf7;background:#f0f6ff}
+    .center {display: flex;justify-content: center;}
     </style>
 
     <!-- (A9) COMMON INTERFACE -->

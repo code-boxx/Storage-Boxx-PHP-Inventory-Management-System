@@ -1,0 +1,4 @@
+.htaccess
+CORE-config.bak
+CORE-config.php
+lib/CORE-config.php

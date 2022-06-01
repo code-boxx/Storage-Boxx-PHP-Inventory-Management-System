@@ -28,6 +28,10 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
           <button class="btn btn-outline-secondary" type="button" onclick="toggleVisibility()"><span class="mi" id="visibility">visibility</span></button>
         </div>
 
+        <div style="text-align:right;">
+          <span><a href="<?=HOST_BASE?>forgotpassword">Forgot password</a></span>
+        </div>
+
         <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in" />
     </div>
   </div>

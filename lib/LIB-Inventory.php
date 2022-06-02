@@ -109,11 +109,17 @@ class Inventory extends Core {
       $this->error = "Invalid direction";
       return false;
     }
+    $item = $this->get($sku);
     if (!is_numeric($qty)) {
       $this->error = "Invalid quantity";
       return false;
     }
-    $item = $this->get($sku);
+    
+    if($direction == "O" && $qty > $item["stock_qty"]){
+      $this->error = "Stock Out exceeded current quantity";
+      return false;
+    }
+
     if ($item===false) { return false; }
     if (!is_array($item)) {
       $this->error = "$sku - Invalid SKU";

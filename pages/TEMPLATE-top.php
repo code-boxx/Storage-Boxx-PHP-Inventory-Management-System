@@ -37,8 +37,16 @@
 
     <!-- (A7) BOOTSTRAP -->
     <!-- https://getbootstrap.com/ -->
-    <link rel="stylesheet" href="<?=HOST_ASSETS?>bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
     <script defer src="<?=HOST_ASSETS?>bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="<?=HOST_ASSETS?>bootstrap.min.css">
+    
 
     <!-- (A8) BURN-IN CSS -->
     <style>
@@ -119,10 +127,18 @@
               <i class="mi mi-smol">move_up</i> Movement
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?=HOST_BASE?>inventory">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <span class="mi mi-smol">inventory_2</span> Items
             </a>
+            <div class="dropdown-menu"  aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" style="color: black;" href="<?=HOST_BASE?>inventory">
+                <span class="mi mi-smol">inventory_2</span> Items
+              </a>
+              <a class="dropdown-item" style="color: black;" href="<?=HOST_BASE?>check">
+                <span class="mi mi-smol">inventory_2</span> Check Item
+              </a>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?=HOST_BASE?>users">
@@ -156,9 +172,9 @@
               menu
             </button>
           </div>
-          <a class="btn btn-sm me-1 text-white mi" href="<?=HOST_BASE?>check">
+          <!-- <a class="btn btn-sm me-1 text-white mi" href="<?=HOST_BASE?>check">
             qr_code_scanner
-          </a>
+          </a> -->
           <button class="btn btn-sm text-white mi" onclick="cb.bye()">
             logout
           </button>

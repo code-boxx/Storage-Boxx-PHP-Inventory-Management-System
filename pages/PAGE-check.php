@@ -20,7 +20,11 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       </div>
       <input type="text" class="form-control" id="check-sku" required autofocus placeholder="Item SKU (enter or scan)"/>
     </div>
-    <input type="submit" class="btn btn-primary" value="Check"/>
+
+    <div style="display: flex; justify-Content: flex-end; align-Items: flex-end;">
+      <input type="submit" class="btn btn-primary" value="Check"/>
+    </div>
+    
   </form>
 </div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

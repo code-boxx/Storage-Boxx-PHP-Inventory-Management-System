@@ -4,8 +4,8 @@ $item = $_CORE->autoCall("Inventory", "get"); ?>
 <!-- (B) NAVIGATION -->
 <nav class="d-flex align-items-center">
   <div class="flex-grow-1">
-    <h3 class="text-uppercase"><?=$item["stock_name"]?></h3>
-    <div><?=$item["stock_sku"]?></div>
+    <h3 class="text-uppercase">Stock Name: <?=$item["stock_name"]?></h3>
+    <div>Item SKU: <?=$item["stock_sku"]?></div>
   </div>
   <button class="btn btn-danger mi" onclick="cb.page(1)">
     undo

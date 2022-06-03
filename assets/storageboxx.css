@@ -1,0 +1,19 @@
+.center {
+    display: flex;justify-content: center;
+}
+    
+.nav-link[data-toggle].collapsed:after {
+    font-family: "Material Icons";
+    content: "arrow_drop_down";
+    float: right;
+    padding-top: 2px;
+    font-size: 20px;
+}
+    
+.nav-link[data-toggle]:not(.collapsed):after {
+    font-family: "Material Icons";
+    content: "arrow_drop_up";
+    float: right;
+    padding-top: 2px;
+    font-size: 20px;
+}

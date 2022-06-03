@@ -46,6 +46,7 @@
     
     <script defer src="<?=HOST_ASSETS?>bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="<?=HOST_ASSETS?>bootstrap.min.css">
+    <link rel="stylesheet" href="<?=HOST_ASSETS?>storageboxx.css">
     
 
     <!-- (A8) BURN-IN CSS -->
@@ -127,18 +128,22 @@
               <i class="mi mi-smol">move_up</i> Movement
             </a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <span class="mi mi-smol">inventory_2</span> Items
-            </a>
-            <div class="dropdown-menu"  aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" style="color: black;" href="<?=HOST_BASE?>inventory">
-                <span class="mi mi-smol">inventory_2</span> Items
-              </a>
-              <a class="dropdown-item" style="color: black;" href="<?=HOST_BASE?>check">
-                <span class="mi mi-smol">inventory_2</span> Check Item
-              </a>
-            </div>
+          <li class="nav-item">
+              <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#submenu1"><span class="mi mi-smol">inventory_2</span> Items</a>
+              <div class="collapse" id="submenu1" aria-expanded="false">
+                  <ul class="flex-column pl-2 nav">
+                      <li class="nav-item">
+                        <a class="nav-link px-2" href="<?=HOST_BASE?>inventory">
+                          <span class="mi mi-smol">post_add</span> Manage Item
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link px-2" href="<?=HOST_BASE?>check">
+                          <span class="mi mi-smol">manage_search</span> Check Item
+                        </a>
+                      </li>
+                  </ul>
+              </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?=HOST_BASE?>users">

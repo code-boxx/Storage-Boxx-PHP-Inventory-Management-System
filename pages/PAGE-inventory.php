@@ -13,7 +13,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   <button class="btn btn-primary mi me-1">
     search
   </button>
-  <button class="btn btn-primary mi" onclick="inv.addEdit()">
+  <button class="btn btn-success mi" onclick="inv.addEdit()">
     add
   </button>
 </form>

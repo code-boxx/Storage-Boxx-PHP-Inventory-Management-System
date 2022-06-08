@@ -27,7 +27,6 @@ CREATE TABLE `users` (
   `user_name` varchar(255) NOT NULL,
   `user_email` varchar(255) NOT NULL,
   `user_password` varchar(255) NOT NULL,
-  `user_profilepic` varchar(256) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `stock`
@@ -47,7 +46,7 @@ ALTER TABLE `users`
   MODIFY `user_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 ALTER TABLE `users` 
-  ADD `user_profilepic` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ;
+  ADD `user_profilepic` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL ;
 
 INSERT INTO `options` (`option_name`, `option_description`, `option_value`, `option_group`) VALUES
   ('EMAIL_FROM', 'System email from.', 'sys@site.com', 1),

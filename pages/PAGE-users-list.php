@@ -6,7 +6,7 @@ $users = $_CORE->autoCall("Users", "getAll");
 if (is_array($users["data"])) { foreach ($users["data"] as $id=>$u) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1" style="display: flex;">
-    <img alt="event-thumbnail" src="./images/profileimg/<?=$u["user_profilepic"] ? $u["user_profilepic"] : 'default/png'?>" loading="lazy" width="64" height="64"/>
+    <img alt="event-thumbnail" src="./images/profileimg/<?=$u["user_profilepic"] ? $u["user_profilepic"] : 'default.png'?>" loading="lazy" width="64" height="64"/>
     <div style="padding-top: 8px;">
       <strong>Username: <?=$u["user_name"]?></strong><br>
       <small>Email: <?=$u["user_email"]?></small>

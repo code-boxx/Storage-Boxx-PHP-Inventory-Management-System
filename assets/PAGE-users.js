@@ -1,28 +1,32 @@
 var usr = {
   // (A) SHOW ALL USERS
-  pg : 1, // CURRENT PAGE
-  find : "", // CURRENT SEARCH
-  list : () => {
+  pg: 1, // CURRENT PAGE
+  find: "", // CURRENT SEARCH
+  imageURL: "",
+  imageName: "",
+  list: () => {
     cb.page(1);
     cb.load({
-      page : "users/list",
-      target : "user-list",
-      data : {
-        page : usr.pg,
-        search : usr.find
-      }
+      page: "users/list",
+      target: "user-list",
+      data: {
+        page: usr.pg,
+        search: usr.find,
+      },
     });
   },
 
   // (B) GO TO PAGE
   //  pg : int, page number
-  goToPage : (pg) => { if (pg!=usr.pg) {
-    usr.pg = pg;
-    usr.list();
-  }},
+  goToPage: (pg) => {
+    if (pg != usr.pg) {
+      usr.pg = pg;
+      usr.list();
+    }
+  },
 
   // (C) SEARCH USER
-  search : () => {
+  search: () => {
     usr.find = document.getElementById("user-search").value;
     usr.pg = 1;
     usr.list();
@@ -31,25 +35,45 @@ var usr = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // id : user ID, for edit only
-  addEdit : (id) => {
+  addEdit: (id) => {
     cb.load({
-      page : "users/form",
-      target : "cb-page-2",
-      data : { id : id ? id : "" },
-      onload : () => { cb.page(2); }
+      page: "users/form",
+      target: "cb-page-2",
+      data: { id: id ? id : "" },
+      onload: () => {
+        cb.page(2);
+      },
+    });
+  },
+
+  fileUpload: () => {
+    var fileInput = document.querySelector("#profileimg");
+    fileInput.addEventListener("change", function (e) {
+      usr.imageName = e.target.files[0].name;
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        const uploaded_image = reader.result;
+        usr.imageURL = reader.result.split('\,');
+        document.querySelector("#preview").src = uploaded_image;
+      });
+      reader.readAsDataURL(this.files[0]);
     });
   },
 
   // (E) SAVE USER
-  save : () => {
-    // (E1) GET DATA
+  save: () => {
+    // (E1) GET DATA\
     var data = {
-      name : document.getElementById("user_name").value,
-      email : document.getElementById("user_email").value,
-      password : document.getElementById("user_password").value
+      image: usr.imageURL[1],
+      imageName: usr.imageName,
+      name: document.getElementById("user_name").value,
+      email: document.getElementById("user_email").value,
+      password: document.getElementById("user_password").value,
     };
     var id = document.getElementById("user_id").value;
-    if (id!="") { data.id = id; }
+    if (id != "") {
+      data.id = id;
+    }
 
     // (E2) PASSWORD STRENGTH
     if (!cb.checker(data.password)) {
@@ -71,20 +95,20 @@ var usr = {
   // (F) DELETE USER
   //  id : int, user ID
   //  confirm : boolean, confirmed delete
-  del : (id, confirm) => {
+  del: (id, confirm) => {
     if (confirm) {
       cb.api({
-        mod : "users",
-        req : "del",
-        data : { id: id },
-        passmsg : "User Deleted",
-        onpass : usr.list
+        mod: "users",
+        req: "del",
+        data: { id: id },
+        passmsg: "User Deleted",
+        onpass: usr.list,
       });
     } else {
       cb.modal("Please confirm", "Delete user?", () => {
         usr.del(id, true);
       });
     }
-  }
+  },
 };
 window.addEventListener("load", usr.list);

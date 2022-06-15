@@ -32,13 +32,16 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
         </div>
 
         <div style="display: flow-root;">
-          <div style="float:left;">
-            <span><a href="<?=HOST_BASE?>forgotpassword" style="text-decoration: none;">Forgot password?</a></span>
-          </div>
 
-          <div style="float: right;">
-            <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in" />
-          </div>
+            <div style="float: right;">
+              <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in" />
+            </div>
+
+            <div style="float:left;">
+              <span><a href="#" style="text-decoration: none;" onclick="cb.forgot()">Forgot password?</a></span>
+            </div>
+            
+          </form>
         </div>
     </div>
   </div>

@@ -11,16 +11,16 @@ if (is_array($items["data"])) { foreach ($items["data"] as $sku=>$i) { ?>
     <small><?=$i["stock_qty"]?> <?=$i["stock_unit"]?></small>
   </div>
   <div>
-    <button class="btn btn-danger btn-sm mi" onclick="inv.del('<?=$sku?>')">
+    <button title="Delete" class="btn btn-danger btn-sm mi" onclick="inv.del('<?=$sku?>')">
       delete
     </button>
-    <button class="btn btn-primary btn-sm mi" onclick="inv.addEdit('<?=$sku?>')">
+    <button title="Edit" class="btn btn-primary btn-sm mi" onclick="inv.addEdit('<?=$sku?>')">
       edit
     </button>
-    <button class="btn btn-primary btn-sm mi" onclick="inv.qrcode('<?=$sku?>')">
+    <button title="Print" class="btn btn-primary btn-sm mi" onclick="inv.qrcode('<?=$sku?>')">
       print
     </button>
-    <button class="btn btn-primary btn-sm mi" onclick="check.load('<?=$sku?>')">
+    <button title="History" class="btn btn-warning btn-sm mi" onclick="check.load('<?=$sku?>')">
       history
     </button>
   </div>

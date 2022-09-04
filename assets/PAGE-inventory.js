@@ -1,12 +1,11 @@
 var inv = {
   // (A) LIST () : SHOW ALL ITEMS
-  pg : 1, // CURRENT PAGE
-  find : "", // CURRENT SEARCH
+  pg : 1, // current page
+  find : "", // current search
   list : () => {
-    cb.page(1);
+    cb.page(0);
     cb.load({
-      page : "inventory/list",
-      target : "inv-list",
+      page : "inventory/list", target : "inv-list",
       data : {
         page : inv.pg,
         search : inv.find
@@ -16,7 +15,7 @@ var inv = {
 
   // (B) GO TO PAGE
   //  pg : page number
-  goToPage : (pg) => { if (pg!=inv.pg) {
+  goToPage : pg => { if (pg!=inv.pg) {
     inv.pg = pg;
     inv.list();
   }},
@@ -31,19 +30,18 @@ var inv = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // sku : item SKU, for edit only
-  addEdit : (sku) => {
+  addEdit : sku => {
     cb.load({
-      page : "inventory/form",
-      target : "cb-page-2",
+      page : "inventory/form", target : "cb-page-2",
       data : { sku : sku ? sku : "" },
-      onload : () => { cb.page(2); }
+      onload : () => { cb.page(1); }
     });
   },
 
   // (E) RANDOM SKU
   // Credits : https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   randomSKU : () => {
-    let length = 8, // SET YOUR OWN
+    let length = 8, // set your own
         result = "",
         char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
         clength = char.length;
@@ -54,7 +52,7 @@ var inv = {
   },
 
   // (F) SET UNIT OF MEASUREMENT
-  unit : (u) => {
+  unit : u => {
     document.getElementById("inv-unit").value = u;
   },
 
@@ -65,15 +63,15 @@ var inv = {
       sku : document.getElementById("inv-sku").value,
       name : document.getElementById("inv-name").value,
       unit : document.getElementById("inv-unit").value,
-      desc : document.getElementById("inv-desc").value
+      desc : document.getElementById("inv-desc").value,
+      low : document.getElementById("inv-low").value
     };
     var osku = document.getElementById("inv-osku").value;
     if (osku!="") { data.osku = osku; }
 
     // (G2) AJAX
     cb.api({
-      mod : "inventory",
-      req : "save",
+      mod : "inventory", req : "save",
       data : data,
       passmsg : "Item saved",
       onpass : inv.list
@@ -84,25 +82,20 @@ var inv = {
   // (H) DELETE ITEM
   //  sku : item SKU
   //  confirm : boolean, confirmed delete
-  del : (sku, confirm) => {
-    if (confirm) {
+  del : sku => {
+    cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => {
       cb.api({
-        mod : "inventory",
-        req : "del",
+        mod : "inventory", req : "del",
         data : { sku : sku },
         passmsg : "Item Deleted",
         onpass : inv.list
       });
-    } else {
-      cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => {
-        inv.del(sku, true);
-      });
-    }
+    });
   },
 
   // (I) GENERATE QR CODE
-  qrcode : (sku) => {
-    window.open(cbhost.base + "qrcode/?sku="+sku);
+  qrcode : (sku, name) => {
+    window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name);
   }
 };
 window.addEventListener("load", inv.list);

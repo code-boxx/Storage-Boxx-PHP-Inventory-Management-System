@@ -1,5 +1,5 @@
 <?php
-// (A) REGISTERED USERS ONLY
+// (A) ADMIN ONLY
 if (!isset($_SESS["user"])) {
   $_CORE->respond(0, "Please sign in first", null, null, 403);
 }
@@ -10,13 +10,9 @@ switch ($_REQ) {
     $_CORE->respond(0, "Invalid request", null, null, 400);
     break;
 
-  // (C) SAVE USER
+  // (C) SAVE SETTINGS
   case "save":
-    $_CORE->autoAPI("Users", "save");
-    break;
-
-  // (D) DELETE USER
-  case "del":
-    $_CORE->autoAPI("Users", "del");
+    $_POST["settings"] = json_decode($_POST["settings"], 1);
+    $_CORE->autoAPI("Settings", "save");
     break;
 }

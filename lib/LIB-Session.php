@@ -20,7 +20,9 @@ class Session extends Core {
     $valid = false;
     if (isset($_COOKIE["cbsess"])) { try {
       require PATH_LIB . "jwt/autoload.php";
-      $token = Firebase\JWT\JWT::decode($_COOKIE["cbsess"], JWT_SECRET, [JWT_ALGO]);
+      $token = Firebase\JWT\JWT::decode(
+        $_COOKIE["cbsess"], new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO)
+      );
       $valid = is_object($token);
     } catch (Exception $e) { $valid = false; }}
 
@@ -28,8 +30,8 @@ class Session extends Core {
     if ($valid) {
       $now = strtotime("now");
       $valid = $token->iss == JWT_ISSUER &&
-               $token->aud == HOST_NAME &&
-               $token->nbf <= $now;
+      $token->aud == HOST_NAME &&
+      $token->nbf <= $now;
       if ($valid && JWT_EXPIRE!=0) {
         $valid = isset($token->exp) ? ($token->exp < $now) : false;
       }
@@ -91,14 +93,14 @@ class Session extends Core {
     setcookie("cbsess", $token, $this->cookie);
   }
 
-  // (C) DESTROY SESSION + COOKIE
+  // (D) DESTROY SESSION + COOKIE
   function destroy () {
-    // (C1) EXPIRE HTTP COOKIE
+    // (D1) EXPIRE HTTP COOKIE
     $options = $this->cookie;
     $options["expires"] = -1;
-    setcookie("cbsess", null, $options);
+    setcookie("cbsess", "", $options);
 
-    // (C2) CLEAR ALL SESSION VARS
+    // (D2) CLEAR ALL SESSION VARS
     global $_SESS;
     $_SESS = [];
   }

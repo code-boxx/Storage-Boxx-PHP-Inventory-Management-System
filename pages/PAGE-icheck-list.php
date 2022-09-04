@@ -1,36 +1,23 @@
 <?php
 // (A) GET MOVEMENT HISTORY
 $move = $_CORE->autoCall("Inventory", "getMove");
-$mv = ["I"=>"login", "O"=>"logout", "T"=>"done_all"];
+$_CORE->Settings->defineN("STOCK_MVT", true);
 
-// (B) OUTPUT MOVEMENT HISTORY ?>
-<div class="d-flex align-items-center p-2 bg-primary text-white">
-  <div class="mi mi-smol mx-1">login</div>
-  <div class="mx-1">Stock In</div>
-  <div class="mi mi-smol mx-1">logout</div>
-  <div class="mx-1">Stock Out</div>
-  <div class="mi mi-smol mx-1">done_all</div>
-  <div class="mx-1">Stock Take</div>
-</div>
-
-<?php if (is_array($move["data"])) { foreach ($move["data"] as $m) { ?>
+// (B) OUTPUT MOVEMENT HISTORY
+if (is_array($move)) { foreach ($move as $m) { ?>
 <div class="d-flex align-items-center border p-2">
-  <div class="flex-grow-1">
-    <div class="fw-bold">
-      <?=$m["mvt_date"]?> (<?=$m["user_name"]?>)
-    </div>
-    <div class="text-secondary">
-      <?=$m["mvt_notes"]?>
-    </div>
+  <div class="w-50 text-center">
+    <div class="fw-bold"><?=STOCK_MVT[$m["mvt_direction"]]?></div>
+    <div class="display-6"><?=$m["mvt_direction"]=="D"||$m["mvt_direction"]=="O"?"-":""?><?=$m["mvt_qty"]?></div>
   </div>
-  <div class="pe-3">
-    <div class="mi mi-smol mx-1"><?=$mv[$m["mvt_direction"]]?></div> <?=$m["mvt_qty"]?>
+  <div class="w-50 text-secondary">
+    <div><?=$m["mvt_date"]?></div>
+    <div><?=$m["user_name"]?></div>
+    <div><?=$m["mvt_notes"]?></div>
   </div>
 </div>
-<?php }} else { ?>
-<div class="d-flex align-items-center border p-2">No movement history.</div>
-<?php }
+<?php }} else { echo "No movement history"; }
 
 // (C) PAGINATION
 $_CORE->load("Page");
-$_CORE->Page->draw($move["page"], "check.goToPage");
+$_CORE->Page->draw("check.goToPage");

@@ -1,68 +1,55 @@
 var move = {
-  // (A) SAVE MOVEMENT
-  save : () => {
-    // (A1) GET FORM FIELDS
-    var sku = document.getElementById("mvt-sku"),
-        direction = document.getElementById("mvt-direction"),
-        qty = document.getElementById("mvt-qty"),
-        notes = document.getElementById("mvt-notes");
+  // (A) PROPERTIES
+  // movement form
+  hmForm : null, hmSKU : null, hmDir : null, hmQty : null, hmNote : null,
+  // last entry
+  hlDir : null, hlQty : null, hlSKU : null, hlNote : null,
+  // qr scanner
+  scanner : null,
 
-    // (A2) SEND TO API
+  // (B) INIT
+  init : () => {
+    // (B1) GET HTML FIELDS
+    move.hmForm = document.getElementById("mvt-form");
+    move.hmSKU = document.getElementById("mvt-sku");
+    move.hmDir = document.getElementById("mvt-direction");
+    move.hmQty = document.getElementById("mvt-qty");
+    move.hmNote = document.getElementById("mvt-notes");
+    move.hlDir = document.getElementById("last-mvt");
+    move.hlQty = document.getElementById("last-qty");
+    move.hlSKU = document.getElementById("last-sku");
+    move.hlNote = document.getElementById("last-notes");
+
+    // (B2) INIT SCANNER
+    move.scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    move.scanner.render((txt, res) => {
+      let buttons = document.querySelectorAll("#reader button");
+      buttons[1].click();
+      move.hmSKU.value = txt;
+      move.save();
+    });
+  },
+
+  // (C) SAVE MOVEMENT
+  save : () => {
     cb.api({
-      mod : "inventory",
-      req : "move",
+      mod : "inventory", req : "move",
       data : {
-        sku : sku.value,
-        direction : direction.value,
-        qty : qty.value,
-        notes : notes.value
+        sku : move.hmSKU.value,
+        direction : move.hmDir.value,
+        qty : move.hmQty.value,
+        notes : move.hmNote.value
       },
       passmsg : "Stock Movement Saved",
-      onpass : (res) => {
-        // ADD ENTRY TO HISTORY
-        let d = {I:"In", O:"Out", T:"Take"};
-        move.history(
-          `${sku.value} | ${d[direction.value]} ${qty.value}`,
-          `New quantity ${res.data}`
-        );
-
-        // RESET FORM
-        qty.value = "1.00";
-        notes.value = "";
-        sku.value = "";
+      onpass : res => {
+        move.hlDir.innerHTML = move.hmDir.options[move.hmDir.selectedIndex].text;
+        move.hlQty.innerHTML = move.hmQty.value;
+        move.hlSKU.innerHTML = move.hmSKU.value;
+        move.hlNote.innerHTML = move.hmNote.value;
+        move.hmForm.reset();
       }
     });
     return false;
-  },
-
-  // (B) ADD RECENT MOVEMENT HISTORY
-  //  title : movement title
-  //  txt : movement text
-  entries : 7, // max movement history entries
-  history : (title, txt) => {
-    // (B1) REMOVE OLD ENTRIES
-    var target = document.getElementById("mvt-result"),
-        all = target.querySelectorAll("li");
-    if (all.length == move.entries) {
-      target.removeChild(all[move.entries-1]);
-    }
-
-    // (B2) ADD NEW ENTRY
-    var entry = document.createElement("li");
-    entry.className = "list-group-item";
-    entry.innerHTML = `<div class="text-primary fw-bold">${title}</div><div>${txt}</div>`;
-    target.prepend(entry);
   }
 };
-
-// (C) WEBCAM SCANNER
-window.addEventListener("DOMContentLoaded", () => {
-  var scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-  scanner.render(
-    (txt, res) => {
-      let buttons = document.querySelectorAll("#reader button");
-      buttons[1].click();
-      document.getElementById("mvt-sku").value = txt;
-      move.save();
-    });
-});
+window.addEventListener("load", move.init);

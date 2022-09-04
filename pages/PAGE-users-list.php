@@ -3,7 +3,7 @@
 $users = $_CORE->autoCall("Users", "getAll");
 
 // (B) DRAW USERS LIST
-if (is_array($users["data"])) { foreach ($users["data"] as $id=>$u) { ?>
+if (is_array($users)) { foreach ($users as $id=>$u) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
     <strong><?=$u["user_name"]?></strong><br>
@@ -18,10 +18,8 @@ if (is_array($users["data"])) { foreach ($users["data"] as $id=>$u) { ?>
     </button>
   </div>
 </div>
-<?php }} else { ?>
-<div class="d-flex align-items-center border p-2">No users found.</div>
-<?php }
+<?php }} else { echo "No users found."; }
 
 // (C) PAGINATION
 $_CORE->load("Page");
-$_CORE->Page->draw($users["page"], "usr.goToPage");
+$_CORE->Page->draw("usr.goToPage");

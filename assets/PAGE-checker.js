@@ -1,15 +1,14 @@
 var check = {
   // (A) LOAD MOVEMENT HISTORY "MAIN PAGE"
   //  sku : string, item sku
-  load : (sku) => {
+  load : sku => {
     cb.load({
-      page : "icheck",
-      target : "cb-page-2",
+      page : "icheck", target : "cb-page-2",
       data : { sku : sku },
       onload : () => {
         check.sku = sku;
         check.pg = 1;
-        cb.page(2);
+        cb.page(1);
         check.list();
       }
     });
@@ -20,8 +19,7 @@ var check = {
   pg : 1, // current page
   list : () => {
     cb.load({
-      page : "icheck/list",
-      target : "i-history",
+      page : "icheck/list", target : "i-history",
       data : {
         sku : check.sku,
         page : check.pg
@@ -31,7 +29,7 @@ var check = {
 
   // (C) GO TO PAGE
   //  pg : int, page number
-  goToPage : (pg) => { if (pg!=check.pg) {
+  goToPage : pg => { if (pg!=check.pg) {
     check.pg = pg;
     check.list();
   }},
@@ -40,8 +38,7 @@ var check = {
   verify : () => {
     var field = document.getElementById("mvt-check");
     cb.api({
-      mod : "inventory",
-      req : "get",
+      mod : "inventory", req : "get",
       data : { sku : field.value },
       passmsg : false,
       onpass : (res) => {

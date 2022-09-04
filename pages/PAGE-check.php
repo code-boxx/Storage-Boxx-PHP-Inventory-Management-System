@@ -1,6 +1,6 @@
 <?php
 $_PMETA = ["load" => [
-  ["s", HOST_ASSETS."html5-qrcode.min.js"],
+  ["s", HOST_ASSETS."html5-qrcode.min.js", "defer"],
   ["s", HOST_ASSETS."PAGE-check.js", "defer"]
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>

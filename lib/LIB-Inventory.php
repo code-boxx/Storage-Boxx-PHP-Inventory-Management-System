@@ -4,9 +4,10 @@ class Inventory extends Core {
   //  $sku : item SKU
   //  $name : item name
   //  $unit : item unit
+  //  $low : low stock quantity monitor
   //  $desc : item description
   //  $osku : old SKU, for editing only
-  function save ($sku, $name, $unit, $desc=null, $osku=null) {
+  function save ($sku, $name, $unit, $low=0, $desc=null, $osku=null) {
     // (A1) CHECK SKU
     $checkSKU = $osku==null ? $sku : $osku ;
     $check = $this->get($sku);
@@ -17,27 +18,20 @@ class Inventory extends Core {
     }
 
     // (A2) DATA SETUP
-    $fields = ["stock_sku", "stock_name", "stock_desc", "stock_unit"];
-    $data = [$sku, $name, $desc, $unit];
+    $fields = ["stock_sku", "stock_name", "stock_low", "stock_desc", "stock_unit"];
+    $data = [$sku, $name, $low, $desc, $unit];
 
     // (A3) ADD ITEM
     if ($osku===null) { $this->DB->insert("stock", $fields, $data); }
 
     // (A4) UPDATE ITEM
     else {
-      // (A4-1) UPDATE MAIN ENTRY
       $this->DB->start();
       $data[] = $osku;
       $this->DB->update("stock", $fields, "`stock_sku`=?", $data);
-
-      // (A4-2) UPDATE MOVEMENT SKU (IF SKU IS CHANGED)
       if ($sku!=$osku) {
-        $this->DB->update(
-          "stock_mvt", ["stock_sku"], "`stock_sku`=?", [$sku, $osku]
-        );
+        $this->DB->update("stock_mvt", ["stock_sku"], "`stock_sku`=?", [$sku, $osku]);
       }
-
-      // (A4-3) COMMIT
       $this->DB->end();
     }
 
@@ -49,14 +43,9 @@ class Inventory extends Core {
   // WARNING : STOCK MOVEMENT WILL BE REMOVED AS WELL
   //  $sku : item SKU
   function del ($sku) {
-    // (B1) REMOVE MAIN ENTRY
     $this->DB->start();
     $this->DB->delete("stock", "`stock_sku`=?", [$sku]);
-
-    // (B2) REMOVE MOVEMENT
     $this->DB->delete("stock_mvt", "`stock_sku`=?", [$sku]);
-
-    // (B3) RESULT
     $this->DB->end();
     return true;
   }
@@ -64,9 +53,7 @@ class Inventory extends Core {
   // (C) GET ITEM BY SKU
   //  $sku : item SKU
   function get ($sku) {
-    return $this->DB->fetch(
-      "SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]
-    );
+    return $this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]);
   }
 
   // (D) GET OR SEARCH ITEMS
@@ -83,29 +70,26 @@ class Inventory extends Core {
 
     // (D2) PAGINATION
     if ($page != null) {
-      $pgn = $this->core->paginator(
+      $this->core->paginator(
         $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
       );
-      $sql .= " LIMIT {$pgn["x"]}, {$pgn["y"]}";
+      $sql .= $this->core->page["lim"];
     }
 
     // (D3) RESULTS
-    $items = $this->DB->fetchAll("SELECT * $sql", $data, "stock_sku");
-    return $page != null
-     ? ["data" => $items, "page" => $pgn]
-     : $items ;
+    return $this->DB->fetchAll("SELECT * $sql", $data, "stock_sku");
   }
 
   // (E) ADD STOCK MOVEMENT
   // NOTE: WILL AUTO-ADAPT USER ID FROM GLOBALS
   // RETURNS NEW ITEM QUANTITY IF OK, FALSE IF FAIL
   //  $sku : item SKU
-  //  $direction : "I"n, "O"ut, stock "T"ake
+  //  $direction : "I"n, "O"ut, "T"ake, "D"iscard
   //  $qty : quantity
   //  $notes : notes, if any
   function move ($sku, $direction, $qty, $notes=null) {
     // (E1) CHECKS
-    if ($direction!="I" && $direction!="O" && $direction!="T") {
+    if ($direction!="I" && $direction!="O" && $direction!="T" && $direction!="D") {
       $this->error = "Invalid direction";
       return false;
     }
@@ -131,11 +115,9 @@ class Inventory extends Core {
     // (E3) UPDATE QUANTITY
     $newqty = floatval($item["stock_qty"]);
     if ($direction == "I") { $newqty += $qty; }
-    if ($direction == "O") { $newqty -= $qty; }
+    if ($direction == "O" || $direction == "D") { $newqty -= $qty; }
     if ($direction == "T") { $newqty = $qty; }
-    $this->DB->update(
-      "stock", ["stock_qty"], "`stock_sku`=?", [$newqty, $sku]
-    );
+    $this->DB->update("stock", ["stock_qty"], "`stock_sku`=?", [$newqty, $sku]);
 
     // (E4) DONE
     $this->DB->end();
@@ -148,25 +130,25 @@ class Inventory extends Core {
   function getMove ($sku, $page=null) {
     // (F1) PAGINATION
     if ($page != null) {
-      $pgn = $this->core->paginator(
-        $this->DB->fetchCol(
-          "SELECT COUNT(*) FROM `stock_mvt` WHERE `stock_sku`=?", [$sku]
-        ), $page
-      );
+      $this->core->paginator($this->DB->fetchCol(
+        "SELECT COUNT(*) FROM `stock_mvt` WHERE `stock_sku`=?", [$sku]
+      ), $page);
     }
-
+    
     // (F2) GET ENTRIES
     $sql = "SELECT m.*, u.`user_name`
     FROM `stock_mvt` m
     LEFT JOIN `users` u USING (`user_id`)
     WHERE m.`stock_sku`=?
     ORDER BY `mvt_date` DESC";
-    if ($page != null) { $sql .= " LIMIT {$pgn["x"]}, {$pgn["y"]}"; }
-    $items = $this->DB->fetchAll($sql, [$sku]);
-
+    if ($page != null) { $sql .= $this->core->page["lim"]; }
+    
     // (F3) RESULTS
-    return $page != null
-     ? ["data" => $items, "page" => $pgn]
-     : $items ;
+    return $this->DB->fetchAll($sql, [$sku]);
+  }
+
+  // (G) GET MONITORED ITEMS
+  function getMonitor () {
+    return $this->DB->fetchAll( "SELECT * FROM `stock` WHERE `stock_low`>0");
   }
 }

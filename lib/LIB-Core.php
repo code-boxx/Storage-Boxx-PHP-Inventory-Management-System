@@ -2,6 +2,7 @@
 class CoreBoxx {
   // (A) PROPERTIES & CONSTRUCTOR
   public $error = ""; // error message, if any
+  public $page = null; // pagination data, if any
   function __construct () {
     $GLOBALS["_SESS"] = []; // initialize global session variable
   }
@@ -46,16 +47,12 @@ class CoreBoxx {
     else {
       foreach ($params as $p) {
         // POST OR GET HAS EXACT PARAMETER MATCH
-        if (isset($target[$p->name])) {
-          $evil .= "\$_". $mode ."[\"". $p->name ."\"],";
-        }
+        if (isset($target[$p->name])) { $evil .= "\$_". $mode ."[\"". $p->name ."\"],"; }
 
         // USE DEFAULT VALUE
         else if ($p->isDefaultValueAvailable()) {
           $val = $p->getDefaultValue();
-          $evil .= is_string($val) ? "\"$val\"," : (
-            $val===null ? "null," : "$val,"
-          );
+          $evil .= is_string($val) ? "\"$val\"," : ($val===null ? "null," : "$val,");
         }
 
         // NULL IF ALL ELSE FAILS
@@ -86,11 +83,7 @@ class CoreBoxx {
   //  $mode : POST or GET
   function autoGETAPI ($module, $function, $mode="POST") {
     $results = $this->autoCall($module, $function, $mode);
-    $this->respond(
-      $results!==false, null,
-      isset($results["data"]) ? $results["data"] : $results,
-      isset($results["page"]) ? $results["page"] : null
-    );
+    $this->respond($results!==false, null, $results);
   }
 
   // (D) SYSTEM
@@ -108,10 +101,8 @@ class CoreBoxx {
       else { $msg = $this->error; }
     }
     echo json_encode([
-      "status" => $status,
-      "message" => $msg,
-      "data" => $data,
-      "more" => $more
+      "status" => $status, "message" => $msg,
+      "data" => $data, "more" => $more, "page" => $this->page
     ]);
     if ($exit) { exit(); }
   }
@@ -122,11 +113,14 @@ class CoreBoxx {
     if (defined("API_MODE")) {
       $this->respond(0,
       ERR_SHOW ? $ex->getMessage() : "OPPS! An error has occured.",
-      ERR_SHOW ? ["code" => $ex->getCode(), "file" => $ex->getFile(), "line" => $ex->getLine() ] : null);
+      ERR_SHOW ? [
+        "code" => $ex->getCode(), "file" => $ex->getFile(),
+        "line" => $ex->getLine(), "trace" => $ex->getTraceAsString()
+      ] : null);
     }
 
     // (D2-2) SHOW HTML ERROR MESSAGE IN WEB MODE
-    else { ?>
+    else if (defined("WEB_MODE")) { ?>
     <div style="box-sizing:border-box;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;background:#fff;color:#000;padding:30px;font-family:arial">
       <h1 style="font-size:50px;padding:0;margin:0">(╯°□°)╯︵ ┻━┻</h1>
       <p style="font-size:30px;color:#ff4545">AN ERROR HAS OCCURED.</p>
@@ -141,6 +135,17 @@ class CoreBoxx {
       <?php } ?>
     </div>
     <?php }
+
+    // (D2-3) OUTPUT PLAIN TEXT OTHERWISE
+    else {
+      echo "An error has occured.";
+      if (ERR_SHOW) {
+        echo implode(" ", [
+          "Code : ", $ex->getCode(), "File : ", $ex->getFile(),
+          "Line : ", $ex->getLine(), "Trace : ", $ex->getTraceAsString()
+        ]);
+      }
+    }
   }
 
   // (E) OTHER CONVENIENCE
@@ -155,32 +160,30 @@ class CoreBoxx {
   //  $now : current page
   function paginator ($entries, $now=1) {
     // (E2-1) TOTAL NUMBER OF PAGES
-    $page = [
+    $this->page = [
       "entries" => (int) $entries,
       "total" => ceil($entries / PAGE_PER)
     ];
 
     // (E2-2) CURRENT PAGE
-    $page["now"] = $now > $page["total"] ? $page["total"] : $now ;
-    if ($page["now"]<=0) { $page["now"] = 1; }
-    $page["now"] = (int) $page["now"];
+    $this->page["now"] = $now > $this->page["total"] ? $this->page["total"] : $now ;
+    if ($this->page["now"]<=0) { $this->page["now"] = 1; }
+    $this->page["now"] = (int) $this->page["now"];
 
     // (E2-3) LIMIT X,Y
-    $page["x"] = ($page["now"] - 1) * PAGE_PER;
-    $page["y"] = PAGE_PER;
-
-    // (E2-4) DONE
-    return $page;
+    $this->page["x"] = ($this->page["now"] - 1) * PAGE_PER;
+    $this->page["y"] = PAGE_PER;
+    $this->page["lim"] = " LIMIT {$this->page["x"]}, {$this->page["y"]}";
   }
 
-  // (F) REDIRECT
+  // (E3) REDIRECT
   function redirect ($page="", $url=HOST_BASE) {
     header("Location: $url$page");
     exit();
   }
 }
 
-// (G) ALL LIBRARIES SHOULD EXTEND THIS CORE CLASS
+// (F) ALL LIBRARIES SHOULD EXTEND THIS CORE CLASS
 class Core {
   function __construct ($core) {
     $this->core =& $core; // Link to core
@@ -188,3 +191,8 @@ class Core {
     if ($core->loaded("DB")) { $this->DB =& $core->DB; } // Link to database module
   }
 }
+
+// (G) CORE OBJECT + GLOBAL ERROR HANDLING
+$_CORE = new CoreBoxx();
+function _CORERR ($ex) { global $_CORE; $_CORE->ouch($ex); }
+set_exception_handler("_CORERR");

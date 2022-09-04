@@ -10,9 +10,13 @@ switch ($_REQ) {
     $_CORE->respond(0, "Invalid request", null, null, 400);
     break;
 
-  // (C) SAVE SETTINGS
+  // (C) SAVE USER
   case "save":
-    $_POST["options"] = json_decode($_POST["options"], 1);
-    $_CORE->autoAPI("Options", "save");
+    $_CORE->autoAPI("Users", "save");
+    break;
+
+  // (D) DELETE USER
+  case "del":
+    $_CORE->autoAPI("Users", "del");
     break;
 }

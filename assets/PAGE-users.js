@@ -1,12 +1,11 @@
 var usr = {
   // (A) SHOW ALL USERS
-  pg : 1, // CURRENT PAGE
-  find : "", // CURRENT SEARCH
+  pg : 1, // current page
+  find : "", // current search
   list : () => {
-    cb.page(1);
+    cb.page(0);
     cb.load({
-      page : "users/list",
-      target : "user-list",
+      page : "users/list", target : "user-list",
       data : {
         page : usr.pg,
         search : usr.find
@@ -16,7 +15,7 @@ var usr = {
 
   // (B) GO TO PAGE
   //  pg : int, page number
-  goToPage : (pg) => { if (pg!=usr.pg) {
+  goToPage : pg => { if (pg!=usr.pg) {
     usr.pg = pg;
     usr.list();
   }},
@@ -31,12 +30,11 @@ var usr = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // id : user ID, for edit only
-  addEdit : (id) => {
+  addEdit : id => {
     cb.load({
-      page : "users/form",
-      target : "cb-page-2",
+      page : "users/form", target : "cb-page-2",
       data : { id : id ? id : "" },
-      onload : () => { cb.page(2); }
+      onload : () => { cb.page(1); }
     });
   },
 
@@ -59,8 +57,7 @@ var usr = {
 
     // (E3) AJAX
     cb.api({
-      mod : "users",
-      req : "save",
+      mod : "users", req : "save",
       data : data,
       passmsg : "User Saved",
       onpass : usr.list
@@ -71,20 +68,15 @@ var usr = {
   // (F) DELETE USER
   //  id : int, user ID
   //  confirm : boolean, confirmed delete
-  del : (id, confirm) => {
-    if (confirm) {
+  del : id => {
+    cb.modal("Please confirm", "Delete user?", () => {
       cb.api({
-        mod : "users",
-        req : "del",
+        mod : "users", req : "del",
         data : { id: id },
         passmsg : "User Deleted",
         onpass : usr.list
       });
-    } else {
-      cb.modal("Please confirm", "Delete user?", () => {
-        usr.del(id, true);
-      });
-    }
+    });
   }
 };
 window.addEventListener("load", usr.list);

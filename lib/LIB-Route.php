@@ -69,6 +69,7 @@ class Route extends Core {
     global $_CORE;
     global $_SESS;
     $_PATH = $this->path;
+    unset($this->path); unset($this->pathlen);
 
     // (C2) LOAD SPECIFIED PAGE
     if (file_exists(PATH_PAGES . $file)) {
@@ -87,64 +88,63 @@ class Route extends Core {
       $this->core->respond(0, "Please use HTTPS", null, null, 426);
     }
 
-    // (D2) GET CLIENT ORIGIN
-    $_OGN = $_SERVER["HTTP_ORIGIN"] ?? $_SERVER["HTTP_REFERER"] ?? $_SERVER["REMOTE_ADDR"] ?? "" ;
-    $_OGN_HOST = parse_url($_OGN, PHP_URL_HOST);
-
-    // (D3) CORS SUPPORT - ONLY IF NOT LOCALHOST
-    if (!in_array($_OGN, ["::1", "127.0.0.1", "localhost"])) {
-      // (D3-1) FALSE - ONLY CALLS FROM HOST_NAME ALLOWED
-      if (API_CORS===false && $_OGN_HOST!=HOST_NAME) { $access = false; }
-
-      // (D3-2) STRING - ALLOW CALLS FROM API_CORS ONLY
-      else if (is_string(API_CORS) && $_OGN_HOST!=API_CORS) { $access = false; }
-
-      // (D3-3) ARRAY - SPECIFIED DOMAINS IN API_CORS ONLY
-      else if (is_array(API_CORS) && !in_array($_OGN_HOST, API_CORS)) { $access = false; }
-
-      // (D3-4) TRUE - ANYTHING GOES
-      else { $access = true; $_OGN = "*"; }
-
-      // (D3-5) ACCESS DENIED
-      if ($access === false) {
-        $this->core->respond(0, "Calls from $_OGN not allowed", null, null, 403);
-      }
-
-      // (D3-6) OUTPUT CORS HEADERS IF REQUIRED
-      if ($_OGN_HOST != HOST_NAME) {
-        header("Access-Control-Allow-Origin: $_OGN");
-        header("Access-Control-Allow-Credentials: true");
-      }
-    }
-
-    // (D4) PARSE URL PATH INTO AN ARRAY
+    // (D2) PARSE URL PATH INTO AN ARRAY - CHECK VALID API REQUEST
     // http://site.com/api/module/request > $this->path = ["module", "request"]
     $this->path = explode("/", rtrim(substr($this->path, strlen(HOST_API)), "/"));
-
-    // (D5) VALID API REQUEST?
     $valid = count($this->path)==2;
     if ($valid) {
       $_MOD = $this->path[0];
       $_REQ = $this->path[1];
       $valid = file_exists(PATH_LIB . "API-$_MOD.php");
     }
+    if (!$valid) { $this->core->respond(0, "Invalid request", null, null, 400); }
+    unset($this->path); unset($this->pathlen); unset($valid);
 
-    // (D6) LOAD API HANDLER
-    if ($valid) {
-      // (D6-1) CLEAN UP
-      unset($access); unset($this->path); unset($valid);
+    // (D3) CORS SUPPORT - ONLY IF NOT LOCALHOST
+    $_OGN = $_SERVER["HTTP_ORIGIN"] ?? $_SERVER["HTTP_REFERER"] ?? $_SERVER["REMOTE_ADDR"] ?? "" ;
+    $_OGN_HOST = parse_url($_OGN, PHP_URL_HOST);
+    if (!in_array($_OGN, ["::1", "127.0.0.1", "localhost"])) {
+      // (D3-1) API ACCESS OVERRIDE
+      // do your own access checks in cors-api-module.php > $access = true/false
+      if (file_exists(PATH_LIB . "CORS-API-$_MOD.php")) {
+        require PATH_LIB . "CORS-API-$_MOD.php";
+      }
 
-      // (D6-2) VARS THAT ARE USEFUL IN YOUR API
-      // $_MOD : requested module. e.g. user
-      // $_REQ : requested action. e.g. save
-      // $_OGN : client origin. e.g. https://site.com/
-      // $_OGN_HOST : host name. e.g. site.com
-      // $_CORE : core boxx engine
-      // $_SESS : session vars
-      global $_CORE;
-      global $_SESS;
-      require PATH_LIB . "API-$_MOD.php";
-    } else { $this->core->respond(0, "Invalid request", null, null, 400); }
+      // (D3-2) USE CORE-CONFIG.PHP CORS RULE
+      else {
+        // false - only calls from host_name allowed
+        if (API_CORS===false && $_OGN_HOST!=HOST_NAME) { $access = false; }
+        // string - allow calls from api_cors only
+        else if (is_string(API_CORS) && $_OGN_HOST!=API_CORS) { $access = false; }
+        // array - specified domains in api_cors only
+        else if (is_array(API_CORS) && !in_array($_OGN_HOST, API_CORS)) { $access = false; }
+        // true - anything goes
+        else { $access = true; }
+      }
+
+      // (D3-3) ACCESS DENIED
+      if (!isset($access)) { $access = false; }
+      if ($access === false) {
+        $this->core->respond(0, "Calls from $_OGN not allowed", null, null, 403);
+      }
+
+      // (D3-4) OUTPUT CORS HEADERS IF REQUIRED
+      if ($_OGN_HOST != HOST_NAME) {
+        header("Access-Control-Allow-Origin: $_OGN");
+        header("Access-Control-Allow-Credentials: true");
+      }
+    }
+
+    // (D4) LOAD API HANDLER
+    // $_MOD : requested module. e.g. user
+    // $_REQ : requested action. e.g. save
+    // $_OGN : client origin. e.g. https://site.com/
+    // $_OGN_HOST : host name. e.g. site.com
+    // $_CORE : core boxx engine
+    // $_SESS : session vars
+    global $_CORE;
+    global $_SESS;
+    require PATH_LIB . "API-$_MOD.php";
   }
 
   // (E) REGENERATE HTACCESS FILE

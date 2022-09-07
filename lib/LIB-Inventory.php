@@ -121,6 +121,18 @@ class Inventory extends Core {
 
     // (E4) DONE
     $this->DB->end();
+
+    // (E5) SEND NOTIFICATION IF MONITORED ITEM
+    if ($item["stock_low"]!=0 && $newqty<=$item["stock_low"]) {
+      $this->core->load("Push");
+      $this->core->Push->send("[{$item["stock_sku"]}] {$item["stock_name"]}",
+        // @TODO
+        "Item is low on stock - {$newqty} {$item["stock_unit"]}",
+        HOST_ASSETS . "push-ico.png", HOST_ASSETS . "push-bg.png"
+      );
+    }
+
+    // (E6) RETURN RESULT
     return $newqty;
   }
 

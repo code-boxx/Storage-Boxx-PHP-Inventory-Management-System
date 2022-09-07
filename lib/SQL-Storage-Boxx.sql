@@ -61,3 +61,12 @@ ALTER TABLE `stock_mvt`
   ADD PRIMARY KEY (`stock_sku`,`mvt_date`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `mvt_direction` (`mvt_direction`);
+
+-- (E) WEB PUSH NOTIFICATIONS
+CREATE TABLE `webpush` (
+  `endpoint` varchar(255) NOT NULL,
+  `data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `webpush`
+  ADD PRIMARY KEY (`endpoint`);

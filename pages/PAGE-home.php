@@ -4,7 +4,12 @@ $_CORE->load("Inventory");
 $items = $_CORE->Inventory->getMonitor();
 
 // (B) DASHBOARD
+$_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-home.js", "defer"]]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
+<!-- (B1) PUSH NOTIFICATIONS -->
+<div id="push-stat"></div>
+
+<!-- (B2) WATCH LIST -->
 <ul class="list-group">
 <?php if (is_array($items)) { foreach ($items as $i) {
 $low = $i["stock_qty"] <= $i["stock_low"]; ?>

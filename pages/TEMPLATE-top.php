@@ -45,7 +45,7 @@
     .head{background:#ddd}.zebra .d-flex{background:#fff;margin-bottom:10px}.zebra .d-flex:nth-child(odd){background-color:#f1f1f1}.pagination{border:1px solid #d0e8ff;background:#f0f8ff}
     #cb-body,body{min-height:100vh}#cb-toggle{display:none}#cb-side{width:155px;flex-shrink:0}#cb-side a{color:#fff}#cb-side .mi{color:#6a6a6a}@media screen and (max-width:768px){#cb-toggle{display:block}#cb-side{display:none}#cb-side.show{display:block}}#reader{max-width:380px}
     </style>
-    <script>var cbhost={base:"<?=HOST_BASE?>",api:"<?=HOST_API_BASE?>",assets:"<?=HOST_ASSETS?>"};</script>
+    <script>var cbhost={base:"<?=HOST_BASE?>",api:"<?=HOST_API_BASE?>",assets:"<?=HOST_ASSETS?>"};var cbvapid="<?=PUSH_PUBLIC?>";</script>
     <script defer src="<?=HOST_ASSETS?>PAGE-cb.js"></script>
 
     <!-- (A6) ADDITIONAL SCRIPTS -->
@@ -129,6 +129,9 @@
           </li>
           <li class="nav-item">
             <div class="my-2">System</div>
+            <a class="nav-link ms-2" href="<?=HOST_BASE?>push">
+              <span class="mi mi-smol">campaign</span> Notifications
+            </a>
             <a class="nav-link ms-2" href="<?=HOST_BASE?>settings">
               <span class="mi mi-smol">settings</span> Settings
             </a>

@@ -2,13 +2,19 @@
 <h3>STORAGE BOXX</h3>
 <div class="mb-3">open source php inventory management system</div>
 <div class="bg-white border p-3">
-  <h6>Links</h6>
+  <h6>Links & Documentation</h6>
   <ul>
-    <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/" target="_blank">Code Boxx Webpage</a></li>
+    <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/" target="_blank">Storage Boxx Official Webpage</a></li>
+    <li><a href="https://github.com/code-boxx/Storage-Boxx" target="_blank">GitHub</a></li>
+  </ul>
+
+  <h6>Socials</h6>
+  <ul>
+    <li><a href="https://code-boxx.com/" target="_blank">Code Boxx Webpage</a></li>
     <li><a href="https://payhip.com/codeboxx" target="_blank">Code Boxx Store (Buy a little something to support us?)</a></li>
     <li><a href="https://www.youtube.com/c/CodeBoxx" target="_blank">Code Boxx YouTube</a></li>
     <li><a href="https://www.pinterest.com/codeboxx/" target="_blank">Code Boxx Pinterest</a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx" target="_blank">GitHub</a></li>
+    <li><a href="https://github.com/code-boxx/" target="_blank">GitHub</a></li>
     <li><a href="https://codepen.io/code-boxx" target="_blank">CodePen</a></li>
   </ul>
 

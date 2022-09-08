@@ -69,7 +69,7 @@ class Route extends Core {
     global $_CORE;
     global $_SESS;
     $_PATH = $this->path;
-    unset($this->path); unset($this->pathlen);
+    $this->path = null; $this->pathlen = null;
 
     // (C2) LOAD SPECIFIED PAGE
     if (file_exists(PATH_PAGES . $file)) {

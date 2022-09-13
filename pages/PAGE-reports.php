@@ -18,7 +18,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <div class="input-group-prepend">
         <span class="input-group-text">Month</span>
       </div>
-      <select name="month" class="form-control"><?php foreach ($months as $m=>$mth) {
+      <select name="month" class="form-select"><?php foreach ($months as $m=>$mth) {
         printf("<option value='%u'%s>%s</option>",
           $m, $m==$monthNow?" selected":"", $mth
         );
@@ -40,7 +40,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <div class="input-group-prepend">
         <span class="input-group-text">Range</span>
       </div>
-      <select class="form-control" name="range">
+      <select class="form-select" name="range">
         <option value="">All Items</option>
         <option value="M">Monitored Items Only</option>
       </select>

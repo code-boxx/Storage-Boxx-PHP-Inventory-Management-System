@@ -12,9 +12,14 @@
       padding: 20px;
       border: 1px solid #e1e1e1;
     }
-    #qrtxt {
+    #qrsku {
       margin-top: 20px;
-      font-weight: 700;
+      color: #f00;
+      font-size: 0.9em;
+    }
+    #qritem {
+      text-transform: uppercase;
+      font-size: 1.7em;
     }
     </style>
     <script src="<?=HOST_ASSETS?>qrcode.min.js"></script>
@@ -33,9 +38,8 @@
   <body>
     <div id="qrwrap">
       <div id="qrcode"></div>
-      <div id="qrtxt">
-        <?=$_GET["sku"]?><br><?=$_GET["name"]?>
-      </div>
+      <div id="qrsku"><?=$_GET["sku"]?></div>
+      <div id="qritem"><?=$_GET["name"]?></div>
     </div>
   </body>
 </html>

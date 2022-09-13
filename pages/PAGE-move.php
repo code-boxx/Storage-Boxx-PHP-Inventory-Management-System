@@ -16,7 +16,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <div class="input-group-prepend">
         <span class="input-group-text mi">compare_arrows</span>
       </div>
-      <select class="form-control" id="mvt-direction"><?php
+      <select class="form-select" id="mvt-direction"><?php
         foreach (STOCK_MVT as $c=>$m) {
           echo "<option value='$c'>$m</option>";
         }

@@ -57,6 +57,6 @@ if ($edit) { $item = $_CORE->autoCall("Inventory", "get"); }
     </div>
   </div>
 
-  <input type="button" class="col btn btn-danger btn-lg" value="Back" onclick="cb.page(0)">
-  <input type="submit" class="col btn btn-primary btn-lg" value="Save">
+  <input type="button" class="col btn btn-danger" value="Back" onclick="cb.page(0)">
+  <input type="submit" class="col btn btn-primary" value="Save">
 </form>

@@ -5,7 +5,7 @@ class Route extends Core {
   private $pathlen; // current url path length
   function run () {
     // (A1) CURRENT URL PATH
-    $this->path = rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/") . "/";
+    $this->path = rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/\\") . "/";
 
     // (A2) THIS IS AN API REQUEST
     if (
@@ -31,7 +31,7 @@ class Route extends Core {
     if (substr($this->path, 0, strlen(HOST_BASE_PATH)) == HOST_BASE_PATH) {
       $this->path = substr($this->path, strlen(HOST_BASE_PATH));
     }
-    $this->path = rtrim($this->path, "/") . "/";
+    $this->path = rtrim($this->path, "/\\") . "/";
     $this->pathlen = strlen($this->path);
 
     // (B2) PRE-RESOLVE HOOK
@@ -57,7 +57,7 @@ class Route extends Core {
     // (B5) AUTO RESOLVE OTHERWISE
     $this->load($this->path=="/"
       ? "PAGE-home.php"
-      : "PAGE-" . str_replace("/", "-", rtrim($this->path, "/")) . ".php"
+      : "PAGE-" . str_replace("/", "-", rtrim($this->path, "/\\")) . ".php"
     );
   }
 
@@ -90,7 +90,7 @@ class Route extends Core {
 
     // (D2) PARSE URL PATH INTO AN ARRAY - CHECK VALID API REQUEST
     // http://site.com/api/module/request > $this->path = ["module", "request"]
-    $this->path = explode("/", rtrim(substr($this->path, strlen(HOST_API)), "/"));
+    $this->path = explode("/", rtrim(substr($this->path, strlen(HOST_API)), "/\\"));
     $valid = count($this->path)==2;
     if ($valid) {
       $_MOD = $this->path[0];

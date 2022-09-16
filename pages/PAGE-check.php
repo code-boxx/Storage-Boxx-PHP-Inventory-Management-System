@@ -16,9 +16,9 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <div class="input-group-prepend">
         <span class="input-group-text mi">qr_code</span>
       </div>
-      <input type="text" class="form-control" id="check-sku" required autofocus placeholder="Item SKU (enter or scan)"/>
+      <input type="text" class="form-control" id="check-sku" required autofocus placeholder="Item SKU (enter or scan)">
     </div>
-    <input type="submit" class="btn btn-primary" value="Check"/>
+    <input type="submit" class="btn btn-primary" value="Check">
   </form>
 </div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

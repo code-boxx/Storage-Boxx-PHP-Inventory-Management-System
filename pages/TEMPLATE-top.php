@@ -100,10 +100,10 @@
           <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32">
             <hr>
             <a class="nav-link ms-2" href="<?=HOST_BASE?>">
-              <span class="mi mi-smol">dashboard</span> Dashboard -x
+              <span class="mi mi-smol">dashboard</span> Dashboard
             </a>
             <a class="nav-link ms-2" href="<?=HOST_BASE?>reports">
-              <span class="mi mi-smol">library_books</span> Reports -x
+              <span class="mi mi-smol">library_books</span> Reports
             </a>
             <hr>
           </li>

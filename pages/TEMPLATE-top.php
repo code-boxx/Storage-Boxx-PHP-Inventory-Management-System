@@ -68,14 +68,14 @@
     </div>
 
     <!-- (B2) TOAST MESSAGE -->
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:11">
+    <div class="position-fixed top-50 start-50 translate-middle" style="z-index:11">
       <div id="cb-toast" class="toast hide" role="alert">
         <div class="toast-header">
           <span id="cb-toast-icon" class="mi"></span>
           <strong id="cb-toast-head" class="me-auto p-1"></strong>
           <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
         </div>
-        <div id="cb-toast-body" class="toast-body"></div>
+        <div id="cb-toast-body" class="toast-body bg-light"></div>
       </div>
     </div>
 

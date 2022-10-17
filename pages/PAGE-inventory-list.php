@@ -24,6 +24,9 @@ if (is_array($items)) { foreach ($items as $sku=>$i) { ?>
       <li class="dropdown-item" onclick="inv.qrcode('<?=$sku?>', '<?=$i["stock_name"]?>')">
         <i class="mi mi-smol">qr_code</i> QR Code
       </li>
+      <li class="dropdown-item" onclick="inv.nfcShow('<?=$sku?>')">
+        <i class="mi mi-smol">nfc</i> NFC Tag
+      </li>
       <li class="dropdown-item text-warning" onclick="inv.del('<?=$sku?>')">
         <i class="mi mi-smol">delete</i> Delete
       </li>

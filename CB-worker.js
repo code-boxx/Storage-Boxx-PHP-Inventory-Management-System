@@ -12,16 +12,20 @@ cFiles = [
   "assets/book.jpg",
   // (A3) COMMON INTERFACE
   "assets/PAGE-cb.js",
+  "assets/PAGE-nfc.js",
   "assets/maticon.woff2",
+  "CB-manifest.json",
   // (A4) QR CODE
   "assets/html5-qrcode.min.js",
   "assets/qrcode.min.js",
   // (A5) PAGES
   "assets/PAGE-check.js",
-  "assets/PAGE-checker.js",
+  "assets/PAGE-home.js",
+  "assets/PAGE-inv-check.js",
   "assets/PAGE-inventory.js",
   "assets/PAGE-login.js",
   "assets/PAGE-move.js",
+  "assets/PAGE-push.js",
   "assets/PAGE-settings.js",
   "assets/PAGE-users.js"
 ];

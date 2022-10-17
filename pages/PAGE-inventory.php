@@ -1,7 +1,8 @@
 <?php
 $_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
   ["s", HOST_ASSETS."PAGE-inventory.js", "defer"],
-  ["s", HOST_ASSETS."PAGE-checker.js", "defer"]
+  ["s", HOST_ASSETS."PAGE-inv-check.js", "defer"]
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) HEADER -->

@@ -83,6 +83,52 @@ var inv = {
   })),
 
   // (H) GENERATE QR CODE
-  qrcode : (sku, name) => window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name)
+  qrcode : (sku, name) => window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name),
+
+  // (I) SHOW WRITE NFC SCREEN
+  nfcShow : sku => {
+    if ("NDEFReader" in window) {
+      nfc.standby();
+      cb.load({
+        page : "inventory/nfc", target : "cb-page-2",
+        data : { sku : sku ? sku : "" },
+        onload : () => {
+          nfc.onwrite = () => {
+            inv.nfcLog(1, `Done - SKU "${sku}" written to tag`);
+            nfc.standby();
+          };
+          nfc.onerror = err => {
+            console.error(err);
+            inv.nfcLog(0, "ERROR - " + err.message);
+            nfc.stop();
+          };
+          cb.page(1);
+          nfc.write(sku);
+          inv.nfcLog(1, `Ready - Tap NFC tag to write SKU "${sku}"`);
+        }
+      });
+    } else {
+      cb.modal("Error", "Web NFC is not supported in your browser/device.");
+    }
+  },
+
+  // (J) SHOW "WRITE NFC TAG" STATUS ON SCREEN
+  nfcLog : (status, msg) => {
+    let hLog = document.getElementById("nfc-stat");
+    if (status == 1) {
+      hLog.classList.remove("bg-danger");
+      hLog.classList.add("bg-success");
+    } else {
+      hLog.classList.remove("bg-success");
+      hLog.classList.add("bg-danger");
+    }
+    hLog.innerHTML = msg;
+  },
+
+  // (K) END WRITE NFC SESSION
+  nfcBack : () => {
+    nfc.stop();
+    cb.page(0);
+  }
 };
 window.addEventListener("load", inv.list);

@@ -5,9 +5,10 @@ Storage Boxx is a simple PHP Inventory Management System. This is not a "super p
 ## FEATURES
 1) Users and items management.
 2) Generate item QR code, built-in QR code scanner.
-3) Stock level monitoring, push notifications on low stock.
-4) CSV reports.
-5) Progressive web app.
+3) Create item NFC tags, built-in NFC scanner.
+4) Stock level monitoring, push notifications on low stock.
+5) CSV reports.
+6) Progressive web app.
 <br><br>
 
 ## SCREENSHOTS

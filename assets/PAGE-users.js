@@ -30,13 +30,11 @@ var usr = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // id : user ID, for edit only
-  addEdit : id => {
-    cb.load({
-      page : "users/form", target : "cb-page-2",
-      data : { id : id ? id : "" },
-      onload : () => { cb.page(1); }
-    });
-  },
+  addEdit : id => cb.load({
+    page : "users/form", target : "cb-page-2",
+    data : { id : id ? id : "" },
+    onload : () => cb.page(1)
+  }),
 
   // (E) SAVE USER
   save : () => {
@@ -57,8 +55,7 @@ var usr = {
 
     // (E3) AJAX
     cb.api({
-      mod : "users", req : "save",
-      data : data,
+      mod : "users", req : "save", data : data,
       passmsg : "User Saved",
       onpass : usr.list
     });
@@ -68,15 +65,11 @@ var usr = {
   // (F) DELETE USER
   //  id : int, user ID
   //  confirm : boolean, confirmed delete
-  del : id => {
-    cb.modal("Please confirm", "Delete user?", () => {
-      cb.api({
-        mod : "users", req : "del",
-        data : { id: id },
-        passmsg : "User Deleted",
-        onpass : usr.list
-      });
-    });
-  }
+  del : id => cb.modal("Please confirm", "Delete user?", () => cb.api({
+    mod : "users", req : "del",
+    data : { id: id },
+    passmsg : "User Deleted",
+    onpass : usr.list
+  }))
 };
 window.addEventListener("load", usr.list);

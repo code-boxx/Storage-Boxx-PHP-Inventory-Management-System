@@ -30,13 +30,11 @@ var inv = {
 
   // (D) SHOW ADD/EDIT DOCKET
   // sku : item SKU, for edit only
-  addEdit : sku => {
-    cb.load({
-      page : "inventory/form", target : "cb-page-2",
-      data : { sku : sku ? sku : "" },
-      onload : () => { cb.page(1); }
-    });
-  },
+  addEdit : sku => cb.load({
+    page : "inventory/form", target : "cb-page-2",
+    data : { sku : sku ? sku : "" },
+    onload : () => cb.page(1)
+  }),
 
   // (E) RANDOM SKU
   // Credits : https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
@@ -51,14 +49,9 @@ var inv = {
     document.getElementById("inv-sku").value = result;
   },
 
-  // (F) SET UNIT OF MEASUREMENT
-  unit : u => {
-    document.getElementById("inv-unit").value = u;
-  },
-
-  // (G) SAVE ITEM
+  // (F) SAVE ITEM
   save : () => {
-    // (G1) GET DATA
+    // (F1) GET DATA
     var data = {
       sku : document.getElementById("inv-sku").value,
       name : document.getElementById("inv-name").value,
@@ -69,7 +62,7 @@ var inv = {
     var osku = document.getElementById("inv-osku").value;
     if (osku!="") { data.osku = osku; }
 
-    // (G2) AJAX
+    // (F2) AJAX
     cb.api({
       mod : "inventory", req : "save",
       data : data,
@@ -79,23 +72,17 @@ var inv = {
     return false;
   },
 
-  // (H) DELETE ITEM
+  // (G) DELETE ITEM
   //  sku : item SKU
   //  confirm : boolean, confirmed delete
-  del : sku => {
-    cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => {
-      cb.api({
-        mod : "inventory", req : "del",
-        data : { sku : sku },
-        passmsg : "Item Deleted",
-        onpass : inv.list
-      });
-    });
-  },
+  del : sku => cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => cb.api({
+    mod : "inventory", req : "del",
+    data : { sku : sku },
+    passmsg : "Item Deleted",
+    onpass : inv.list
+  })),
 
-  // (I) GENERATE QR CODE
-  qrcode : (sku, name) => {
-    window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name);
-  }
+  // (H) GENERATE QR CODE
+  qrcode : (sku, name) => window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name)
 };
 window.addEventListener("load", inv.list);

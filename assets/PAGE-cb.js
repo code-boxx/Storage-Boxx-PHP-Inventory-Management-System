@@ -153,7 +153,7 @@ var cb = {
     if (opt.nofail === undefined) { opt.nofail = false; }
 
     // (D2) ON AJAX LOAD
-    options.onpass = (res) => {
+    options.onpass = res => {
       // (D2-1) PARSE RESULTS
       try { var res = JSON.parse(res); }
       catch (err) {
@@ -213,15 +213,10 @@ var cb = {
   },
 
   // (F) SIGN OFF
-  bye : () => {
-    cb.modal("Please Confirm", "Sign off?", () => {
-      cb.api({
-        mod : "session", req : "logout",
-        passmsg : false,
-        onpass : () => { location.href = cbhost.base + "login/"; }
-      });
-    });
-  },
+  bye : () => cb.modal("Please Confirm", "Sign off?", () => cb.api({
+    mod : "session", req : "logout", passmsg : false,
+    onpass : () => location.href = cbhost.base + "login/"
+  })),
 
   // (G) PASSWORD/HASH STRENGTH CHECKER
   checker : hash => /^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(hash)

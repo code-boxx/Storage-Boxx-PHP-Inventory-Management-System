@@ -37,29 +37,25 @@ var check = {
 
   // (CD) LOAD MOVEMENT HISTORY "MAIN PAGE"
   //  sku : string, item sku
-  load : sku => {
-    cb.load({
-      page : "icheck", target : "cb-page-2",
-      data : { sku : sku },
-      onload : () => {
-        check.sku = sku;
-        check.pg = 1;
-        cb.page(1);
-        check.list();
-      }
-    });
-  },
+  load : sku => cb.load({
+    page : "icheck", target : "cb-page-2",
+    data : { sku : sku },
+    onload : () => {
+      check.sku = sku;
+      check.pg = 1;
+      cb.page(1);
+      check.list();
+    }
+  }),
 
   // (E) SHOW ITEM MOVEMENT HISTORY
-  list : () => {
-    cb.load({
-      page : "icheck/list", target : "i-history",
-      data : {
-        sku : check.sku,
-        page : check.pg
-      }
-    });
-  },
+  list : () => cb.load({
+    page : "icheck/list", target : "i-history",
+    data : {
+      sku : check.sku,
+      page : check.pg
+    }
+  }),
 
   // (F) GO TO PAGE
   //  pg : int, page number

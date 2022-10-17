@@ -8,9 +8,7 @@ function send () {
       image : document.getElementById("push_img").value
     },
     passmsg : "Message sent",
-    onpass : () => {
-      document.getElementById("push_form").reset();
-    }
+    onpass : () => document.getElementById("push_form").reset()
   });
   return false;
 }

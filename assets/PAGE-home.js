@@ -18,14 +18,14 @@ var pusher = {
     if (Notification.permission === "default") {
       Notification.requestPermission().then(perm => {
         if (Notification.permission === "granted") {
-          pusher.reg().catch(e => { pusher.show(0, e.message); });
+          pusher.reg().catch(e => pusher.show(0, e.message));
         } else { pusher.show(0, "Allow notifications to receive low stock warnings."); }
       });
     }
 
     // (B3) GRANTED
     else if (Notification.permission === "granted") {
-      pusher.reg().catch(e => { pusher.show(0, e.message); });
+      pusher.reg().catch(e => pusher.show(0, e.message));
     }
 
     // (B4) DENIED
@@ -51,7 +51,7 @@ var pusher = {
         sub : JSON.stringify(sub)
       },
       passmsg : false,
-      onpass : () => { pusher.show(1, "Push notifications ready."); }
+      onpass : () => pusher.show(1, "Push notifications ready.")
     });
   }
 };

@@ -10,19 +10,24 @@ if (is_array($items)) { foreach ($items as $sku=>$i) { ?>
     <small><?=$i["stock_desc"]?></small><br>
     <small><?=$i["stock_qty"]?> <?=$i["stock_unit"]?></small>
   </div>
-  <div>
-    <button class="btn btn-danger btn-sm mi" onclick="inv.del('<?=$sku?>')">
-      delete
+  <div class="dropdown">
+    <button class="btn btn-primary btn-sm mi dropdown-toggle" type="button" data-bs-toggle="dropdown">
+      more_vert
     </button>
-    <button class="btn btn-primary btn-sm mi" onclick="inv.addEdit('<?=$sku?>')">
-      edit
-    </button>
-    <button class="btn btn-primary btn-sm mi" onclick="inv.qrcode('<?=$sku?>', '<?=$i["stock_name"]?>')">
-      print
-    </button>
-    <button class="btn btn-primary btn-sm mi" onclick="check.load('<?=$sku?>')">
-      history
-    </button>
+    <ul class="dropdown-menu dropdown-menu-dark">
+      <li class="dropdown-item" onclick="inv.addEdit('<?=$sku?>')">
+        <i class="mi mi-smol">edit</i> Edit
+      </li>
+      <li class="dropdown-item" onclick="check.load('<?=$sku?>')">
+        <i class="mi mi-smol">history</i> History
+      </li>
+      <li class="dropdown-item" onclick="inv.qrcode('<?=$sku?>', '<?=$i["stock_name"]?>')">
+        <i class="mi mi-smol">qr_code</i> QR Code
+      </li>
+      <li class="dropdown-item text-warning" onclick="inv.del('<?=$sku?>')">
+        <i class="mi mi-smol">delete</i> Delete
+      </li>
+    </ul>
   </div>
 </div>
 <?php }} else { echo "No items found."; }

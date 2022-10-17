@@ -5,7 +5,6 @@ if ($edit) { $item = $_CORE->autoCall("Inventory", "get"); }
 
 // (B) ITEM FORM ?>
 <h3 class="mb-3"><?=$edit?"EDIT":"ADD"?> ITEM</h3>
-
 <form onsubmit="return inv.save()">
   <div class="bg-white border p-4 mb-3">
     <div class="input-group">
@@ -31,29 +30,28 @@ if ($edit) { $item = $_CORE->autoCall("Inventory", "get"); }
       <input type="text" id="inv-desc" class="form-control" value="<?=$edit?$item["stock_desc"]:""?>" placeholder="Description">
     </div>
 
-    <div class="input-group">
+    <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text mi">straighten</span>
       </div>
-      <input type="text" class="form-control" id="inv-unit" required value="<?=$edit?$item["stock_unit"]:""?>" placeholder="Unit of Measurement">
-    </div>
-    <div class="p-1 mb-3">
-      <span onclick="inv.unit('PC')">[PC]</span>
-      <span onclick="inv.unit('EA')">[EA]</span>
-      <span onclick="inv.unit('BX')">[BX]</span>
-      <span onclick="inv.unit('CS')">[CS]</span>
-      <span onclick="inv.unit('PL')">[PL]</span>
+      <input type="text" class="form-control" id="inv-unit" list="inv-units" required value="<?=$edit?$item["stock_unit"]:""?>" placeholder="Unit of Measurement">
+      <datalist id="inv-units">
+        <option value="BAG"> <option value="BIN"> <option value="BOX">
+        <option value="CAN"> <option value="CAS"> <option value="CNT">
+        <option value="CRT"> <option value="CSK"> <option value="CTN">
+        <option value="PCS"> <option value="PKG"> <option value="ROL">
+      </datalist>
     </div>
 
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text mi">notifications</span>
       </div>
-      <input type="number" step="0.01" class="form-control" id="inv-low" required value="<?=$edit?$item["stock_low"]:""?>" placeholder="Stock watch">
+      <input type="number" step="0.01" class="form-control" id="inv-low" required value="<?=$edit?$item["stock_low"]:""?>" placeholder="Stock level watch">
     </div>
-    <div>
-      Enter "0" if you don't want to monitor this item.
-      Or any number more than 0 to monitor on the dashboard.
+    <div class="mt-2 text-secondary">
+      * Enter "0" if you don't want to monitor this item.
+      Enter any quantity more than 0 to monitor on the dashboard.
     </div>
   </div>
 

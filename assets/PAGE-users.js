@@ -70,6 +70,74 @@ var usr = {
     data : { id: id },
     passmsg : "User Deleted",
     onpass : usr.list
-  }))
+  })),
+
+  // (G) SHOW WRITE NFC PAGE
+  nfcShow : id => cb.load({
+    page : "users/nfc", target : "cb-page-2",
+    data : { id : id },
+    onload : () => {
+      if ("NDEFReader" in window) {
+        document.getElementById("nfc-stat").onclick = () => usr.nfcNew(id);
+        usr.nfcLog(1, `Click here to create a new token`);
+      } else {
+        usr.nfcLog(0, "Web NFC is not supported in your browser/device.");
+      }
+      cb.page(1);
+    }
+  }),
+
+  // (H) SHOW "WRITE NFC TAG" STATUS ON SCREEN
+  nfcLog : (status, msg) => {
+    let hLog = document.getElementById("nfc-stat");
+    if (status == 1) {
+      hLog.classList.remove("bg-danger");
+      hLog.classList.add("bg-success");
+    } else {
+      hLog.classList.remove("bg-success");
+      hLog.classList.add("bg-danger");
+    }
+    hLog.value = msg;
+  },
+
+  // (I) CREATE NEW NFC LOGIN TAG
+  nfcNew : id => {
+    cb.api({
+      mod : "users", req : "token",
+      data : { id : id },
+      passmsg : false,
+      onpass : res => {
+        document.getElementById("nfc-stat").onclick = "";
+        document.getElementById("nfc-null").disabled = false;
+        nfc.onwrite = () => {
+          usr.nfcLog(1, `Done - Login token created`);
+          nfc.standby();
+        };
+        nfc.onerror = err => {
+          console.error(err);
+          usr.nfcLog(0, "ERROR - " + err.message);
+          nfc.stop();
+        };
+        nfc.write(res.data);
+        usr.nfcLog(1, `Ready - Tap to write NFC token`);
+      }
+    });
+  },
+
+  // (J) NULLIFY NFC TOKEN
+  nfcNull : id => {
+    cb.api({
+      mod : "users", req : "notoken",
+      data : { id : id },
+      passmsg : "Login token nullified.",
+      onpass : res => document.getElementById("nfc-null").disabled = true
+    });
+  },
+
+  // (K) END WRITE NFC SESSION
+  nfcBack : () => {
+    nfc.stop();
+    cb.page(0);
+  }
 };
 window.addEventListener("load", usr.list);

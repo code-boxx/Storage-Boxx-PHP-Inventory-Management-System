@@ -10,17 +10,22 @@ switch ($_REQ) {
     $_CORE->autoAPI("Users", "login");
     break;
 
-  // (C) LOGOUT
+  // (C) NFC TOKEN LOGIN
+  case "intoken":
+    $_CORE->autoAPI("Users", "intoken");
+    break;
+
+  // (D) LOGOUT
   case "logout":
     $_CORE->autoAPI("Users", "logout");
     break;
 
-  // (D) REQUEST PASSWORD RESET
+  // (E) REQUEST PASSWORD RESET
   case "forgotA":
     $_CORE->autoAPI("Forgot", "request");
     break;
 
-  // (E) PROCESS PASSWORD RESET
+  // (F) PROCESS PASSWORD RESET
   case "forgotB":
     $_CORE->autoAPI("Forgot", "reset");
     break;

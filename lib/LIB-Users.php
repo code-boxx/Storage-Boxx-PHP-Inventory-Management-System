@@ -122,4 +122,56 @@ class Users extends Core {
     $this->core->Session->destroy();
     return true;
   }
+
+  // (I) CREATE NEW NFC TOKEN
+  function token ($id) {
+    // (I1) UPDATE TOKEN
+    $token = $this->core->random(4);
+    $this->DB->update("users", ["user_token"], "`user_id`=?", [$token, $id]);
+
+    // (I2) RETURN ENCODED TOKEN
+    require PATH_LIB . "jwt/autoload.php";
+    return Firebase\JWT\JWT::encode([$id, $token], JWT_SECRET, JWT_ALGO);
+  }
+
+  // (J) NULLIFY NFC TOKEN
+  function notoken ($id) {
+    $this->DB->update("users", ["user_token"], "`user_id`=?", [null, $id]);
+    return true;
+  }
+
+  // (K) NFC TOKEN LOGIN
+  function intoken ($token) {
+    // (K1) DECODE TOKEN
+    $valid = true;
+    try {
+      require PATH_LIB . "jwt/autoload.php";
+      $token = Firebase\JWT\JWT::decode(
+        $token, new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO)
+      );
+      $valid = is_object($token);
+      if ($valid) {
+        $token = (array) $token;
+        $valid = count($token)==2;
+      }
+    } catch (Exception $e) { $valid = false; }
+
+    // (K2) VERIFY TOKEN
+    if ($valid) {
+      $user = $this->get($token[0]);
+      $valid = (is_array($user) && $user["user_token"]==$token[1]);
+    }
+
+    // (K3) SESSION START
+    if ($valid) {
+      global $_SESS;
+      $_SESS["user"] = $user;
+      $this->core->Session->create();
+      return true;
+    }
+
+    // (K4) NADA
+    $this->error = "Invalid token";
+    return false;
+  }
 }

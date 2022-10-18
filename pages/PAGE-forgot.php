@@ -21,7 +21,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       </div>
 
       <input type="submit" class="btn btn-primary py-2 mb-4" value="Reset Request">
-      <div><a href="<?=HOST_BASE?>login">Back to login</a></div>
+      <div><a href="<?=HOST_BASE?>login">Login</a></div>
     </form>
   </div>
 </div>
@@ -43,7 +43,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
         if ($pass) { echo "OK - New password sent to your email."; }
         else { echo $_CORE->error; }
       ?></div>
-      <div><a href="<?=HOST_BASE?>login">Back to login</a></div>
+      <div><a href="<?=HOST_BASE?>login">Login</a></div>
     </div>
   </div>
 </div>

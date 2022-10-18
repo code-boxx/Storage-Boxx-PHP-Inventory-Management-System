@@ -20,6 +20,7 @@ cFiles = [
   "assets/qrcode.min.js",
   // (A5) PAGES
   "assets/PAGE-check.js",
+  "assets/PAGE-forgot.js",
   "assets/PAGE-home.js",
   "assets/PAGE-inv-check.js",
   "assets/PAGE-inventory.js",

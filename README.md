@@ -1,5 +1,5 @@
 ## STORAGE BOXX
-Storage Boxx is a simple PHP Inventory Management System. It is not a "super professional crazy bloated with features" kind of system. But it covers the basics, has a built-in webcam QR code scanner, built-in NFC, and low stock warning push notifications. This will help the small businesses get started with their inventory stock keeping.
+Storage Boxx is a simple PHP Inventory Management System. It is not a "super professional crazy bloated with features" kind of system. But it covers the basics, has a built-in webcam QR code scanner, built-in NFC, and low stock warning push notifications. This will help small businesses get started with inventory stock keeping.
 <br><br>
 
 ## FEATURES
@@ -13,7 +13,7 @@ Storage Boxx is a simple PHP Inventory Management System. It is not a "super pro
 
 ## SCREENSHOTS
 <p float="left">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-0.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-0a.png">
   <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-1.png">
   <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-2.png">
   <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-3.png">
@@ -33,7 +33,7 @@ Just access `http://your-site.com/` in your browser and walk through the install
 <br><br>
 
 ## DOCUMENTATION & FRAMEWORKS
-1) Built on [Bootstrap](https://getbootstrap.com/), [Material Icons](https://fonts.google.com/icons), [HTML5 QRCode Scanner](https://github.com/mebjashtml5-qrcode), [QRCodeJS](https://davidshimjs.github.io/qrcodejs/), [PHP Web Push](https://github.com/web-push-libs/web-push-php) and [Core Boxx](https://code-boxx.com/core-boxx-php-rapid-development-framework/).
+1) Built on [Bootstrap](https://getbootstrap.com/), [Material Icons](https://fonts.google.com/icons), [HTML5 QRCode Scanner](https://github.com/mebjashtml5-qrcode), [QRCodeJS](https://davidshimjs.github.io/qrcodejs/), [PHP Web Push](https://github.com/web-push-libs/web-push-php), [PHP-JWT](https://github.com/firebase/php-jwt), and [Core Boxx](https://code-boxx.com/core-boxx-php-rapid-development-framework/).
 2) Visit https://code-boxx.com/storage-boxx-php-inventory-system/ for the full documentation!
 <br><br>
 

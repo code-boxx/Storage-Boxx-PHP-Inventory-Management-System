@@ -1,5 +1,8 @@
 <?php
-$_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-users.js", "defer"]]];
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-users.js", "defer"]
+]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) HEADER -->
 <h3 class="mb-3">MANAGE USERS</h3>

@@ -19,4 +19,15 @@ switch ($_REQ) {
   case "del":
     $_CORE->autoAPI("Users", "del");
     break;
+
+  // (E) CREATE LOGIN TOKEN
+  case "token":
+    $result = $_CORE->autoCall("Users", "token");
+    $_CORE->respond($result!==false, null, $result!==false?$result:null);
+    break;
+
+  // (F) NULLIFY LOGIN TOKEN
+  case "notoken":
+    $_CORE->autoAPI("Users", "notoken");
+    break;
 }

@@ -26,6 +26,7 @@
     <li><a href="https://github.com/mebjas/html5-qrcode" target="_blank">HTML5-QRCode</a></li>
     <li><a href="https://developers.google.com/fonts/docs/material_icons" target="_blank">Material Icons</a></li>
     <li><a href="https://github.com/web-push-libs/web-push-php" target="_blank">PHP Web Push</a></li>
+    <li><a href="https://github.com/firebase/php-jwt" target="_blank">PHP JSON Web Token</a></li>
   </ul>
 </div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

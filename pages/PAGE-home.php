@@ -7,23 +7,30 @@ $items = $_CORE->Inventory->getMonitor();
 $_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-home.js", "defer"]]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (B1) PUSH NOTIFICATIONS -->
+<h5>PUSH NOTIFICATIONS</h5>
 <div id="push-stat"></div>
 
 <!-- (B2) WATCH LIST -->
+<h5>ITEMS WATCH LIST</h5>
 <ul class="list-group">
 <?php if (is_array($items)) { foreach ($items as $i) {
 $low = $i["stock_qty"] <= $i["stock_low"]; ?>
-<li class="list-group-item d-flex justify-content-between align-items-start">
-  <div class="ms-2 me-auto">
-    <div class="fw-bold<?=$low?" text-danger":""?>">[<?=$i["stock_sku"]?>] <?=$i["stock_name"]?></div>
-    <div class="text-<?=$low?"danger":"secondary"?>">Min : <?=$i["stock_low"]?> <?=$i["stock_unit"]?></div>
-    <div class="text-<?=$low?"danger":"secondary"?>">Now : <?=$i["stock_qty"]?> <?=$i["stock_unit"]?></div>
+<li class="list-group-item d-flex align-items-center text-<?=$low?"danger":"secondary"?>">
+  <div class="flex-grow-1">
+    <div class="fw-bold">[<?=$i["stock_sku"]?>] <?=$i["stock_name"]?></div>
+    <div>
+      <?php if ($low) { ?>
+      <span class="badge bg-danger">LOW</span>
+      <?php } else { ?>
+      <span class="badge bg-primary">OK</span>
+      <?php } ?>
+      Min : <?=$i["stock_low"]?> <?=$i["stock_unit"]?>
+    </div>
   </div>
-  <?php if ($low) { ?>
-  <span class="badge bg-danger">LOW</span>
-  <?php } else { ?>
-  <span class="badge bg-primary">OK</span>
-  <?php } ?>
+  <div class="ms-1 text-center">
+    <div class="display-6"><?=$i["stock_qty"]?></div>
+    <div><?=$i["stock_unit"]?></div>
+  </div>
 </li>
 <?php }} else { echo "<li class='list-group-item'>No items on the watch list.</li>"; } ?>
 </ul>

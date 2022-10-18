@@ -28,7 +28,8 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       </div>
 
       <input type="submit" class="btn btn-primary py-2 mb-4" value="Sign in">
-    </div>
+      <div><a href="<?=HOST_BASE?>forgot">Forgot Password</a></div>
+    </form>
   </div>
 </div>
 </div>

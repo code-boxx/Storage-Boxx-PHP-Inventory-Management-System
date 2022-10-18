@@ -14,4 +14,14 @@ switch ($_REQ) {
   case "logout":
     $_CORE->autoAPI("Users", "logout");
     break;
+
+  // (D) REQUEST PASSWORD RESET
+  case "forgotA":
+    $_CORE->autoAPI("Forgot", "request");
+    break;
+
+  // (E) PROCESS PASSWORD RESET
+  case "forgotB":
+    $_CORE->autoAPI("Forgot", "reset");
+    break;
 }

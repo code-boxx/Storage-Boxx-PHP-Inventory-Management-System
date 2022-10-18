@@ -30,7 +30,7 @@ var move = {
       let buttons = document.querySelectorAll("#reader button");
       buttons[1].click();
       move.hmSKU.value = txt;
-      if (move.hmForm.checkValidity()) { move.save(); }
+      if (move.hmForm.checkValidity()) { window.scrollTo(0, 0); move.save(); }
       else { move.hmForm.reportValidity(); }
     });
 

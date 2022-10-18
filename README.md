@@ -1,5 +1,5 @@
 ## STORAGE BOXX
-Storage Boxx is a simple PHP Inventory Management System. This is not a "super professional crazy bloated with features" kind of system. But it does cover the basics, has a built-in webcam QR code scanner, and low stock warning push notifications. This should help the small businesses get started with their inventory stock keeping.
+Storage Boxx is a simple PHP Inventory Management System. It is not a "super professional crazy bloated with features" kind of system. But it covers the basics, has a built-in webcam QR code scanner, built-in NFC, and low stock warning push notifications. This will help the small businesses get started with their inventory stock keeping.
 <br><br>
 
 ## FEATURES
@@ -13,11 +13,11 @@ Storage Boxx is a simple PHP Inventory Management System. This is not a "super p
 
 ## SCREENSHOTS
 <p float="left">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-0.jpg">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-1.jpg">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-2.jpg">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-3.jpg">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/ss-sb-4.jpg">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-0.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-1.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-2.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-3.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/sb-ss-4.png">
 </p>
 <br><br>
 

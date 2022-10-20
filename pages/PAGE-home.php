@@ -7,11 +7,10 @@ $items = $_CORE->Inventory->getMonitor();
 $_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-home.js", "defer"]]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (B1) PUSH NOTIFICATIONS -->
-<h5>PUSH NOTIFICATIONS</h5>
-<div id="push-stat"></div>
+<div id="push-stat" class="alert alert-danger d-none">Test</div>
+<h3 class="mb-3">ITEMS WATCH LIST</h3>
 
 <!-- (B2) WATCH LIST -->
-<h5>ITEMS WATCH LIST</h5>
 <ul class="list-group">
 <?php if (is_array($items)) { foreach ($items as $i) {
 $low = $i["stock_qty"] <= $i["stock_low"]; ?>

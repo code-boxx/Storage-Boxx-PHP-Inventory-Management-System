@@ -2,6 +2,7 @@ var check = {
   // (A) PROPERTIES
   hForm : null, // html check form
   hSKU : null, // html sku field
+  hnBtn : null, // html nfc button
   hnStat : null, // html nfc status
   qrscan : null, // qr scanner
   sku : null, // current item
@@ -12,6 +13,7 @@ var check = {
     // (B1) GET HTML ELEMENTS
     check.hForm = document.getElementById("check-form");
     check.hSKU = document.getElementById("check-sku");
+    check.hnBtn = document.getElementById("nfc-btn");
     check.hnStat = document.getElementById("nfc-stat");
 
     // (B2) QR CODE SCANNER
@@ -27,44 +29,33 @@ var check = {
     if ("NDEFReader" in window) {
       // (B3-1) ON SUCCESSFUL NFC READ
       nfc.onread = evt => {
+        nfc.standby();
         const decoder = new TextDecoder();
         for (let record of evt.message.records) {
           check.hSKU.value = decoder.decode(record.data);
         }
         check.verify();
-        nfc.standby();
-        check.nfcLog(1, "Click here to scan another NFC tag.");
+        check.hnStat.innerHTML = "NFC";
       };
-
+      
       // (B3-2) ON NFC READ ERROR
       nfc.onerror = err => {
         nfc.stop();
         console.error(err);
-        check.nfcLog(0, "ERROR - " + err.message);
+        cb.modal("ERROR", err.message);
+        check.hnStat.innerHTML = "ERROR";
       };
 
-      // (B3-3) CLICK TO (RE)START NFC SCAN
-      check.hnStat.onclick = () => {
+      // (B3-3) ENABLE NFC BUTTON
+      check.hnBtn.onclick = () => {
+        check.hnStat.innerHTML = "Scanning - Tap token";
         nfc.scan();
-        check.nfcLog(1, "Ready - Tap NFC tag to scan.");
       };
-      check.nfcLog(1, "Click here to start scanning.");
-    } else {
-      check.nfcLog(0, "Web NFC is not supported on this browser/device.");
+      check.hnBtn.classList.remove("d-none");
     }
   },
 
-  // (C) HELPER - SHOW NFC STATUS MESSAGE ON SCREEN
-  nfcLog : (status, msg) => {
-    if (status==1) {
-      check.hnStat.className = "form-control text-white bg-success";
-    } else {
-      check.hnStat.className = "form-control text-white bg-danger";
-    }
-    check.hnStat.value = msg;
-  },
-
-  // (D) VERIFY VALID SKU BEFORE SHOW HISTORY
+  // (C) VERIFY VALID SKU BEFORE SHOW HISTORY
   verify : () => {
     cb.api({
       mod : "inventory", req : "get",
@@ -82,7 +73,7 @@ var check = {
     return false;
   },
 
-  // (E) LOAD MOVEMENT HISTORY "MAIN PAGE"
+  // (D) LOAD MOVEMENT HISTORY "MAIN PAGE"
   //  sku : string, item sku
   load : sku => cb.load({
     page : "icheck", target : "cb-page-2",
@@ -95,7 +86,7 @@ var check = {
     }
   }),
 
-  // (F) SHOW ITEM MOVEMENT HISTORY
+  // (E) SHOW ITEM MOVEMENT HISTORY
   list : () => cb.load({
     page : "icheck/list", target : "i-history",
     data : {
@@ -104,7 +95,7 @@ var check = {
     }
   }),
 
-  // (G) GO TO PAGE
+  // (F) GO TO PAGE
   //  pg : int, page number
   goToPage : pg => { if (pg!=check.pg) {
     check.pg = pg;

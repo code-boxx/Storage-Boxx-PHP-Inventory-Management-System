@@ -27,7 +27,7 @@
 
     <!-- (A4) SERVICE WORKER -->
     <script>if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("<?=HOST_BASE?>CB-worker.js", {scope: "/"});
+      navigator.serviceWorker.register("<?=HOST_BASE?>CB-worker.js", {scope: "<?=HOST_BASE_PATH?>"});
     }</script>
     <?php } ?>
 
@@ -45,7 +45,7 @@
     .head{background:#ddd}.zebra .d-flex{background:#fff;margin-bottom:10px}.zebra .d-flex:nth-child(odd){background-color:#f1f1f1}.pagination{border:1px solid #d0e8ff;background:#f0f8ff}
     #cb-body,body{min-height:100vh}#cb-toggle{display:none}#cb-side{width:155px;flex-shrink:0}#cb-side a{color:#fff}#cb-side .mi{color:#6a6a6a}@media screen and (max-width:768px){#cb-toggle{display:block}#cb-side{display:none}#cb-side.show{display:block}}#reader{max-width:380px}
     </style>
-    <script>var cbhost={base:"<?=HOST_BASE?>",api:"<?=HOST_API_BASE?>",assets:"<?=HOST_ASSETS?>"};var cbvapid="<?=PUSH_PUBLIC?>";</script>
+    <script>var cbhost={base:"<?=HOST_BASE?>",basepath:"<?=HOST_BASE_PATH?>",api:"<?=HOST_API_BASE?>",assets:"<?=HOST_ASSETS?>"};var cbvapid="<?=PUSH_PUBLIC?>";</script>
     <script defer src="<?=HOST_ASSETS?>PAGE-cb.js"></script>
 
     <!-- (A6) ADDITIONAL SCRIPTS -->
@@ -97,50 +97,48 @@
       <nav id="cb-side" class="bg-dark text-white p-2">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32">
-            <hr>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>">
-              <span class="mi mi-smol">dashboard</span> Dashboard
-            </a>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>reports">
-              <span class="mi mi-smol">library_books</span> Reports
-            </a>
-            <hr>
-          </li>
-          <li class="nav-item">
-            <div class="mb-2">Inventory</div>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>move">
-              <span class="mi mi-smol">move_up</span> Movement
-            </a>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>check">
-              <span class="mi mi-smol">qr_code_scanner</span> Check Item
-            </a>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>inventory">
-              <span class="mi mi-smol">inventory</span> Items
-            </a>
-            <hr>
-          </li>
-          <li class="nav-item">
-            <div class="my-2">Entities</div>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>users">
-              <span class="mi mi-smol">people</span> Users
-            </a>
-            <hr>
-          </li>
-          <li class="nav-item">
-            <div class="my-2">System</div>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>push">
-              <span class="mi mi-smol">campaign</span> Notifications
-            </a>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>settings">
-              <span class="mi mi-smol">settings</span> Settings
-            </a>
-            <a class="nav-link ms-2" href="<?=HOST_BASE?>about">
-              <i class="mi mi-smol">info</i> About
-            </a>
-            <hr>
-          </li>
-        </ul>
+          <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32" class="me-1">
+          <hr>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>">
+            <span class="mi mi-smol">dashboard</span> Dashboard
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>reports">
+            <span class="mi mi-smol">library_books</span> Reports
+          </a><hr>
+        </li>
+        <li class="nav-item">
+          <div class="mb-2">Inventory</div>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>move">
+            <span class="mi mi-smol">move_up</span> Movement
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>check">
+            <span class="mi mi-smol">qr_code_scanner</span> Check Item
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>inventory">
+            <span class="mi mi-smol">inventory</span> Items
+          </a><hr>
+        </li>
+        <li class="nav-item">
+          <div class="my-2">Entities</div>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>users">
+            <span class="mi mi-smol">people</span> Users
+          </a><hr>
+        </li>
+        <li class="nav-item">
+          <div class="my-2">System</div>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>push">
+            <span class="mi mi-smol">campaign</span> Notifications
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>settings">
+            <span class="mi mi-smol">settings</span> Settings
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>about">
+            <i class="mi mi-smol">info</i> About
+          </a><hr>
+        </li>
+      </ul>
       </nav>
       <?php } ?>
 
@@ -154,9 +152,20 @@
               menu
             </button>
           </div>
-          <button class="btn btn-sm text-white mi" onclick="cb.bye()">
-            logout
-          </button>
+          <div class="dropdown">
+            <button class="btn btn-sm text-white mi" type="button" data-bs-toggle="dropdown">
+              person_outline
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+              <li class="dropdown-header">
+                <?=$_SESS["user"]["user_name"]?><br>
+                <?=$_SESS["user"]["user_email"]?>
+              </li>
+              <li class="dropdown-item text-warning" onclick="cb.bye()">
+                <i class="mi mi-smol">logout</i> Logout
+              </li>
+            </ul>
+          </div>
         </nav>
         <?php } ?>
 

@@ -29,7 +29,7 @@ var usr = {
   },
 
   // (D) SHOW ADD/EDIT DOCKET
-  // id : user ID, for edit only
+  //  id : user ID, for edit only
   addEdit : id => cb.load({
     page : "users/form", target : "cb-page-2",
     data : { id : id ? id : "" },
@@ -67,74 +67,78 @@ var usr = {
   //  confirm : boolean, confirmed delete
   del : id => cb.modal("Please confirm", "Delete user?", () => cb.api({
     mod : "users", req : "del",
-    data : { id: id },
+    data : { id : id },
     passmsg : "User Deleted",
     onpass : usr.list
   })),
 
   // (G) SHOW WRITE NFC PAGE
+  hnBtn : null, // html write nfc button
+  hnStat : null, // html write nfc button status
+  hnNull : null, // html null token button
   nfcShow : id => cb.load({
     page : "users/nfc", target : "cb-page-2",
     data : { id : id },
     onload : () => {
+      usr.hnBtn = document.getElementById("nfc-btn");
+      usr.hnStat = document.getElementById("nfc-stat");
+      usr.hnNull = document.getElementById("nfc-null");
       if ("NDEFReader" in window) {
-        document.getElementById("nfc-stat").onclick = () => usr.nfcNew(id);
-        usr.nfcLog(1, `Click here to create a new token`);
+        usr.hnStat.innerHTML = "Create Login Token";
+        usr.hnBtn.disabled = false;
       } else {
-        usr.nfcLog(0, "Web NFC is not supported in your browser/device.");
+        usr.hnStat.innerHTML = "Web NFC not available";
       }
       cb.page(1);
     }
   }),
 
-  // (H) SHOW "WRITE NFC TAG" STATUS ON SCREEN
-  nfcLog : (status, msg) => {
-    let hLog = document.getElementById("nfc-stat");
-    if (status == 1) {
-      hLog.classList.remove("bg-danger");
-      hLog.classList.add("bg-success");
-    } else {
-      hLog.classList.remove("bg-success");
-      hLog.classList.add("bg-danger");
-    }
-    hLog.value = msg;
-  },
-
-  // (I) CREATE NEW NFC LOGIN TAG
+  // (H) CREATE NEW NFC LOGIN TAG
   nfcNew : id => {
+    // (H1) DISABLE "WRITE NFC" BUTTON
+    usr.hnBtn.disabled = true;
+
+    // (H2) REGISTER WITH SERVER + GET JWT
     cb.api({
       mod : "users", req : "token",
       data : { id : id },
       passmsg : false,
       onpass : res => {
-        document.getElementById("nfc-stat").onclick = "";
-        document.getElementById("nfc-null").disabled = false;
+        // (H2-1) ENABLE "NULLIFY" BUTTTON
+        usr.hnNull.disabled = false;
+
+        // (H2-2) ON SUCCESSFUL NFC WRITE
         nfc.onwrite = () => {
-          usr.nfcLog(1, `Done - Login token created`);
           nfc.standby();
+          cb.modal("Successful", "Login token successfully created.");
+          usr.hnStat.innerHTML = "Done";
         };
+
+        // (H2-3) ON FAILED NFC WRITE
         nfc.onerror = err => {
-          console.error(err);
-          usr.nfcLog(0, "ERROR - " + err.message);
           nfc.stop();
+          console.error(err);
+          cb.modal("ERROR", err.message);
+          usr.hnStat.innerHTML = "ERROR!";
+          usr.hnBtn.disabled = false;
         };
+
+        // (H2-4) START NFC WRITE
         nfc.write(res.data);
-        usr.nfcLog(1, `Ready - Tap to write NFC token`);
+        usr.hnStat.innerHTML = "Tap NFC tag to write";
       }
-    });
+    })
   },
 
-  // (J) NULLIFY NFC TOKEN
-  nfcNull : id => {
-    cb.api({
-      mod : "users", req : "notoken",
-      data : { id : id },
-      passmsg : "Login token nullified.",
-      onpass : res => document.getElementById("nfc-null").disabled = true
-    });
-  },
+  // (I) NULLIFY NFC TOKEN
+  nfcNull : id => cb.api({
+    mod : "users", req : "notoken",
+    data : { id : id },
+    passmsg : "Login token nullified.",
+    onpass : res => usr.hnNull.disabled = true
+  }),
 
-  // (K) END WRITE NFC SESSION
+  // (J) END WRITE NFC SESSION
   nfcBack : () => {
     nfc.stop();
     cb.page(0);

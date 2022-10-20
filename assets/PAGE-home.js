@@ -1,58 +1,74 @@
 var pusher = {
   // (A) PROPERTIES
   hStat : null, // html status
+  worker : null, // registered service worker
+  sub : null, // push notification subscription
 
-  // (B) HTML HELPER - SHOW MESSAGE
-  show : (status, msg) => {
-    if (status==0) { pusher.hStat.className = "d-flex align-items-center p-3 my-3 text-white bg-danger"; }
-    if (status==1) { pusher.hStat.className = "d-flex align-items-center p-3 my-3 text-white bg-success"; }
-    pusher.hStat.innerHTML = (status==0 ? "<i class='mi me-1'>close</i>" : "<i class='mi me-1'>done</i>") + msg;
+  // (B) HELPER - SHOW HTML "ALERT MESSAGE"
+  show : msg => {
+    pusher.hStat.innerHTML = msg;
+    pusher.hStat.classList.remove("d-none");
   },
 
-  // (B) INIT - PERMISSION CHECK
+  // (C) INIT
   init : () => {
-    // (B1) GET HTML WRAPPER
+    // (C1) GET HTML STATUS
     pusher.hStat = document.getElementById("push-stat");
 
-    // (B2) ASK FOR PERMISSION
-    if (Notification.permission === "default") {
-      Notification.requestPermission().then(perm => {
-        if (Notification.permission === "granted") {
-          pusher.reg().catch(e => pusher.show(0, e.message));
-        } else { pusher.show(0, "Allow notifications to receive low stock warnings."); }
-      });
+    // (C2) FEATURE CHECK
+    if (!("serviceWorker" in navigator)) {
+      pusher.show("Service worker not supported.");
+      return false;
+    }
+    if (!("Notification" in window)) {
+      pusher.show("Push notifications not supported.");
+      return false;
     }
 
-    // (B3) GRANTED
-    else if (Notification.permission === "granted") {
-      pusher.reg().catch(e => pusher.show(0, e.message));
-    }
-
-    // (B4) DENIED
-    else { pusher.show(0, "Allow notifications to receive low stock warnings."); }
+    // (C3) REGISTER SERVICE WORKER + NOTIFICATIONS PERMISSION CHECK
+    navigator.serviceWorker.register(cbhost.base + "CB-push-worker.js", { scope: cbhost.basepath })
+    .then(reg => {
+      pusher.worker = reg;
+      if (Notification.permission == "default") {
+        Notification.requestPermission()
+        .then(perm => {
+          if (perm == "granted") { pusher.reg(); }
+          else { pusher.show("Notifications denied - Manually enable permissions to allow low stock warning."); }
+        })
+        .catch(err => pusher.show("ERROR - " + err.message));
+      } else if (Notification.permission == "granted") {
+        pusher.reg();
+      } else {
+        pusher.show("Notifications denied - Manually enable permissions to allow low stock warning.");
+      }
+    })
+    .catch(err => pusher.show("ERROR - " + err.message));
   },
-  
-  // (C) REGISTER SERVICE WORKER
-  reg : async () => {
-    // (C1) REGISTER SERVICE WORKER
-    const reg = await navigator.serviceWorker.register(cbhost.base + "CB-push-worker.js", { scope: "/" });
-    
-    // (C2) SUBSCRIBE TO PUSH SERVER
-    const sub = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: cbvapid
-    });
 
-    // (C3) UPDATE SERVER
-    cb.api({
-      mod : "push", req : "save",
-      data : {
-        endpoint : sub.endpoint,
-        sub : JSON.stringify(sub)
-      },
-      passmsg : false,
-      onpass : () => pusher.show(1, "Push notifications ready.")
-    });
-  }
+  // (D) REGISTER PUSH NOTIFICATIONS
+  reg : () => {
+    pusher.worker.pushManager.getSubscription()
+    .then(sub => {
+      if (sub==null) {
+        pusher.worker.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: cbvapid
+        })
+        .then(sub => { pusher.sub = sub; pusher.save(); })
+        .catch(err => pusher.show("ERROR - " + err.message));
+      } else { pusher.sub = sub; pusher.save(); }
+    })
+    .catch(err => pusher.show("ERROR - " + err.message));
+  },
+
+  // (E) UPDATE SERVER SUBSCRIPTION
+  save : () => cb.api({
+    mod : "push", req : "save",
+    data : {
+      endpoint : pusher.sub.endpoint,
+      sub : JSON.stringify(pusher.sub)
+    },
+    passmsg : false
+  })
 };
 window.addEventListener("load", pusher.init);

@@ -10,10 +10,11 @@ $yearNow = date("Y");
 
 // (B) HTML
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
+<h3 class="mb-3">REPORTS</h3>
 <div class="d-flex flex-wrap">
   <!-- (B1) MOVEMENT CSV -->
   <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/movement">
-    <h5 class="mb-3">MOVEMENT REPORT</h5>
+    <div class="fw-bold text-danger mb-3">ITEMS MOVEMENT</div>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text">Month</span>
@@ -35,7 +36,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 
   <!-- (B2) ITEMS LIST -->
   <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/items">
-    <h5 class="mb-3">ITEMS LIST</h5>
+    <div class="fw-bold text-danger mb-3">ITEMS LIST</div>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text">Range</span>

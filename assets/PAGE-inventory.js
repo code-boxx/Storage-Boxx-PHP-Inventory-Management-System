@@ -9,7 +9,12 @@ var inv = {
       data : {
         page : inv.pg,
         search : inv.find
-      }
+      },
+      onload : () => { if (!("NDEFReader" in window)) {
+        for (let r of document.querySelectorAll("#inv-list .nfcshow")) {
+          r.classList.add("d-none");
+        }
+      }}
     });
   },
 
@@ -29,7 +34,7 @@ var inv = {
   },
 
   // (D) SHOW ADD/EDIT DOCKET
-  // sku : item SKU, for edit only
+  //  sku : item SKU, for edit only
   addEdit : sku => cb.load({
     page : "inventory/form", target : "cb-page-2",
     data : { sku : sku ? sku : "" },
@@ -37,7 +42,7 @@ var inv = {
   }),
 
   // (E) RANDOM SKU
-  // Credits : https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+  // credits : https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   randomSKU : () => {
     let length = 8, // set your own
         result = "",
@@ -86,43 +91,41 @@ var inv = {
   qrcode : (sku, name) => window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name),
 
   // (I) SHOW WRITE NFC SCREEN
+  hnStat : null, // html write nfc button status
+  nfcSKU : null, // current sku to write
   nfcShow : sku => {
-    if ("NDEFReader" in window) {
-      nfc.standby();
-      cb.load({
-        page : "inventory/nfc", target : "cb-page-2",
-        data : { sku : sku ? sku : "" },
-        onload : () => {
-          nfc.onwrite = () => {
-            inv.nfcLog(1, `Done - SKU "${sku}" written to tag`);
-            nfc.standby();
-          };
-          nfc.onerror = err => {
-            console.error(err);
-            inv.nfcLog(0, "ERROR - " + err.message);
-            nfc.stop();
-          };
-          cb.page(1);
-          nfc.write(sku);
-          inv.nfcLog(1, `Ready - Tap NFC tag to write SKU "${sku}"`);
-        }
-      });
-    } else {
-      cb.modal("Error", "Web NFC is not supported in your browser/device.");
-    }
+    cb.load({
+      page : "inventory/nfc", target : "cb-page-2",
+      data : { sku : sku ? sku : "" },
+      onload : () => {
+        inv.nfcSKU = sku;
+        inv.hnStat = document.getElementById("nfc-stat");
+        cb.page(1);
+        inv.nfcWrite();
+      }
+    });
   },
 
-  // (J) SHOW "WRITE NFC TAG" STATUS ON SCREEN
-  nfcLog : (status, msg) => {
-    let hLog = document.getElementById("nfc-stat");
-    if (status == 1) {
-      hLog.classList.remove("bg-danger");
-      hLog.classList.add("bg-success");
-    } else {
-      hLog.classList.remove("bg-success");
-      hLog.classList.add("bg-danger");
-    }
-    hLog.innerHTML = msg;
+  // (J) START WRITE NFC TAG
+  nfcWrite : () => {
+    // (J1) ON SUCCESSFUL NFC WRITE
+    nfc.onwrite = () => {
+      nfc.standby();
+      cb.modal("Successful", "Click on the button again if you want to write another tag.");
+      inv.hnStat.innerHTML = "Done";
+    };
+
+    // (J2) ON FAILED NFC WRITE
+    nfc.onerror = err => {
+      nfc.stop();
+      console.error(err);
+      cb.modal("ERROR", err.msg);
+      inv.hnStat.innerHTML = "ERROR!";
+    };
+
+    // (J3) START NFC WRITE
+    nfc.write(inv.nfcSKU);
+    inv.hnStat.innerHTML = "Ready - Tap NFC tag to write";
   },
 
   // (K) END WRITE NFC SESSION

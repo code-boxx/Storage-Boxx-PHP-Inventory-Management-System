@@ -13,49 +13,51 @@ var login = {
     return false;
   },
 
-  // (B) NFC LOGIN
+  // (B) INITIALIZE - CHECK NFC
+  hna : null, // html "or click on nfc" message
+  hnb : null, // html hfc button
+  hnc : null, // html hfc button status
+  init : () => { if ("NDEFReader" in window) {
+    login.hna = document.getElementById("nfc-login-a");
+    login.hnb = document.getElementById("nfc-login-b");
+    login.hnc = document.getElementById("nfc-login-c");
+    login.hna.classList.remove("d-none");
+    login.hnb.classList.remove("d-none");
+  }},
+
+  // (C) NFC LOGIN
   nfc : () => {
-    // (B1) NFC SUPPORTED
-    let stat = document.getElementById("nfc-stat");
-    if ("NDEFReader" in window) {
-      // (B1-1) ON NFC READ
-      nfc.onread = evt => {
-        // GET TOKEN
-        const decoder = new TextDecoder();
-        let token = "";
-        for (let record of evt.message.records) {
-          token = decoder.decode(record.data);
-        }
-        nfc.standby();
+    // (C1) ON NFC READ
+    nfc.onread = evt => {
+      // (C1-1) GET TOKEN
+      nfc.standby();
+      const decoder = new TextDecoder();
+      let token = "";
+      for (let record of evt.message.records) {
+        token = decoder.decode(record.data);
+      }
 
-        // API LOGIN
-        cb.api({
-          mod : "session", req : "intoken",
-          data : { token : token },
-          passmsg : false,
-          onpass : () => location.href = cbhost.base,
-          onfail : () => login.nfc()
-        });
-      };
+      // (C1-2) API LOGIN
+      cb.api({
+        mod : "session", req : "intoken",
+        data : { token : token },
+        passmsg : false,
+        onpass : () => location.href = cbhost.base,
+        onfail : () => login.nfc()
+      });
+    };
 
-      // (B1-2) ON NFC READ ERROR
-      nfc.onerror = err => {
-        nfc.stop();
-        console.error(err);
-        cb.modal("ERROR", err.msg);
-      };
+    // (C2) ON NFC ERROR
+    nfc.onerror = err => {
+      nfc.stop();
+      console.error(err);
+      cb.modal("ERROR", err.msg);
+      login.hnc.innerHTML = "ERROR!";
+    };
 
-      // (B1-3) START SCAN
-      stat.className = "form-control text-white bg-success";
-      stat.value = "Ready - Scan token to login";
-      nfc.scan();
-    }
-
-    // (B2) NFC NOT SUPPORTED
-    else {
-      stat.className = "form-control text-white bg-danger";
-      stat.value = "NFC not supported";
-    }
+    // (C3) START SCAN
+    login.hnc.innerHTML = "Scanning - Tap token";
+    nfc.scan();
   }
 };
-window.addEventListener("load", login.nfc);
+window.addEventListener("load", login.init);

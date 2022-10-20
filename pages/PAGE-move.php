@@ -43,27 +43,21 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <input type="text" class="form-control" id="mvt-sku" required placeholder="Item SKU (manual enter or scan)">
   </div>
 
-  <input type="submit" class="btn btn-primary" value="Save">
+  <div class="d-flex align-items-stretch">
+    <input type="submit" class="btn btn-primary" value="Save">
+    <button id="nfc-btn" type="button" class="btn btn-primary d-flex align-items-center ms-2 d-none">
+      <i class="mi">nfc</i> <span id="nfc-stat" class="ms-2">NFC</span>
+    </button>
+  </div>
 </form>
 
-<!-- (B) NFC SCANNER -->
-<div class="fw-bold text-danger">SCAN NFC</div>
-<div class="bg-white border p-4 mb-4">
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">nfc</span>
-    </div>
-    <input type="text" class="form-control" id="nfc-stat" readonly>
-  </div>
-</div>
-
-<!-- (C) WEBCAM SCANNER -->
-<div class="fw-bold text-danger">SCAN QR</div>
+<!-- (B) WEBCAM SCANNER -->
+<div class="fw-bold text-danger">SCAN QR CODE</div>
 <div class="bg-white border p-4 mb-4">
   <div id="reader"></div>
 </div>
 
-<!-- (D) LAST ENTRY -->
+<!-- (C) LAST ENTRY -->
 <div class="fw-bold text-danger">LAST SAVED ENTRY</div>
 <div class="d-flex align-items-center bg-white border p-4">
   <div class="me-4 text-center">

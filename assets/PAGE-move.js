@@ -7,7 +7,7 @@ var move = {
   // qr scanner
   qrscan : null,
   // nfc scanner
-  hnStat : null,
+  hnBtn : null, hnStat : null,
 
   // (B) INIT
   init : () => {
@@ -22,6 +22,7 @@ var move = {
     move.hlDir = document.getElementById("last-mvt");
     move.hlSKU = document.getElementById("last-sku");
     move.hlNote = document.getElementById("last-notes");
+    move.hnBtn = document.getElementById("nfc-btn");
     move.hnStat = document.getElementById("nfc-stat");
 
     // (B2) INIT WEBCAM SCANNER
@@ -38,45 +39,34 @@ var move = {
     if ("NDEFReader" in window) {
       // (B3-1) ON SUCCESSFUL NFC READ
       nfc.onread = evt => {
+        nfc.standby();
         const decoder = new TextDecoder();
         for (let record of evt.message.records) {
           move.hmSKU.value = decoder.decode(record.data);
         }
         if (move.hmForm.checkValidity()) { move.save(); }
         else { move.hmForm.reportValidity(); }
-        nfc.standby();
-        move.nfcLog(1, "Click here to scan another NFC tag.");
+        move.hnStat.innerHTML = "NFC";
       };
 
       // (B3-2) ON NFC READ ERROR
       nfc.onerror = err => {
         nfc.stop();
         console.error(err);
-        move.nfcLog(0, "ERROR - " + err.message);
+        cb.modal("ERROR", err.message);
+        move.hnStat.innerHTML = "ERROR";
       };
 
-      // (B3-3) CLICK TO (RE)START NFC SCAN
-      move.hnStat.onclick = () => {
+      // (B3-3) ENABLE NFC BUTTON
+      move.hnBtn.onclick = () => {
+        move.hnStat.innerHTML = "Scanning - Tap token";
         nfc.scan();
-        move.nfcLog(1, "Ready - Tap NFC tag to scan.");
       };
-      move.nfcLog(1, "Click here to start scanning.");
-    } else {
-      move.nfcLog(0, "Web NFC is not supported on this browser/device.");
+      move.hnBtn.classList.remove("d-none");
     }
   },
 
-  // (C) HELPER - SHOW NFC STATUS MESSAGE ON SCREEN
-  nfcLog : (status, msg) => {
-    if (status==1) {
-      move.hnStat.className = "form-control text-white bg-success";
-    } else {
-      move.hnStat.className = "form-control text-white bg-danger";
-    }
-    move.hnStat.value = msg;
-  },
-
-  // (D) SAVE MOVEMENT
+  // (C) SAVE MOVEMENT
   save : () => {
     cb.api({
       mod : "inventory", req : "move",

@@ -1,5 +1,5 @@
 ## STORAGE BOXX
-Storage Boxx is a simple PHP Inventory Management System. It is not a "super professional crazy bloated with features" kind of system. But it covers the basics, has a built-in webcam QR code scanner, built-in NFC scanner, and low stock warning push notifications. This will help small businesses get started with inventory stock keeping.
+Storage Boxx is an open-source PHP Inventory Management System. It is not a “super professional crazy bloated with features” kind of system. But it covers the basics, has a built-in webcam QR code scanner, built-in NFC scanner, and low stock warning push notifications. This will help small businesses get started with inventory stock keeping.
 <br><br>
 
 ## FEATURES

@@ -10,3 +10,6 @@ ALTER TABLE `password_reset`
 
 -- (B) NFC LOGIN TOKEN
 ALTER TABLE `users` ADD `user_token` VARCHAR(32) NULL DEFAULT NULL AFTER `user_password`;
+
+-- (C) STOCK LEFT
+ALTER TABLE `stock_mvt` ADD `mvt_left` DECIMAL(12,2) NOT NULL DEFAULT '0' AFTER `mvt_qty`;

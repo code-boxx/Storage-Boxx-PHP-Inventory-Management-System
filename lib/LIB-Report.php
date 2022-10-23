@@ -13,7 +13,7 @@ class Report extends Core {
     // (A2) OUTPUT CSV
     header("Content-Disposition: attachment; filename=movement-$year-$month.csv;");
     $f = fopen("php://output", "w");
-    fputcsv($f, ["Date", "Staff", "SKU", "Item", "Direction", "Quantity", "Notes"]);
+    fputcsv($f, ["Date", "Staff", "SKU", "Item", "Direction", "Quantity", "Left", "Notes"]);
     $this->DB->query(
       "SELECT m.*, s.`stock_name`, u.`user_name` 
        FROM `stock_mvt` m
@@ -26,7 +26,7 @@ class Report extends Core {
       fputcsv($f, [
         $r["mvt_date"], $r["user_name"],
         $r["stock_sku"], $r["stock_name"],
-        STOCK_MVT[$r["mvt_direction"]], $r["mvt_qty"],
+        STOCK_MVT[$r["mvt_direction"]], $r["mvt_qty"], $r["mvt_left"],
         $r["mvt_notes"]
       ]);
     }

@@ -104,25 +104,23 @@ class Inventory extends Core {
       return false;
     }
 
-    // (E2) ADD MOVEMENT
-    global $_SESS;
-    $this->DB->start();
-    $this->DB->insert("stock_mvt",
-      ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_notes"],
-      [$sku, date("Y-m-d H:i:s"), $direction, $_SESS["user"]["user_id"], $qty, $notes]
-    );
-
-    // (E3) UPDATE QUANTITY
+    // (E2) CALCULATE NEW QUANTITY
     $newqty = floatval($item["stock_qty"]);
     if ($direction == "I") { $newqty += $qty; }
     if ($direction == "O" || $direction == "D") { $newqty -= $qty; }
     if ($direction == "T") { $newqty = $qty; }
-    $this->DB->update("stock", ["stock_qty"], "`stock_sku`=?", [$newqty, $sku]);
 
-    // (E4) DONE
+    // (E3) ADD MOVEMENT & QUANTITY
+    global $_SESS;
+    $this->DB->start();
+    $this->DB->insert("stock_mvt",
+      ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_left", "mvt_notes"],
+      [$sku, date("Y-m-d H:i:s"), $direction, $_SESS["user"]["user_id"], $qty, $newqty, $notes]
+    );
+    $this->DB->update("stock", ["stock_qty"], "`stock_sku`=?", [$newqty, $sku]);
     $this->DB->end();
 
-    // (E5) SEND NOTIFICATION IF MONITORED ITEM
+    // (E4) SEND NOTIFICATION IF MONITORED ITEM
     if ($item["stock_low"]!=0 && $newqty<=$item["stock_low"]) {
       $this->core->load("Push");
       $this->core->Push->send("[{$item["stock_sku"]}] {$item["stock_name"]}",
@@ -131,7 +129,7 @@ class Inventory extends Core {
       );
     }
 
-    // (E6) RETURN RESULT
+    // (E5) RETURN RESULT
     $item["stock_qty"] = $newqty;
     return $item;
   }

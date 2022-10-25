@@ -51,7 +51,7 @@ if ($_PHASE=="B") {
   // @TODO - SET AS NECESSARY
   define("I_ALL", [
     I_BASE, I_ASSETS, I_LIB, I_PAGES, // I_UPLOADS,
-    I_LIB . "CORE-Config.php", I_BASE . "index.php"
+    I_LIB . "CORE-Config.php", I_BASE . "index.php", I_BASE . "CB-manifest.json"
   ]);
 
   // (B1-2) APACHE + PHP VERSION + EXTENSIONS
@@ -158,15 +158,11 @@ if ($_PHASE == "D") {
     var install = {
       // (DD2) HELPER - AJAX FETCH
       ajax : (url, phase, after) => {
-        // (DD2-1) DISABLE GO BUTTON
-        var go = document.getElementById("gobtn");
-        go.disabled = true;
-        
-        // (DD2-2) FORM DATA
+        // (DD2-1) FORM DATA
         let data = new FormData(document.getElementById("iForm"));
         data.append("phase", phase);
 
-        // (DD2-3) AJAX FETCH
+        // (DD2-2) AJAX FETCH
         fetch(url, { method:"POST", body:data })
         .then(res => {
           if (res.status==200) { return res.text(); }
@@ -175,20 +171,35 @@ if ($_PHASE == "D") {
             let err = "SERVER ERROR " + res.status;
             if (res.status==404) { err += " - Is the host URL correct? Is 'AllowOverride All' set in Apache?`"; }
             alert(err);
+            install.toggle(true);
           }
         })
         .then(txt => {
           if (txt=="OK") { after(); }
-          else if (txt!=undefined) { alert(txt); }
+          else if (txt!=undefined) {
+            alert(txt);
+            install.toggle(true);
+          }
         })
         .catch(err => {
           alert(`Fetch error - ${err.message}`);
+          install.toggle(true);
           console.error(err);
-        })
-        .finally(() => go.disabled = false);
+        });
       },
 
-      // (DD3) RANDOM JWT KEY GENERATOR
+      // (DD3) LOCK/UNLOCK INSTALL FORM
+      toggle : enable => {
+        if (enable) {
+          document.getElementById("gobtn").disabled = false;
+          document.getElementById("iForm").onsubmit = install.go;
+        } else {
+          document.getElementById("gobtn").disabled = true;
+          document.getElementById("iForm").onsubmit = false;
+        }
+      },
+
+      // (DD4) RANDOM JWT KEY GENERATOR
       // CREDITS https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
       rnd : () => {
         var result = "";
@@ -200,54 +211,56 @@ if ($_PHASE == "D") {
         document.getElementsByName("jwtkey")[0].value = result;
       },
 
-      // (DD4) TOGGLE CORS
+      // (DD5) TOGGLE CORS
       cors : allowed => {
         let more = document.getElementById("corsmore");
         if (allowed==1) { more.classList.remove("hide"); }
         else { more.classList.add("hide"); }
       },
 
-      // (DD5) INSTALL GO
+      // (DD6) INSTALL GO
       go : () => {
+        // (DD6-1) LOCK INSTALL FORM
+        install.toggle(false);
+
         <?php if (I_USER) { ?>
-        // (DD5-1) ADMIN PASSWORD
+        // (DD6-2) ADMIN PASSWORD
         var pass = document.getElementsByName("apass")[0],
             cpass = document.getElementsByName("apassc")[0];
         if (pass.value != cpass.value) {
-          go.disabled = false;
           alert("Admin passwords do not match!");
+          install.toggle(true);
           return false;
         }
   
-        // (DD5-2) PASSWORD STRENGTH CHECK - AT LEAST 8 CHARACTERS ALPHANUMERIC
+        // (DD6-3) PASSWORD STRENGTH CHECK - AT LEAST 8 CHARACTERS ALPHANUMERIC
         if (!/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(pass.value)) {
-          go.disabled = false;
           alert("Password must be at least 8 characters alphanumeric");
+          install.toggle(true);
           return false;
         }
         <?php } ?>
 
-        // (DD5-3) URL PATH
+        // (DD6-4) URL PATH
         let url = (document.getElementsByName("https")[0].value=="0" ? "http" : "https")
                 + "://" + document.getElementsByName("host")[0].value;
 
-        // (DD5-4) GENERATE HTACCESS
-        install.ajax(url, "E", () => {
-          // (DD5-5) VERIFY HTACCESS + INSTALL
-          install.ajax(url + "COREVERIFY", "F", () => {
-            // (DD5-6) DONE
-            alert("Installation complete, this page will now reload.");
-            location.href = url;
-          });
-        });
+        // (DD6-5) GENERATE HTACCESS + VERIFY HTACCESS + INSTALL
+        install.ajax(url, "E", () => install.ajax(url + "COREVERIFY", "F", () => {
+          alert("Installation complete, this page will now reload.");
+          location.href = url;
+        }));
         return false;
       }
     };
+
+    // (DD7) ENABLE INSTALL FORM ON WINDOW LOAD
+    window.onload = () => install.toggle(true);
     </script>
   </head>
   <body>
     <?php if (I_APACHE === false || I_REWRITE === false) { ?>
-    <!-- (DD6) WARNINGS -->
+    <!-- (DD8) WARNINGS -->
     <div class="danger">
       The installer cannot verify if you are running Apache Web Server, or if <code>MOD_REWRITE</code> is enabled.
       You can still try to proceed if you want.
@@ -256,15 +269,15 @@ if ($_PHASE == "D") {
     </div>
     <?php } ?>
 
-    <!-- (DD7) HEADER -->
+    <!-- (DD9) HEADER -->
     <div id="iHead">
       <img src="assets/favicon.png">
       <h1><?=I_NAME?> INSTALLATION</h1>
     </div>
 
-    <!-- (DD8) INSTALLATION FORM -->
-    <form id="iForm" onsubmit="return install.go()">
-      <!-- (DD8-1) HOST URL -->
+    <!-- (DD10) INSTALLATION FORM -->
+    <form id="iForm" onsubmit="return false">
+      <!-- (DD10-1) HOST URL -->
       <h2>HOST URL</h2>
       <div class="iSec">
         <label>HTTP or HTTPS</label>
@@ -274,10 +287,10 @@ if ($_PHASE == "D") {
         </select>
         <label>Domain &amp; Path</label>
         <input type="text" name="host" required value="<?=I_HOST?>">
-        <div class="notes">&#9432; Change this only if wrong, include the path if not deployed in root. E.G. <code>site.com/myproject/</code></div>
+        <div class="notes">* Change this only if wrong, include the path if not deployed in root. E.G. <code>site.com/myproject/</code></div>
       </div>
 
-      <!-- (DD8-2) API ENDPOINT -->
+      <!-- (DD10-2) API ENDPOINT -->
       <h2>API ENDPOINT</h2>
       <div class="iSec">
         <label>Enforce HTTPS?</label>
@@ -285,24 +298,24 @@ if ($_PHASE == "D") {
           <option value="0">No</option>
           <option value="1"<?=I_HTTPS?" selected":""?>>Yes</option>
         </select>
-        <div class="notes">&#9432; If enforced, API will only respond to HTTPS calls - Recommended to set "yes" for live servers.</div>
+        <div class="notes">* If enforced, API will only respond to HTTPS calls - Recommended to set "yes" for live servers.</div>
         <label>CORS</label>
         <select name="apicors" onchange="install.cors(this.value)">
           <option value="0">Disallow</option>
           <option value="1">Allow</option>
         </select>
-        <div class="notes">&#9432; Allow CORS only if you intend to develop mobile apps, or let third parties access your system.</div>
+        <div class="notes">* Allow CORS only if you intend to develop mobile apps, or let third parties access your system.</div>
         <div id="corsmore" class="hide">
           <label>Allowed CORS Domains</label>
           <input type="text" name="corsallow">
-          <div class="notes">&#9432; Leave this blank to allow all websites and apps to access your system (not recommended).</div>
+          <div class="notes">* Leave this blank to allow all websites and apps to access your system (not recommended).</div>
           <div class="notes">
-            &#9432; To restrict which domains can access your system - Enter the domain name (<code>site-a.com</code>), or multiple domains separated by commas (<code>site-a.com, site-b.com</code>).
+            * To restrict which domains can access your system - Enter the domain name (<code>site-a.com</code>), or multiple domains separated by commas (<code>site-a.com, site-b.com</code>).
           </div>
         </div>
       </div>
 
-      <!-- (DD8-3) DATABASE -->
+      <!-- (DD10-3) DATABASE -->
       <h2>DATABASE</h2>
       <div class="iSec">
         <label>Host</label>
@@ -315,14 +328,14 @@ if ($_PHASE == "D") {
         <input type="password" name="dbpass" value="<?=I_DB_PASS?>">
       </div>
 
-      <!-- (DD8-4) EMAIL SEND FROM -->
+      <!-- (DD10-4) EMAIL SEND FROM -->
       <h2>EMAIL</h2>
       <div class="iSec">
         <label>Sent From</label>
         <input type="email" name="mailfrom" value="sys@site.com" required>
       </div>
 
-      <!-- (DD8-5) JWT & ADMIN USER -->
+      <!-- (DD10-5) JWT & ADMIN USER -->
       <?php if (I_USER) { ?>
       <h2>JSON WEB TOKEN</h2>
       <div class="iSec">
@@ -330,7 +343,7 @@ if ($_PHASE == "D") {
         <input type="text" name="jwtkey" required>
         <label>Issuer</label>
         <input type="text" name="jwyiss" required value="<?=$_SERVER["HTTP_HOST"]?>">
-        <div class="notes">&#9432; Your company name or domain name.</div>
+        <div class="notes">* Your company name or domain name.</div>
       </div>
 
       <h2>ADMIN USER</h2>
@@ -341,13 +354,13 @@ if ($_PHASE == "D") {
         <input type="text" name="aemail" required value="admin@site.com">
         <label>Password</label>
         <input type="password" name="apass" required>
-        <div class="notes">&#9432; At least 8 characters alphanumeric.</div>
+        <div class="notes">* At least 8 characters alphanumeric.</div>
         <label>Confirm Password</label>
         <input type="password" name="apassc" required>
       </div>
       <?php } ?>
 
-      <!-- (DD8-6) PUSH NOTIFICATION -->
+      <!-- (DD10-6) PUSH NOTIFICATION -->
       <?php if (I_PUSH) { ?>
       <h2>WEB PUSH VAPID KEYS</h2>
       <div class="iSec">
@@ -356,15 +369,15 @@ if ($_PHASE == "D") {
         <label>Public Key</label>
         <input type="text" name="pushpublic" required value="<?=I_VAPID["publicKey"]?>">
         <div class="notes">
-          &#9432; You can regenerate these with:<br>
+          * You can regenerate these with:<br>
           <code>require "lib/webpush/autoload.php";</code><br>
           <code>$keys = Minishlink\WebPush\VAPID::createVapidKeys();</code>
         </div>
       </div>
       <?php } ?>
 
-      <!-- (DD8-7) GO! -->
-      <input id="gobtn" type="submit" value="Go!">
+      <!-- (DD10-7) GO! -->
+      <input id="gobtn" type="submit" value="Go!" disabled>
     </form>
   </body>
 </html>
@@ -460,7 +473,7 @@ if ($_PHASE == "F") {
     $replace["PUSH_PRIVATE"] = $_POST["pushprivate"];
     $replace["PUSH_PUBLIC"] = $_POST["pushpublic"];
   }
-  unset($_POST); unset($hbase);
+  unset($_POST);
 
   // (F6) BACKUP LIB/CORE-CONFIG.PHP
   if (!copy(I_LIB . "CORE-Config.php", I_LIB . "CORE-Config.old")) {
@@ -477,9 +490,19 @@ if ($_PHASE == "F") {
   }}}
   try { file_put_contents(I_LIB . "CORE-Config.php", implode("", $cfg)); }
   catch (Exception $ex) { exit("Error writing to ". I_LIB ."CORE-Config.php"); }
-  unset($cfg); unset($replace);
 
-  // (F8) ALMOST DONE...
+  // (F8) UPDATE WEB MANIFEST
+  $replace = ["start_url", "scope"];
+  $hbase = parse_url(rtrim($hbase, "/\\") . "/", PHP_URL_PATH);
+  $cfg = file(I_BASE . "CB-manifest.json") or exit("Cannot read". I_BASE . "CB-manifest.json");
+  foreach ($cfg as $j=>$line) { foreach ($replace as $r) { if (strpos($line, "\"$r\"") !== false) {
+    $cfg[$j] = "  \"$r\": \"$hbase\",\r\n";
+  }}}
+  try { file_put_contents(I_BASE . "CB-manifest.json", implode("", $cfg)); }
+  catch (Exception $ex) { exit("Error writing to ". I_BASE . "CB-manifest.json"); }
+  unset($hbase); unset($cfg); unset($replace);
+
+  // (F9) ALMOST DONE...
   $_PHASE = "G";
 }
 

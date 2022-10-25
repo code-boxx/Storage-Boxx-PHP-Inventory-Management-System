@@ -147,10 +147,11 @@ class Route extends Core {
     require PATH_LIB . "API-$_MOD.php";
   }
 
-  // (E) REGENERATE HTACCESS FILE
-  function htaccess () {
-    $htaccess = PATH_BASE . ".htaccess";
-    if (file_put_contents($htaccess, implode("\r\n", [
+  // (E) REGENERATE HTACCESS + MANIFEST FILES
+  function init () {
+    // (E1) HTACCESS
+    $file = PATH_BASE . ".htaccess";
+    if (file_put_contents($file, implode("\r\n", [
       "RewriteEngine On",
       "RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]",
       "RewriteBase " . HOST_BASE_PATH,
@@ -158,6 +159,17 @@ class Route extends Core {
       "RewriteCond %{REQUEST_FILENAME} !-f",
       "RewriteCond %{REQUEST_FILENAME} !-d",
       "RewriteRule . " . HOST_BASE_PATH . "index.php [L]"
-    ])) === false) { throw new Exception("Failed to create $htaccess"); }
+    ])) === false) { throw new Exception("Failed to create $file"); }
+
+    // (E2) WEB MANIFEST
+    $file = PATH_BASE . "CB-manifest.json";
+    $replace = ["start_url", "scope"];
+    $cfg = file($file) or exit("Cannot read $file");
+    foreach ($cfg as $j=>$line) { foreach ($replace as $r) { if (strpos($line, "\"$r\"") !== false) {
+      $cfg[$j] = "  \"$r\": \"".HOST_BASE_PATH."\",\r\n";
+    }}}
+    if (file_put_contents($file, implode("", $cfg)) === false) {
+      throw new Exception("Failed to write $file");
+    }
   }
 }

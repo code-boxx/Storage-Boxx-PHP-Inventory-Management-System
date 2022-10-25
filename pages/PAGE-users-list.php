@@ -10,7 +10,7 @@ if (is_array($users)) { foreach ($users as $id=>$u) { ?>
     <small><?=$u["user_email"]?></small>
   </div>
   <div class="dropdown">
-    <button class="btn btn-primary btn-sm mi dropdown-toggle" type="button" data-bs-toggle="dropdown">
+    <button class="btn btn-primary btn-sm mi" type="button" data-bs-toggle="dropdown">
       more_vert
     </button>
     <ul class="dropdown-menu dropdown-menu-dark">

@@ -20,7 +20,7 @@
 
   <h6>Built With</h6>
   <ul>
-    <li><a href="https://code-boxx.com/core-boxx-php-rapid-development-framework/" target="_blank">Core Boxx</a></li>
+    <li><a href="https://code-boxx.com/core-boxx-php-framework/" target="_blank">Core Boxx</a></li>
     <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
     <li><a href="https://davidshimjs.github.io/qrcodejs/" target="_blank">QRCode.js</a></li>
     <li><a href="https://github.com/mebjas/html5-qrcode" target="_blank">HTML5-QRCode Scanner</a></li>

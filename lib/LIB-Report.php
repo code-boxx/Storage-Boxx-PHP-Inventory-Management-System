@@ -15,16 +15,17 @@ class Report extends Core {
     $f = fopen("php://output", "w");
     fputcsv($f, ["Date", "Staff", "SKU", "Item", "Direction", "Quantity", "Left", "Notes"]);
     $this->DB->query(
-      "SELECT m.*, s.`stock_name`, u.`user_name` 
+      "SELECT m.*, DATE_FORMAT(m.`mvt_date`, '".DT_LONG."') `md`, s.`stock_name`, u.`user_name` 
        FROM `stock_mvt` m
        LEFT JOIN `stock` s USING (`stock_sku`)
        LEFT JOIN `users` u USING (`user_id`)
-       WHERE `mvt_date` BETWEEN ? AND ?",
+       WHERE `mvt_date` BETWEEN ? AND ?
+       ORDER BY m.`stock_sku`, m.`mvt_date`",
       [$start, $end]
     );
     while ($r = $this->DB->stmt->fetch()) {
       fputcsv($f, [
-        $r["mvt_date"], $r["user_name"],
+        $r["md"], $r["user_name"],
         $r["stock_sku"], $r["stock_name"],
         STOCK_MVT[$r["mvt_direction"]], $r["mvt_qty"], $r["mvt_left"],
         $r["mvt_notes"]
@@ -38,7 +39,8 @@ class Report extends Core {
     // (B1) HEADER
     header("Content-Disposition: attachment; filename=items-list.csv;");
     $f = fopen("php://output", "w");
-    fputcsv($f, ["ITEMS LIST AS AT ".date("Y-m-d H:i:s")]);
+    $now = $this->DB->fetchCol("SELECT DATE_FORMAT(CURRENT_TIMESTAMP(), '".DT_LONG."') `now`");
+    fputcsv($f, ["ITEMS LIST AS AT " . strtoupper($now)]);
     fputcsv($f, ["SKU", "Name", "Description", "Quantity", "Unit"]);
 
     // (B2) ITEMS

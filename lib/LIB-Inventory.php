@@ -144,15 +144,15 @@ class Inventory extends Core {
         "SELECT COUNT(*) FROM `stock_mvt` WHERE `stock_sku`=?", [$sku]
       ), $page);
     }
-    
+
     // (F2) GET ENTRIES
-    $sql = "SELECT m.*, u.`user_name`
+    $sql = "SELECT m.*, DATE_FORMAT(m.`mvt_date`, '".DT_LONG."') `md`, u.`user_name`
     FROM `stock_mvt` m
     LEFT JOIN `users` u USING (`user_id`)
     WHERE m.`stock_sku`=?
     ORDER BY `mvt_date` DESC";
     if ($page != null) { $sql .= $this->core->page["lim"]; }
-    
+
     // (F3) RESULTS
     return $this->DB->fetchAll($sql, [$sku]);
   }

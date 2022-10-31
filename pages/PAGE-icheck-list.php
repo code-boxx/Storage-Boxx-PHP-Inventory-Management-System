@@ -11,7 +11,7 @@ if (is_array($move)) { foreach ($move as $m) { ?>
     <div class="display-6"><?=$m["mvt_direction"]=="D"||$m["mvt_direction"]=="O"?"-":""?><?=$m["mvt_qty"]?></div>
   </div>
   <div class="w-50 text-secondary">
-    <div><?=$m["mvt_date"]?></div>
+    <div><?=$m["md"]?></div>
     <div><?=$m["user_name"]?></div>
     <div><?=$m["mvt_notes"]?></div>
   </div>

@@ -2,8 +2,8 @@ var inv = {
   // (A) LIST () : SHOW ALL ITEMS
   pg : 1, // current page
   find : "", // current search
-  list : () => {
-    cb.page(0);
+  list : silent => {
+    if (silent!==true) { cb.page(0); }
     cb.load({
       page : "inventory/list", target : "inv-list",
       data : {

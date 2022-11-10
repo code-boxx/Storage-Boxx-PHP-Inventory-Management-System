@@ -30,4 +30,9 @@ switch ($_REQ) {
   case "get":
     $_CORE->autoGETAPI("Inventory", "get");
     break;
+
+  // (G) IMPORT ITEMS
+  case "import":
+    $_CORE->autoAPI("Inventory", "import");
+    break;
 }

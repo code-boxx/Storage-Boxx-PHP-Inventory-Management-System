@@ -15,7 +15,8 @@ cFiles = [
   "assets/PAGE-nfc.js",
   "assets/maticon.woff2",
   "CB-manifest.json",
-  // (A4) QR CODE
+  // (A4) QR CODE + CSV
+  "assets/csv.min.js",
   "assets/html5-qrcode.min.js",
   "assets/qrcode.min.js",
   // (A5) PAGES
@@ -23,6 +24,7 @@ cFiles = [
   "assets/PAGE-forgot.js",
   "assets/PAGE-home.js",
   "assets/PAGE-inv-check.js",
+  "assets/PAGE-inv-import.js",
   "assets/PAGE-inventory.js",
   "assets/PAGE-login.js",
   "assets/PAGE-move.js",

@@ -161,4 +161,16 @@ class Inventory extends Core {
   function getMonitor () {
     return $this->DB->fetchAll( "SELECT * FROM `stock` WHERE `stock_low`>0");
   }
+
+  // (H) IMPORT ITEM
+  function import ($sku, $name, $unit, $low=0, $desc=null) {
+    // (H1) CHECK
+    if (is_array($this->get($sku))) {
+      $this->error = "$sku is already registered.";
+      return false;
+    }
+
+    // (H2) SAVE
+    return $this->save($sku, $name, $unit, $low, $desc);
+  }
 }

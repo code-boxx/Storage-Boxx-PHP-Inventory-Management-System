@@ -2,6 +2,8 @@
 <h3>STORAGE BOXX</h3>
 <div class="mb-3">open source php inventory management system</div>
 <div class="bg-white border p-3">
+<img class="img-fluid d-block mx-auto mb-3" style="max-height:350px;" src="<?=HOST_ASSETS?>HEAD-storage-boxx.jpg">
+
   <h6>Links & Documentation</h6>
   <ul>
     <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/" target="_blank">Storage Boxx Official Webpage</a></li>

@@ -17,6 +17,15 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <div class="fw-bold text-danger mb-3">ITEMS MOVEMENT</div>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
+        <span class="input-group-text">Range</span>
+      </div>
+      <select class="form-select" name="range">
+        <option value="A">All Items</option>
+        <option value="S">Summary</option>
+      </select>
+    </div>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
         <span class="input-group-text">Month</span>
       </div>
       <select name="month" class="form-select"><?php foreach ($months as $m=>$mth) {
@@ -31,7 +40,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       </div>
       <input type="number" name="year" max="<?=$yearNow?>" step="1" class="form-control" required value="<?=$yearNow?>">
     </div>
-    <input type="submit" class="col btn btn-primary" value="CSV">
+    <input type="submit" class="w-100 col btn btn-primary" value="CSV">
   </form>
 
   <!-- (B2) ITEMS LIST -->
@@ -46,7 +55,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
         <option value="M">Monitored Items Only</option>
       </select>
     </div>
-    <input type="submit" class="col btn btn-primary" value="CSV">
+    <input type="submit" class="w-100 col btn btn-primary" value="CSV">
   </form>
 </div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

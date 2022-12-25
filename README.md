@@ -13,12 +13,12 @@ Storage Boxx is an open-source PHP Inventory Management System. It is not a “s
 
 ## SCREENSHOTS
 <p float="left">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-1.png">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-2.png">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-3.png">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-4.png">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-5.png">
-  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-6.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-1a.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-2a.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-3a.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-4a.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-5a.png">
+  <img width="250" style="inline-block" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-6a.png">
 </p>
 <br><br>
 

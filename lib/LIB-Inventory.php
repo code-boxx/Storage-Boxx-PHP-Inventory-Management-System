@@ -125,7 +125,7 @@ class Inventory extends Core {
       $this->core->load("Push");
       $this->core->Push->send("[{$item["stock_sku"]}] {$item["stock_name"]}",
         "Item is low on stock - {$newqty} {$item["stock_unit"]}",
-        HOST_ASSETS . "push-ico.png", HOST_ASSETS . "push-bg.jpg"
+        HOST_ASSETS . "PUSH-ico.jpg", HOST_ASSETS . "PUSH-bg.jpg"
       );
     }
 

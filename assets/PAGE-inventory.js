@@ -66,6 +66,7 @@ var inv = {
     };
     var osku = document.getElementById("inv-osku").value;
     if (osku!="") { data.osku = osku; }
+    else { data.stock = document.getElementById("inv-stock").value; }
 
     // (F2) AJAX
     cb.api({

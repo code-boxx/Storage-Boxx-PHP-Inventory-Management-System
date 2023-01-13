@@ -4,10 +4,11 @@ class Inventory extends Core {
   //  $sku : item SKU
   //  $name : item name
   //  $unit : item unit
+  //  $stock : initial stock level (new item only)
   //  $low : low stock quantity monitor
   //  $desc : item description
   //  $osku : old SKU, for editing only
-  function save ($sku, $name, $unit, $low=0, $desc=null, $osku=null) {
+  function save ($sku, $name, $unit, $stock=0, $low=0, $desc=null, $osku=null) {
     // (A1) CHECK SKU
     $checkSKU = $osku==null ? $sku : $osku ;
     $check = $this->get($sku);
@@ -17,25 +18,35 @@ class Inventory extends Core {
       return false;
     }
 
-    // (A2) DATA SETUP
-    $fields = ["stock_sku", "stock_name", "stock_low", "stock_desc", "stock_unit"];
-    $data = [$sku, $name, $low, $desc, $unit];
+    // (A2) AUTO COMMIT OFF
+    global $_SESS;
+    $this->DB->start();
 
     // (A3) ADD ITEM
-    if ($osku===null) { $this->DB->insert("stock", $fields, $data); }
+    if ($osku===null) {
+      $this->DB->insert("stock", 
+        ["stock_sku", "stock_name", "stock_desc", "stock_unit", "stock_low", "stock_qty"],
+        [$sku, $name, $desc, $unit, $low, $stock]
+      );
+      $this->DB->insert("stock_mvt",
+        ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_left", "mvt_notes"],
+        [$sku, date("Y-m-d H:i:s"), "T", $_SESS["user"]["user_id"], $stock, $stock, "Item added to system - Initial stock."]
+      );
+    }
 
     // (A4) UPDATE ITEM
     else {
-      $this->DB->start();
-      $data[] = $osku;
-      $this->DB->update("stock", $fields, "`stock_sku`=?", $data);
+      $this->DB->update(
+        "stock", ["stock_sku", "stock_name", "stock_desc", "stock_unit", "stock_low"], 
+        "`stock_sku`=?", [$sku, $name, $desc, $unit, $low, $osku]
+      );
       if ($sku!=$osku) {
         $this->DB->update("stock_mvt", ["stock_sku"], "`stock_sku`=?", [$sku, $osku]);
       }
-      $this->DB->end();
     }
 
-    // (A5) RETURN RESULT
+    // (A5) COMMIT & RETURN RESULT
+    $this->DB->end();
     return true;
   }
 
@@ -163,7 +174,7 @@ class Inventory extends Core {
   }
 
   // (H) IMPORT ITEM
-  function import ($sku, $name, $unit, $low=0, $desc=null) {
+  function import ($sku, $name, $unit, $stock=0, $low=0, $desc=null) {
     // (H1) CHECK
     if (is_array($this->get($sku))) {
       $this->error = "$sku is already registered.";
@@ -171,6 +182,6 @@ class Inventory extends Core {
     }
 
     // (H2) SAVE
-    return $this->save($sku, $name, $unit, $low, $desc);
+    return $this->save($sku, $name, $unit, $stock, $low, $desc);
   }
 }

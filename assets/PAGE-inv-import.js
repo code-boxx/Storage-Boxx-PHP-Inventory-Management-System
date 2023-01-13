@@ -27,17 +27,19 @@ var iimport = {
       // (B2-1) READ ROW-BY-ROW INTO HTML + CHECK VALID
       CSV.parse(reader.result).forEach(r => {
         row = document.createElement("tr");
-        if (r.length != 5) {
+        if (r.length != 6) {
           row.className = "table-danger fw-bold";
-          row.innerHTML = `<td colspan="6">?</td><td>Invalid Row</td>`;
+          row.innerHTML = `<td colspan="7">?</td><td>Invalid Row</td>`;
         } else {
           err = null;
-          for (let i=0; i<5; i++) {
-            if (r[i]==null) { err = "Missing Data"; }
+          for (let i=0; i<6; i++) {
+            if (r[i]===null || r[i]==="") { err = "Missing Data"; }
             col = document.createElement("td");
             col.innerHTML = r[i]==null?"":r[i];
             row.appendChild(col);
           }
+          if (isNaN(r[4])) { err = "Invalid Watch Level"; }
+          if (isNaN(r[5])) { err = "Invalid Stock Level"; }
           col = document.createElement("td");
           col.innerHTML = err==null ? "" : err;
           row.appendChild(col);
@@ -84,7 +86,8 @@ var iimport = {
           name : col[1].innerHTML,
           desc : col[2].innerHTML,
           unit : col[3].innerHTML,
-          low : col[4].innerHTML
+          stock : col[4].innerHTML,
+          low : col[5].innerHTML
         },
         onpass : () => {
           row.classList.remove("valid");

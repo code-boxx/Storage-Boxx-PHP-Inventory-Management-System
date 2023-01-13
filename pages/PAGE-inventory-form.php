@@ -48,7 +48,7 @@ if ($edit) { $item = $_CORE->autoCall("Inventory", "get"); }
       <div class="input-group-prepend">
         <span class="input-group-text mi">published_with_changes</span>
       </div>
-      <input type="number" step="0.01" class="form-control" id="inv-stock" required placeholder="Cuttent stock level">
+      <input type="number" step="0.01" class="form-control" id="inv-stock" required placeholder="Current stock level">
     </div>
     <?php } ?>
 

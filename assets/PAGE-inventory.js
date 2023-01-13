@@ -80,7 +80,6 @@ var inv = {
 
   // (G) DELETE ITEM
   //  sku : item SKU
-  //  confirm : boolean, confirmed delete
   del : sku => cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => cb.api({
     mod : "inventory", req : "del",
     data : { sku : sku },

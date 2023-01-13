@@ -42,6 +42,7 @@ class Inventory extends Core {
       );
       if ($sku!=$osku) {
         $this->DB->update("stock_mvt", ["stock_sku"], "`stock_sku`=?", [$sku, $osku]);
+        $this->DB->update("suppliers_items", ["stock_sku"], "`stock_sku`=?", [$sku, $osku]);
       }
     }
 

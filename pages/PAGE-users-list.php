@@ -7,7 +7,7 @@ if (is_array($users)) { foreach ($users as $id=>$u) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
     <strong><?=$u["user_name"]?></strong><br>
-    <small><?=$u["user_email"]?></small>
+    <small><a href="mailto:<?=$u["user_email"]?>"><?=$u["user_email"]?></a></small>
   </div>
   <div class="dropdown">
     <button class="btn btn-primary btn-sm mi" type="button" data-bs-toggle="dropdown">

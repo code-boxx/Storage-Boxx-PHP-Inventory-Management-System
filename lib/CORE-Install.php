@@ -29,7 +29,7 @@ define("I_PAGES", I_BASE . "pages" . DIRECTORY_SEPARATOR);
 
 // (A4) SQL FILES - FROM OLDEST TO NEWEST VERSIONS
 // @TODO - SET AS NECESSARY
-define("I_SQL", ["SQL-Storage-Boxx-0.sql", "SQL-Storage-Boxx-1.sql", "SQL-Storage-Boxx-2.sql"]);
+define("I_SQL", ["SQL-Storage-Boxx-0.sql", "SQL-Storage-Boxx-1.sql", "SQL-Storage-Boxx-2.sql", "SQL-Storage-Boxx-3.sql"]);
 
 // (A5) HELPER FUNCTION - IMPORT SQL FILES
 function import ($pdo, $from=0) {

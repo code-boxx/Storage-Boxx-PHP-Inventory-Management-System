@@ -124,6 +124,9 @@
           <div class="my-2">Entities</div>
           <a class="nav-link ms-2" href="<?=HOST_BASE?>users">
             <span class="mi mi-smol">people</span> Users
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>suppliers">
+            <span class="mi mi-smol">corporate_fare</span> Suppliers
           </a><hr>
         </li>
         <li class="nav-item">

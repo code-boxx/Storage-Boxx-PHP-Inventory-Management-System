@@ -64,7 +64,6 @@ var usr = {
 
   // (F) DELETE USER
   //  id : int, user ID
-  //  confirm : boolean, confirmed delete
   del : id => cb.modal("Please confirm", "Delete user?", () => cb.api({
     mod : "users", req : "del",
     data : { id : id },

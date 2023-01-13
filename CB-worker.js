@@ -33,6 +33,9 @@ self.addEventListener("install", evt => {
       "assets/PAGE-move.js",
       "assets/PAGE-push.js",
       "assets/PAGE-settings.js",
+      "assets/PAGE-sup-import.js",
+      "assets/PAGE-sup-items.js",
+      "assets/PAGE-suppliers.js",
       "assets/PAGE-users.js"
     ]))
     .catch(err => console.error(err))

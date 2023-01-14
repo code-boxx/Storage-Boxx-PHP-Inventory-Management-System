@@ -1,5 +1,5 @@
 <?php
-// (A) GET ITEMS
+// (A) GET SUPPLIERS
 $sup = $_CORE->autoCall("Suppliers", "getAll");
 
 // (B) DRAW SUPPLIERS LIST
@@ -15,13 +15,16 @@ if (is_array($sup)) { foreach ($sup as $id=>$s) { ?>
       more_vert
     </button>
     <ul class="dropdown-menu dropdown-menu-dark">
-      <li class="dropdown-item" onclick="sup.addEdit('<?=$id?>')">
+      <li class="dropdown-item" onclick="sup.addEdit(<?=$id?>)">
         <i class="mi mi-smol">edit</i> Edit
       </li>
-      <li class="dropdown-item" onclick="items.init('<?=$id?>')">
+      <li class="dropdown-item" onclick="items.init(<?=$id?>)">
         <i class="mi mi-smol">inventory</i> Items
       </li>
-      <li class="dropdown-item text-warning" onclick="sup.del('<?=$id?>')">
+      <li class="dropdown-item" onclick="sup.csv(<?=$id?>)">
+        <i class="mi mi-smol">download</i> CSV List
+      </li>
+      <li class="dropdown-item text-warning" onclick="sup.del(<?=$id?>)">
         <i class="mi mi-smol">delete</i> Delete
       </li>
     </ul>

@@ -94,4 +94,29 @@ class Report extends Core {
     }
     fclose($f);
   }
+
+  // (C) SUPPLIER ITEMS LIST
+  function sitems ($id) {
+    // (C1) GET SUPPLIER
+    $sup = $this->DB->fetch("SELECT * FROM `suppliers` WHERE `sup_id`=?", [$id]);
+
+    // (C2) CSV HEADER
+    header("Content-Disposition: attachment; filename=items-list.csv;");
+    $f = fopen("php://output", "w");
+    fputcsv($f, [$sup["sup_name"]]);
+    fputcsv($f, [$sup["sup_tel"], $sup["sup_email"], $sup["sup_address"]]);
+    fputcsv($f, ["SKU", "Supplier SKU", "Name", "Description", "Unit", "Unit Price"]);
+
+    // (C3) SUPPLIER ITEMS
+    $this->DB->query(
+      "SELECT * FROM `suppliers_items`
+       LEFT JOIN `stock` USING (`stock_sku`)
+       WHERE `sup_id`=?",
+      [$id]
+    );
+    while ($r = $this->DB->stmt->fetch()) {
+      fputcsv($f, [$r["stock_sku"], $r["sup_sku"], $r["stock_name"], $r["stock_desc"], $r["stock_unit"], $r["unit_price"]]);
+    }
+    fclose($f);
+  }
 }

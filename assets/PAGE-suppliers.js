@@ -65,6 +65,12 @@ var sup = {
     data : { id : id },
     passmsg : "Supplier deleted",
     onpass : sup.list
-  }))
+  })),
+
+  // (G) SUPPLIER ITEMS CSV DOWNLOAD
+  csv : id => {
+    document.getElementById("sup-csv-id").value = id;
+    document.getElementById("sup-csv").submit();
+  }
 };
 window.addEventListener("load", sup.list);

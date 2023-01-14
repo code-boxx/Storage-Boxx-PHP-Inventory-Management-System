@@ -29,6 +29,11 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   </ul>
 </form>
 
-<!-- (C) SUPPLIERS LIST -->
+<!-- (C) HIDDEN - DOWNLOAD SUPPLIER ITEMS LIST -->
+<form id="sup-csv" method="post" target="_blank" action="<?=HOST_BASE?>report/sitems">
+  <input type="hidden" name="id" id="sup-csv-id">
+</form>
+
+<!-- (D) SUPPLIERS LIST -->
 <div id="sup-list" class="zebra my-4"></div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

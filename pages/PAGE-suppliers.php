@@ -3,7 +3,8 @@ $_PMETA = ["load" => [
   ["s", HOST_ASSETS."csv.min.js", "defer"],
   ["s", HOST_ASSETS."PAGE-suppliers.js", "defer"],
   ["s", HOST_ASSETS."PAGE-sup-import.js", "defer"],
-  ["s", HOST_ASSETS."PAGE-sup-items.js", "defer"]
+  ["s", HOST_ASSETS."PAGE-sup-items.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-sup-items-import.js", "defer"]
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) HEADER -->

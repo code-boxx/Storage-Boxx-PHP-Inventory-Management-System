@@ -19,7 +19,8 @@ ALTER TABLE `suppliers`
 CREATE TABLE `suppliers_items` (
   `sup_id` bigint(20) NOT NULL,
   `stock_sku` varchar(255) NOT NULL,
-  `sup_sku` varchar(255) DEFAULT NULL
+  `sup_sku` varchar(255) DEFAULT NULL,
+  `unit_price` decimal(12,2) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `suppliers_items`

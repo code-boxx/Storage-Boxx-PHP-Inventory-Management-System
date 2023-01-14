@@ -15,11 +15,18 @@ if ($edit) { $item = $_CORE->autoCall("Suppliers", "getItem"); }
       <input type="text" class="form-control" id="item-sku" required value="<?=$edit?$item["stock_sku"]:""?>" placeholder="SKU">
     </div>
 
-    <div class="input-group">
+    <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text mi">qr_code</span>
       </div>
-      <input type="text" id="item-ssku" class="form-control" value="<?=$edit?$item["sup_sku"]:""?>" placeholder="Supplier SKU (If different)">
+      <input type="text" id="item-ssku" class="form-control" value="<?=$edit?$item["sup_sku"]:""?>" placeholder="Supplier SKU (if different)">
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text mi">attach_money</span>
+      </div>
+      <input type="number" step="0.01" id="item-price" class="form-control" required value="<?=$edit?$item["unit_price"]:""?>" placeholder="Unit Price">
     </div>
   </div>
 

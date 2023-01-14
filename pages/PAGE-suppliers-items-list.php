@@ -6,9 +6,9 @@ $items = $_CORE->autoCall("Suppliers", "getItems");
 if (is_array($items)) { foreach ($items as $sku=>$i) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
-    <strong><?=$i["stock_name"]?> (<?=$i["stock_unit"]?>)</strong><br>
-    <strong>SKU: <?=$sku?> | Supplier SKU: <?=$i["sup_sku"]?$i["sup_sku"]:$sku?></strong><br>
-    <small><?=$i["stock_desc"]?></small>
+    <strong><?=$i["stock_name"]?></strong><br>
+    <small>SKU: <?=$sku?> | SSKU: <?=$i["sup_sku"]?$i["sup_sku"]:$sku?></small><br>
+    <small>Price: <?=$i["unit_price"]?> / <?=$i["stock_unit"]?></small>
   </div>
   <div class="dropdown">
     <button class="btn btn-primary btn-sm mi" type="button" data-bs-toggle="dropdown">

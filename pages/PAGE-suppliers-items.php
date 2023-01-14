@@ -26,11 +26,9 @@ $sup = $_CORE->autoCall("Suppliers", "get");
     <li class="dropdown-item" onclick="items.addEdit()">
       <i class="mi mi-smil">add</i> Add Single
     </li>
-    <!-- @TODO
-    <li class="dropdown-item" onclick="items.iinit()">
+    <li class="dropdown-item" onclick="iimport.init()">
       <i class="mi mi-smil">upload</i> Import CSV
     </li>
-    -->
   </ul>
 </form>
 

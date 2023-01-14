@@ -57,17 +57,22 @@ var items = {
 
   // (F) SAVE ITEM
   save : () => {
-    // (F1) GET DATA
+    // (F1) AUTO SUPPLIER SKU
+    var sku = document.getElementById("item-sku"),
+        ssku = document.getElementById("item-ssku"),
+        osku = document.getElementById("item-osku");
+    if (ssku.value=="") { ssku.value = sku.value; }
+
+    // (F2) GET FORM DATA
     var data = {
       id : items.id,
-      sku : document.getElementById("item-sku").value
-    },
-    osku = document.getElementById("item-osku").value,
-    ssku = document.getElementById("item-ssku").value;
-    if (osku!="") { data.osku = osku; }
-    if (ssku!="") { data.ssku = ssku; }
+      sku : sku.value,
+      ssku : ssku.value,
+      price : document.getElementById("item-price").value
+    };
+    if (osku.value!="") { data.osku = osku.value; }
 
-    // (F2) AJAX
+    // (F3) AJAX
     cb.api({
       mod : "suppliers", req : "saveItem",
       data : data,

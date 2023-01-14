@@ -84,9 +84,10 @@ class Suppliers extends Core {
   // (F) SAVE ITEM TO SUPPLIER
   //  $id : supplier id
   //  $sku : item sku
-  //  $ssku : supplier sku, if any
+  //  $ssku : supplier sku
+  //  $price : unit price
   //  $osku : old SKU, for editing only
-  function saveItem ($id, $sku, $ssku=null, $osku=null) {
+  function saveItem ($id, $sku, $ssku, $price, $osku=null) {
     // (F1) CHECKS
     if (!is_array($this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]))) {
       $this->error = "$sku is not a valid item";
@@ -102,16 +103,16 @@ class Suppliers extends Core {
     // (F2) ADD ITEM
     if ($osku===null) {
       $this->DB->insert("suppliers_items", 
-        ["sup_id", "stock_sku", "sup_sku"],
-        [$id, $sku, $ssku]
+        ["sup_id", "stock_sku", "sup_sku", "unit_price"],
+        [$id, $sku, $ssku, $price]
       );
     }
 
     // (F3) UPDATE ITEM
     else {
       $this->DB->update(
-        "suppliers_items", ["stock_sku", "sup_sku"], 
-        "`sup_id`=? AND `stock_sku`=?", [$sku, $ssku, $id, $osku]
+        "suppliers_items", ["stock_sku", "sup_sku", "unit_price"], 
+        "`sup_id`=? AND `stock_sku`=?", [$sku, $ssku, $price, $id, $osku]
       );
     }
 
@@ -158,5 +159,25 @@ class Suppliers extends Core {
       "SELECT * FROM `suppliers_items` WHERE `sup_id`=? AND `stock_sku`=?",
       [$id, $sku]
     );
+  }
+
+  // (J) IMPORT SUPPLIER ITEM
+  //  $id : supplier id
+  //  $sku : item sku
+  //  $ssku : supplier sku
+  //  $price : unit price
+  function importItem ($id, $sku, $ssku, $price) {
+    // (J1) CHECK VALID SKU
+    if (!is_array($this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]))) {
+      $this->error = "$sku is not a valid item";
+      return false;
+    }
+
+    // (J2) REPLACE
+    $this->DB->insert("suppliers_items", 
+      ["sup_id", "stock_sku", "sup_sku", "unit_price"],
+      [$id, $sku, ($ssku==""||$ssku==null?$sku:$ssku), $price], true
+    );
+    return true;
   }
 }

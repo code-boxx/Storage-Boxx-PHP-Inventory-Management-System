@@ -34,4 +34,9 @@ switch ($_REQ) {
   case "delItem":
     $_CORE->autoAPI("Suppliers", "delItem");
     break;
+
+  // (H) IMPORT SUPPLIER ITEM
+  case "importItem":
+    $_CORE->autoAPI("Suppliers", "importItem");
+    break;
 }

@@ -35,7 +35,7 @@ self.addEventListener("install", evt => {
       "assets/PAGE-settings.js",
       "assets/PAGE-sup-import.js",
       "assets/PAGE-sup-items.js",
-      "assets/PAGE-sup-items-import",
+      "assets/PAGE-sup-items-import.js",
       "assets/PAGE-suppliers.js",
       "assets/PAGE-users.js"
     ]))

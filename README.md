@@ -2,7 +2,7 @@
 Storage Boxx is an open-source PHP Inventory Management System. It is not a “super professional crazy bloated with features” kind of system. But it covers the basics, has a built-in webcam QR code scanner, built-in NFC scanner, and low stock warning push notifications. This will help small businesses get started with inventory stock keeping.
 <br><br>
 
-## FEATURES
+## :white_check_mark: FEATURES
 1) Users, items, suppliers management.
 2) Generate item QR code, built-in QR code scanner.
 3) Create item NFC tags, built-in NFC scanner.
@@ -11,7 +11,7 @@ Storage Boxx is an open-source PHP Inventory Management System. It is not a “s
 6) Installable progressive web app.
 <br><br>
 
-## SCREENSHOTS
+## :camera: SCREENSHOTS
 <p float="left">
   <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-1b.png">
   <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-ss-2a.png">
@@ -22,23 +22,23 @@ Storage Boxx is an open-source PHP Inventory Management System. It is not a “s
 </p>
 <br><br>
 
-## REQUIREMENTS
+## :ballot_box_with_check: REQUIREMENTS
 1) LAMP/WAMP/MAMP/XAMPP
 2) Apache Mod Rewrite
 3) PHP MYSQL PDO Extension
 4) At least PHP 8.0
 <br><br>
 
-## INSTALLATION
+## :floppy_disk: INSTALLATION
 Just access `http://your-site.com/` in your browser and walk through the installer.
 <br><br>
 
-## DOCUMENTATION & FRAMEWORKS
+## :bulb: DOCUMENTATION & FRAMEWORKS
 1) Built on [Bootstrap](https://getbootstrap.com/), [Material Icons](https://fonts.google.com/icons), [HTML5 QRCode Scanner](https://github.com/mebjashtml5-qrcode), [QRCodeJS](https://davidshimjs.github.io/qrcodejs/), [PHP Web Push](https://github.com/web-push-libs/web-push-php), [PHP-JWT](https://github.com/firebase/php-jwt), and [Core Boxx](https://code-boxx.com/core-boxx-php-framework/).
 2) Visit https://code-boxx.com/storage-boxx-php-inventory-system/ for the full documentation!
 <br><br>
 
-## LICENSE
+## :newspaper: LICENSE
 Copyright by Code Boxx
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

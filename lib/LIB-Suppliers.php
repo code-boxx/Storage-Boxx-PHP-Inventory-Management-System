@@ -180,4 +180,27 @@ class Suppliers extends Core {
     );
     return true;
   }
+
+  // (K) GET ALL SUPPLIERS THAT HAS THIS ITEM
+  //  $sku : item
+  //  $page : optional, page number
+  function getBySKU ($sku, $page=null) {
+    // (K1) PARITAL SUPPLIERS SQL + DATA
+    $sql = "FROM `suppliers_items` i
+            LEFT JOIN `suppliers` su USING(`sup_id`) 
+            LEFT JOIN `stock` st USING (`stock_sku`)
+            WHERE i.`stock_sku`=?";
+    $data = [$sku];
+
+    // (K2) PAGINATION
+    if ($page != null) {
+      $this->core->paginator(
+        $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
+      );
+      $sql .= $this->core->page["lim"];
+    }
+
+    // (K3) RESULTS
+    return $this->DB->fetchAll("SELECT i.*, su.*, st.`stock_unit` $sql", $data, "sup_id");
+  }
 }

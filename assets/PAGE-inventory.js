@@ -132,6 +132,35 @@ var inv = {
   nfcBack : () => {
     nfc.stop();
     cb.page(0);
-  }
+  },
+
+  // (L) SUPPLIERS FOR ITEM
+  suppg : 1,
+  supsku : null,
+  sup : sku => cb.load({
+    page : "inventory/sup", target : "cb-page-2",
+    data : { sku : sku },
+    onload : () => {
+      cb.page(1);
+      inv.suppg = 1;
+      inv.supsku = sku;
+      inv.suplist();
+    }
+  }),
+
+  // (M) SUPPLIER LIST FOR ITEM
+  suplist : () => cb.load({
+    page : "inventory/sup/list", target : "sup-list",
+    data : { 
+      sku : inv.supsku,
+      page : inv.suppg
+    }
+  }),
+
+  // (N) GO TO SUPPLIER PAGE
+  suppage : pg => { if (pg!=inv.suppg) {
+    inv.suppg = pg;
+    inv.suplist();
+  }},
 };
 window.addEventListener("load", inv.list);

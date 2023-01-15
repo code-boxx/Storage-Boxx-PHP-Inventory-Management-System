@@ -7,7 +7,10 @@ if (is_array($sup)) { foreach ($sup as $id=>$s) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
     <strong><?=$s["sup_name"]?></strong><br>
-    <small><?=$s["sup_tel"]?> | <a href="mailto:<?=$s["sup_email"]?>"><?=$s["sup_email"]?></a></small><br>
+    <small>
+      T: <a href="tel:<?=$s["sup_tel"]?>"><?=$s["sup_tel"]?></a> |
+      E: <a href="mailto:<?=$s["sup_email"]?>"><?=$s["sup_email"]?></a>
+    </small><br>
     <small><?=$s["sup_address"]?></small>
   </div>
   <div class="dropdown">

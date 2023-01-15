@@ -21,6 +21,9 @@ if (is_array($items)) { foreach ($items as $sku=>$i) { ?>
       <li class="dropdown-item" onclick="check.load('<?=$sku?>')">
         <i class="mi mi-smol">history</i> History
       </li>
+      <li class="dropdown-item" onclick="inv.sup('<?=$sku?>')">
+        <i class="mi mi-smol">corporate_fare</i> Suppliers
+      </li>
       <li class="dropdown-item" onclick="inv.qrcode('<?=$sku?>', '<?=$i["stock_name"]?>')">
         <i class="mi mi-smol">qr_code</i> QR Code
       </li>

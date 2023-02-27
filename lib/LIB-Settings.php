@@ -8,7 +8,7 @@ class Settings extends Core {
 
   // (B) AUTO DEFINE BY SETTING GROUP
   //  $group : setting group
-  function defineG ($group) {
+  function defineG ($group) : void {
     foreach ($this->DB->fetchKV(
       "SELECT * FROM `settings` WHERE `setting_group`=?",
       [$group], "setting_name", "setting_value"
@@ -18,7 +18,7 @@ class Settings extends Core {
   // (C) AUTO DEFINE BY SETTING NAME
   //  $name : setting name (string or array)
   //  $json : json decode setting value?
-  function defineN ($name, $json=false) {
+  function defineN ($name, $json=false) : void {
     // (C1) SQL & DATA
     $sql = "SELECT * FROM `settings` WHERE `setting_name`";
     if (is_array($name)) {

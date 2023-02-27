@@ -54,10 +54,10 @@ class Suppliers extends Core {
 
     // (D2) PAGINATION
     if ($page != null) {
-      $this->core->paginator(
+      $this->Core->paginator(
         $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
       );
-      $sql .= $this->core->page["lim"];
+      $sql .= $this->Core->page["lim"];
     }
 
     // (D3) RESULTS
@@ -143,8 +143,8 @@ class Suppliers extends Core {
 
     // (H2) PAGINATION
     if ($page != null) {
-      $this->core->paginator($this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page);
-      $sql .= $this->core->page["lim"];
+      $this->Core->paginator($this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page);
+      $sql .= $this->Core->page["lim"];
     }
 
     // (H3) RESULTS
@@ -194,10 +194,10 @@ class Suppliers extends Core {
 
     // (K2) PAGINATION
     if ($page != null) {
-      $this->core->paginator(
+      $this->Core->paginator(
         $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
       );
-      $sql .= $this->core->page["lim"];
+      $sql .= $this->Core->page["lim"];
     }
 
     // (K3) RESULTS

@@ -19,13 +19,13 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <div class="input-group-prepend">
       <span class="input-group-text mi">info</span>
     </div>
-    <input type="text" class="form-control" id="push_ico" required placeholder="Icon" value="<?=HOST_ASSETS?>PUSH-ico.jpg">
+    <input type="text" class="form-control" id="push_ico" required placeholder="Icon" value="<?=HOST_ASSETS?>STORAGE-BOXX-PUSH-A.webp">
   </div>
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text mi">image</span>
     </div>
-    <input type="text" class="form-control" id="push_img" required placeholder="Image" value="<?=HOST_ASSETS?>PUSH-bg.jpg">
+    <input type="text" class="form-control" id="push_img" required placeholder="Image" value="<?=HOST_ASSETS?>STORAGE-BOXX-PUSH-B.webp">
   </div>
   <input type="submit" class="col btn btn-primary" value="Send">
 </form>

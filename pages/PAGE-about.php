@@ -2,7 +2,7 @@
 <h3>STORAGE BOXX</h3>
 <div class="mb-3">open source php inventory management system</div>
 <div class="bg-white border p-3">
-<img class="img-fluid d-block mx-auto mb-3" style="max-height:350px;" src="<?=HOST_ASSETS?>HEAD-storage-boxx.jpg">
+<img class="img-fluid d-block mx-auto mb-3" style="max-height:450px;" src="<?=HOST_ASSETS?>head-storage-boxx.webp">
 
   <h6>Links & Documentation</h6>
   <ul>

@@ -20,8 +20,8 @@ class Forgot extends Core {
     }
 
     // (C2) CHECK IF VALID USER
-    $this->core->load("Users");
-    $user = $this->core->Users->get($email);
+    $this->Core->load("Users");
+    $user = $this->Users->get($email);
     if (!is_array($user)) {
       $this->error = "$email is not registered.";
       return false;
@@ -48,8 +48,8 @@ class Forgot extends Core {
     );
 
     // (C5) SEND EMAIL TO USER
-    $this->core->load("Mail");
-    return $this->core->Mail->send([
+    $this->Core->load("Mail");
+    return $this->Mail->send([
       "to" => $user["user_email"],
       "subject" => "Password Reset",
       "template" => PATH_PAGES . "MAIL-forgot-a.php",
@@ -84,8 +84,8 @@ class Forgot extends Core {
 
     // (D5) GET USER
     if ($pass) {
-      $this->core->load("Users");
-      $user = $this->core->Users->get($id);
+      $this->Core->load("Users");
+      $user = $this->Users->get($id);
       $pass = is_array($user);
     }
 
@@ -98,7 +98,7 @@ class Forgot extends Core {
     // (D7) CHECK PASS - PROCEED RESET
     // (D7-1) UPDATE USER PASSWORD
     $this->DB->start();
-    $password = $this->core->random(5);
+    $password = $this->Core->random(5);
     $this->DB->update(
       "users", ["user_password"], "`user_id`=?",
       [password_hash($password, PASSWORD_DEFAULT), $id]
@@ -108,8 +108,8 @@ class Forgot extends Core {
     $this->DB->delete("password_reset", "`user_id`=?", [$id]);
 
     // (D7-3) EMAIL TO USER
-    $this->core->load("Mail");
-    $pass = $this->core->Mail->send([
+    $this->Core->load("Mail");
+    $pass = $this->Mail->send([
       "to" => $user["user_email"],
       "subject" => "Password Reset",
       "template" => PATH_PAGES . "MAIL-forgot-b.php",

@@ -62,10 +62,10 @@ class Users extends Core {
 
     // (E2) PAGINATION
     if ($page != null) {
-      $this->core->paginator(
+      $this->Core->paginator(
         $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
       );
-      $sql .= $this->core->page["lim"];
+      $sql .= $this->Core->page["lim"];
     }
 
     // (E3) RESULTS
@@ -108,7 +108,7 @@ class Users extends Core {
 
     // (G3) SESSION START
     $_SESS["user"] = $user;
-    $this->core->Session->create();
+    $this->Session->create();
     return true;
   }
 
@@ -119,14 +119,14 @@ class Users extends Core {
     if (!isset($_SESS["user"])) { return true; }
 
     // (H2) END SESSION
-    $this->core->Session->destroy();
+    $this->Session->destroy();
     return true;
   }
 
   // (I) CREATE NEW NFC TOKEN
   function token ($id) {
     // (I1) UPDATE TOKEN
-    $token = $this->core->random(4);
+    $token = $this->Core->random(4);
     $this->DB->update("users", ["user_token"], "`user_id`=?", [$token, $id]);
 
     // (I2) RETURN ENCODED TOKEN
@@ -166,7 +166,7 @@ class Users extends Core {
     if ($valid) {
       global $_SESS;
       $_SESS["user"] = $user;
-      $this->core->Session->create();
+      $this->Session->create();
       return true;
     }
 

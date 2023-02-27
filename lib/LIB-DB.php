@@ -1,10 +1,10 @@
 <?php
 class DB extends Core {
   // (A) PROPERTIES
-  public $pdo = null; // pdo object
-  public $stmt = null; // sql statement
+  public $pdo = null;    // pdo object
+  public $stmt = null;   // sql statement
   public $lastID = null; // last insert id
-  public $lastRows = 0; // last affected rows
+  public $lastRows = 0;  // last affected rows
 
   // (B) CONSTRUCTOR - CONNECT TO DATABASE
   function __construct ($core) {
@@ -24,11 +24,11 @@ class DB extends Core {
   }
 
   // (D) AUTO-COMMIT OFF
-  function start () { $this->pdo->beginTransaction(); }
+  function start () : void { $this->pdo->beginTransaction(); }
 
   // (E) COMMIT OR ROLLBACK?
   //  $pass : commit or rollback?
-  function end ($pass=true) {
+  function end ($pass=true) : void {
     if ($pass) { $this->pdo->commit(); }
     else { $this->pdo->rollBack(); }
   }
@@ -36,8 +36,7 @@ class DB extends Core {
   // (F) EXECUTE SQL QUERY
   //  $sql : sql query
   //  $data : array of parameters for query
-  // * simply throws exception on sql error, no return results.
-  function query ($sql, $data=null) {
+  function query ($sql, $data=null) : void {
     $this->stmt = $this->pdo->prepare($sql);
     $this->stmt->execute($data);
   }
@@ -97,8 +96,7 @@ class DB extends Core {
   //  $fields : array of fields to insert
   //  $data : data array to insert
   //  $replace : replace instead of insert?
-  // * simply throws exception on sql error, no return results.
-  function insert ($table, $fields, $data, $replace=false) {
+  function insert ($table, $fields, $data, $replace=false) : void {
     // (K1) QUICK CHECK
     $cfields = count($fields);
     $cdata = count($data);
@@ -123,19 +121,15 @@ class DB extends Core {
     }
   }
 
-  // (L) REPLACE
-  //  * simply reuses "insert" above, but with $replace flag
-  function replace ($table, $fields, $data) {
-    $this->insert($table, $fields, $data, true);
-  }
+  // (L) REPLACE - INSERT(), BUT WITH $REPLACE=TRUE
+  function replace ($table, $fields, $data) : void { $this->insert($table, $fields, $data, true); }
 
   // (M) UPDATE SQL HELPER
   //  $table : table to update
   //  $fields : array of fields to update
   //  $where : where clause for update SQL
   //  $data : data array to update
-  // * simply throws exception on sql error, no return results.
-  function update ($table, $fields, $where, $data) {
+  function update ($table, $fields, $where, $data) : void {
     $sql = "UPDATE `$table` SET ";
     foreach ($fields as $f) { $sql .= "`$f`=?,"; }
     $sql = substr($sql, 0, -1) . " WHERE $where";
@@ -147,8 +141,7 @@ class DB extends Core {
   //  $table : table to update
   //  $where : where clause for delete SQL
   //  $data : data array
-  // * simply throws exception on sql error, no return results.
-  function delete ($table, $where, $data=null) {
+  function delete ($table, $where, $data=null) : void {
     $sql = "DELETE FROM `$table` WHERE $where";
     $this->query($sql, $data);
     $this->lastRows = $this->stmt->rowCount();

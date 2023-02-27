@@ -1,9 +1,9 @@
 <?php
 class Route extends Core {
   // (A) RUN URL ENGINE
-  private $path; // current url path
+  private $path;    // current url path
   private $pathlen; // current url path length
-  function run () {
+  function run () : void {
     // (A1) CURRENT URL PATH
     $this->path = rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/\\") . "/";
 
@@ -24,7 +24,7 @@ class Route extends Core {
   }
 
   // (B) RESOLVE CURRENT URL ROUTE
-  function resolve () {
+  function resolve () : void {
     // (B1) GET CURRENT URL PATH
     // http://site.com/ > $this->path = "/"
     // http://site.com/hello/world/ > $this->path = "hello/world/"
@@ -64,7 +64,7 @@ class Route extends Core {
   // (C) LOAD HTML PAGE
   //  $file : exact file name to load
   //  $http : optional http response code
-  function load ($file, $http=null) {
+  function load ($file, $http=null) : void {
     // (C1) ALL PAGES CAN ACCESS CORE & SESSION VARS
     global $_CORE;
     global $_SESS;
@@ -82,10 +82,10 @@ class Route extends Core {
   }
 
   // (D) RESOLVE API REQUEST
-  function api () {
+  function api () : void {
     // (D1) ENFORCE HTTPS (RECOMMENDED)
     if (API_HTTPS && empty($_SERVER["HTTPS"])) {
-      $this->core->respond(0, "Please use HTTPS", null, null, 426);
+      $this->Core->respond(0, "Please use HTTPS", null, null, 426);
     }
 
     // (D2) PARSE URL PATH INTO AN ARRAY - CHECK VALID API REQUEST
@@ -97,7 +97,7 @@ class Route extends Core {
       $_REQ = $this->path[1];
       $valid = file_exists(PATH_LIB . "API-$_MOD.php");
     }
-    if (!$valid) { $this->core->respond(0, "Invalid request", null, null, 400); }
+    if (!$valid) { $this->Core->respond(0, "Invalid request", null, null, 400); }
     unset($this->path); unset($this->pathlen); unset($valid);
 
     // (D3) CORS SUPPORT - ONLY IF NOT LOCALHOST
@@ -125,7 +125,7 @@ class Route extends Core {
       // (D3-3) ACCESS DENIED
       if (!isset($access)) { $access = false; }
       if ($access === false) {
-        $this->core->respond(0, "Calls from $_OGN not allowed", null, null, 403);
+        $this->Core->respond(0, "Calls from $_OGN not allowed", null, null, 403);
       }
 
       // (D3-4) OUTPUT CORS HEADERS IF REQUIRED
@@ -148,7 +148,7 @@ class Route extends Core {
   }
 
   // (E) REGENERATE HTACCESS + MANIFEST FILES
-  function init () {
+  function init () : void {
     // (E1) HTACCESS
     $file = PATH_BASE . ".htaccess";
     if (file_put_contents($file, implode("\r\n", [

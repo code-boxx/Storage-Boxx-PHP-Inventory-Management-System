@@ -7,8 +7,8 @@ class Report extends Core {
     $month = $month<10 ? "0$month" : $month;
     $start = "$year-$month-01 00:00:00";
     $end = "$year-$month-$days 23:59:59";
-    $this->core->load("Settings");
-    $this->core->Settings->defineN("STOCK_MVT", true);
+    $this->Core->load("Settings");
+    $this->Settings->defineN("STOCK_MVT", true);
 
     // (A2) OUTPUT CSV HEADERS
     header("Content-Disposition: attachment; filename=movement-$year-$month.csv;");

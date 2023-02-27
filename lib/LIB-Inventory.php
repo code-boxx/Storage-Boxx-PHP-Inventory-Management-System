@@ -82,10 +82,10 @@ class Inventory extends Core {
 
     // (D2) PAGINATION
     if ($page != null) {
-      $this->core->paginator(
+      $this->Core->paginator(
         $this->DB->fetchCol("SELECT COUNT(*) $sql", $data), $page
       );
-      $sql .= $this->core->page["lim"];
+      $sql .= $this->Core->page["lim"];
     }
 
     // (D3) RESULTS
@@ -134,10 +134,10 @@ class Inventory extends Core {
 
     // (E4) SEND NOTIFICATION IF MONITORED ITEM
     if ($item["stock_low"]!=0 && $newqty<=$item["stock_low"]) {
-      $this->core->load("Push");
-      $this->core->Push->send("[{$item["stock_sku"]}] {$item["stock_name"]}",
+      $this->Core->load("Push");
+      $this->Push->send("[{$item["stock_sku"]}] {$item["stock_name"]}",
         "Item is low on stock - {$newqty} {$item["stock_unit"]}",
-        HOST_ASSETS . "PUSH-ico.jpg", HOST_ASSETS . "PUSH-bg.jpg"
+        HOST_ASSETS . "STORAGE-BOXX-PUSH-A.webp", HOST_ASSETS . "STORAGE-BOXX-PUSH-B.webp"
       );
     }
 
@@ -152,7 +152,7 @@ class Inventory extends Core {
   function getMove ($sku, $page=null) {
     // (F1) PAGINATION
     if ($page != null) {
-      $this->core->paginator($this->DB->fetchCol(
+      $this->Core->paginator($this->DB->fetchCol(
         "SELECT COUNT(*) FROM `stock_mvt` WHERE `stock_sku`=?", [$sku]
       ), $page);
     }
@@ -163,7 +163,7 @@ class Inventory extends Core {
     LEFT JOIN `users` u USING (`user_id`)
     WHERE m.`stock_sku`=?
     ORDER BY `mvt_date` DESC";
-    if ($page != null) { $sql .= $this->core->page["lim"]; }
+    if ($page != null) { $sql .= $this->Core->page["lim"]; }
 
     // (F3) RESULTS
     return $this->DB->fetchAll($sql, [$sku]);

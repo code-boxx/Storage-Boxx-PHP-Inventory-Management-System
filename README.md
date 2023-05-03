@@ -26,7 +26,8 @@ Storage Boxx is an open-source PHP Inventory Management System. It is not a "sup
 1) LAMP/WAMP/MAMP/XAMPP
 2) Apache Mod Rewrite
 3) PHP MYSQL PDO Extension
-4) At least PHP 8.0
+4) PHP OPENSSL Extension
+5) At least PHP 8.0
 <br><br>
 
 ## :floppy_disk: INSTALLATION

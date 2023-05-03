@@ -44,8 +44,12 @@ class Settings extends Core {
   }
 
   // (E) SAVE SETTINGS
+  //  $settings : string, json encoded array of settings in key => value
   //  $settings : array, key => value
   function save ($settings) {
+    if (!is_array($settings)) {
+      $settings = json_decode($settings, true);
+    }
     foreach ($settings as $k=>$v) {
       $this->DB->update("settings", ["setting_value"], "`setting_name`=?", [$v, $k]);
     }

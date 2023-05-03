@@ -42,13 +42,17 @@ class DB extends Core {
   }
 
   // (G) FETCH ALL (MULTIPLE ROWS)
-  //  $sql : SQL query
-  //  $data : array of parameters for query
-  //  $key : optional, use this field as the array key
+  //  $sql : sql query
+  //  $data : array, parameters for sql query
+  //  $key : optional, arrange results by this key
+  //    null : pdo::fetch_assoc
+  //    string : use this field as the array key
+  //    true : flat array, make sure select query only has 1 column!
   //  * returns null if no results
   function fetchAll ($sql, $data=null, $key=null) {
     $this->query($sql, $data);
     if ($key === null) { $results = $this->stmt->fetchAll(); }
+    else if ($key === true) { $results = $this->stmt->fetchAll(PDO::FETCH_COLUMN); }
     else {
       $results = [];
       while ($row = $this->stmt->fetch()) { $results[$row[$key]] = $row; }
@@ -57,8 +61,8 @@ class DB extends Core {
   }
 
   // (H) FETCH ALL (KEY => VALUE)
-  //  $sql : SQL query
-  //  $data : array of parameters for query
+  //  $sql : sql query
+  //  $data : array, parameters for sql query
   //  $key : use this field as the array key
   //  $value : use this field as the value
   //  * returns null if no results
@@ -72,8 +76,8 @@ class DB extends Core {
   }
 
   // (I) FETCH (SINGLE ROW)
-  //  $sql : SQL query
-  //  $data : array of parameters for query
+  //  $sql : sql query
+  //  $data : array, parameters for sql query
   //  * returns null if no results
   function fetch ($sql, $data=null) {
     $this->query($sql, $data);
@@ -82,8 +86,8 @@ class DB extends Core {
   }
 
   // (J) FETCH (SINGLE COLUMN)
-  //  $sql : SQL query
-  //  $data : array of parameters for query
+  //  $sql : sql query
+  //  $data : array, parameters for sql query
   //  * returns null if no results
   function fetchCol ($sql, $data=null) {
     $this->query($sql, $data);

@@ -1,42 +1,55 @@
 <?php
 class Route extends Core {
-  // (A) RUN URL ENGINE
-  private $path;    // current url path
-  private $pathlen; // current url path length
+  public $path;    // current url path
+  public $pathlen; // current url path length
+  public $mod;     // current requested api module
+  public $act;     // current requested api action
+  public $origin;  // client origin, e.g. http://site.com
+  public $orihost; // client origin host, e.g. site.com
+
+  // (A) RUN URL ROUTING ENGINE
   function run () : void {
-    // (A1) CURRENT URL PATH
-    $this->path = rtrim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/\\") . "/";
-
-    // (A2) THIS IS AN API REQUEST
-    if (
-      strlen($this->path) >= strlen(HOST_API) &&
-      substr($this->path, 0, strlen(HOST_API)) == HOST_API
-    ) {
-      define("API_MODE", 1);
-      $this->api();
-    }
-
-    // (A3) A "NORMAL" HTTP REQUEST
-    else {
-      define("WEB_MODE", 1);
-      $this->resolve();
-    }
-  }
-
-  // (B) RESOLVE CURRENT URL ROUTE
-  function resolve () : void {
-    // (B1) GET CURRENT URL PATH
+    // (A1) CLEAN CURRENT URL PATH
     // http://site.com/ > $this->path = "/"
     // http://site.com/hello/world/ > $this->path = "hello/world/"
+    $this->path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
     if (substr($this->path, 0, strlen(HOST_BASE_PATH)) == HOST_BASE_PATH) {
       $this->path = substr($this->path, strlen(HOST_BASE_PATH));
     }
     $this->path = rtrim($this->path, "/\\") . "/";
     $this->pathlen = strlen($this->path);
 
-    // (B2) PRE-RESOLVE HOOK
-    require PATH_LIB . "CORE-Routes.php";
-    if (isset($override)) { $this->path = $override($this->path); }
+    // (A2) MISSING ASSET FILE
+    if (substr($this->path, 0, 6) == "assets") {
+      $this->load("PAGE-404.php", 404);
+    }
+
+    // (A3) THIS IS AN API REQUEST
+    else if (
+      strlen($this->path) >= strlen(HOST_API) &&
+      substr($this->path, 0, strlen(HOST_API)) == HOST_API
+    ) {
+      $this->Core->mode = "A";
+      $this->api();
+    }
+
+    // (A4) A "NORMAL" HTTP REQUEST
+    else {
+      $this->Core->mode = "W";
+      $this->resolve();
+    }
+  }
+
+  // (B) RESOLVE CURRENT URL ROUTE
+  function resolve () : void {
+    // (B1) LOAD ROUTE OVERRIDE
+    require PATH_LIB . "HOOK-Routes.php";
+
+    // (B2) MANUAL ROUTE OVERRIDE
+    if (isset($override)) {
+      $this->path = $override($this->path);
+      $this->pathlen = strlen($this->path);
+    }
 
     // (B3) EXACT ROUTES HAVE PRECEDENCE
     if (isset($routes[$this->path])) {
@@ -65,11 +78,8 @@ class Route extends Core {
   //  $file : exact file name to load
   //  $http : optional http response code
   function load ($file, $http=null) : void {
-    // (C1) ALL PAGES CAN ACCESS CORE & SESSION VARS
+    // (C1) ALL PAGES CAN ACCESS CORE
     global $_CORE;
-    global $_SESS;
-    $_PATH = $this->path;
-    $this->path = null; $this->pathlen = null;
 
     // (C2) LOAD SPECIFIED PAGE
     if (file_exists(PATH_PAGES . $file)) {
@@ -89,62 +99,51 @@ class Route extends Core {
     }
 
     // (D2) PARSE URL PATH INTO AN ARRAY - CHECK VALID API REQUEST
-    // http://site.com/api/module/request > $this->path = ["module", "request"]
-    $this->path = explode("/", rtrim(substr($this->path, strlen(HOST_API)), "/\\"));
-    $valid = count($this->path)==2;
+    // http://site.com/api/module/action
+    $request = explode("/", rtrim(substr($this->path, strlen(HOST_API)), "/\\"));
+    $valid = count($request)==2;
     if ($valid) {
-      $_MOD = $this->path[0];
-      $_REQ = $this->path[1];
-      $valid = file_exists(PATH_LIB . "API-$_MOD.php");
+      $this->mod = $request[0];
+      $this->act = $request[1];
+      $valid = file_exists(PATH_LIB . "API-{$this->mod}.php");
+      unset($request);
     }
     if (!$valid) { $this->Core->respond(0, "Invalid request", null, null, 400); }
-    unset($this->path); unset($this->pathlen); unset($valid);
 
     // (D3) CORS SUPPORT - ONLY IF NOT LOCALHOST
-    $_OGN = $_SERVER["HTTP_ORIGIN"] ?? $_SERVER["HTTP_REFERER"] ?? $_SERVER["REMOTE_ADDR"] ?? "" ;
-    $_OGN_HOST = parse_url($_OGN, PHP_URL_HOST);
-    if (!in_array($_OGN, ["::1", "127.0.0.1", "localhost"])) {
-      // (D3-1) API ACCESS OVERRIDE
-      // do your own access checks in cors-api-module.php > $access = true/false
-      if (file_exists(PATH_LIB . "CORS-API-$_MOD.php")) {
-        require PATH_LIB . "CORS-API-$_MOD.php";
-      }
+    $this->origin = $_SERVER["HTTP_ORIGIN"] ?? $_SERVER["HTTP_REFERER"] ?? $_SERVER["REMOTE_ADDR"] ?? "" ;
+    $this->orihost = parse_url($this->origin, PHP_URL_HOST);
+    if ($this->orihost=="") { $this->orihost = $this->origin; }
+    if (!in_array($this->orihost, ["::1", "127.0.0.1", "localhost"])) {
+      // (D3-1) USE CORE-CONFIG.PHP CORS RULE
+      // false - only calls from host_name allowed
+      if (API_CORS===false && $this->orihost!=HOST_NAME) { $access = false; }
+      // string - allow calls from api_cors only
+      else if (is_string(API_CORS) && $this->orihost!=API_CORS) { $access = false; }
+      // array - specified domains in api_cors only
+      else if (is_array(API_CORS) && !in_array($this->orihost, API_CORS)) { $access = false; }
+      // true - anything goes
+      else { $access = true; }
 
-      // (D3-2) USE CORE-CONFIG.PHP CORS RULE
-      else {
-        // false - only calls from host_name allowed
-        if (API_CORS===false && $_OGN_HOST!=HOST_NAME) { $access = false; }
-        // string - allow calls from api_cors only
-        else if (is_string(API_CORS) && $_OGN_HOST!=API_CORS) { $access = false; }
-        // array - specified domains in api_cors only
-        else if (is_array(API_CORS) && !in_array($_OGN_HOST, API_CORS)) { $access = false; }
-        // true - anything goes
-        else { $access = true; }
-      }
+      // (D3-2) MANUAL OVERRIDE
+      require PATH_LIB . "HOOK-API-CORS.php";
 
       // (D3-3) ACCESS DENIED
       if (!isset($access)) { $access = false; }
       if ($access === false) {
-        $this->Core->respond(0, "Calls from $_OGN not allowed", null, null, 403);
+        $this->Core->respond(0, "Calls from $this->origin not allowed", null, null, 403);
       }
 
       // (D3-4) OUTPUT CORS HEADERS IF REQUIRED
-      if ($_OGN_HOST != HOST_NAME) {
-        header("Access-Control-Allow-Origin: $_OGN");
+      if ($this->orihost != HOST_NAME) {
+        header("Access-Control-Allow-Origin: $this->origin");
         header("Access-Control-Allow-Credentials: true");
       }
     }
 
     // (D4) LOAD API HANDLER
-    // $_MOD : requested module. e.g. user
-    // $_REQ : requested action. e.g. save
-    // $_OGN : client origin. e.g. https://site.com/
-    // $_OGN_HOST : host name. e.g. site.com
-    // $_CORE : core boxx engine
-    // $_SESS : session vars
     global $_CORE;
-    global $_SESS;
-    require PATH_LIB . "API-$_MOD.php";
+    require PATH_LIB . "API-{$this->mod}.php";
   }
 
   // (E) REGENERATE HTACCESS + MANIFEST FILES

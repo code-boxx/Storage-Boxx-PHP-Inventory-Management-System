@@ -3,29 +3,21 @@ $_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-push.js", "defer"]]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <h3 class="mb-3">SEND PUSH NOTIFICATION</h3>
 <form id="push_form" class="bg-white border p-4 mb-3" onsubmit="return send()">
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">format_quote</span>
-    </div>
-    <input type="text" class="form-control" id="push_title" required placeholder="Title">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="push_title" required>
+    <label>Title</label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">textsms</span>
-    </div>
-    <input type="text" class="form-control" id="push_txt" required placeholder="Message">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="push_txt" required>
+    <label>Message</label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">info</span>
-    </div>
-    <input type="text" class="form-control" id="push_ico" required placeholder="Icon" value="<?=HOST_ASSETS?>STORAGE-BOXX-PUSH-A.webp">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="push_ico" required value="<?=HOST_ASSETS?>push-a.webp">
+    <label>Icon</label>
   </div>
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">image</span>
-    </div>
-    <input type="text" class="form-control" id="push_img" required placeholder="Image" value="<?=HOST_ASSETS?>STORAGE-BOXX-PUSH-B.webp">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="push_img" required value="<?=HOST_ASSETS?>push-b.webp">
+    <label>Cover Image</label>
   </div>
   <input type="submit" class="col btn btn-primary" value="Send">
 </form>

@@ -69,7 +69,7 @@ var move = {
   // (C) SAVE MOVEMENT
   save : () => {
     cb.api({
-      mod : "inventory", req : "move",
+      mod : "inventory", act : "move",
       data : {
         sku : move.hmSKU.value,
         direction : move.hmDir.value,

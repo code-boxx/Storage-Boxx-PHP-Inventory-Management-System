@@ -26,6 +26,7 @@ self.addEventListener("install", evt => {
       // (A5) PAGES
       "assets/PAGE-check.js",
       "assets/PAGE-forgot.js",
+      "assets/PAGE-home-inv.js",
       "assets/PAGE-home.js",
       "assets/PAGE-inv-check.js",
       "assets/PAGE-inv-import.js",

@@ -1,6 +1,6 @@
 <?php
 // (A) ALREADY SIGNED IN
-if (isset($_SESS["user"])) { $_CORE->redirect(); }
+if (isset($_CORE->Session->data["user"])) { $_CORE->redirect(); }
 
 // (B) HTML PAGE
 $_PMETA = ["load" => [
@@ -19,18 +19,14 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       Enter your email/password<span id="nfc-login-a" class="d-none"> or click on "NFC"</span>
     </div>
 
-    <div class="input-group mb-4">
-      <div class="input-group-prepend">
-        <span class="input-group-text mi">email</span>
-      </div>
-      <input type="email" id="login-email" class="form-control" placeholder="Email" required>
+    <div class="form-floating mb-4">
+      <input type="email" id="login-email" class="form-control" required>
+      <label>Email</label>
     </div>
 
-    <div class="input-group mb-4">
-      <div class="input-group-prepend">
-        <span class="input-group-text mi">lock</span>
-      </div>
-      <input type="password" id="login-pass" class="form-control" placeholder="Password" required>
+    <div class="form-floating mb-4">
+      <input type="password" id="login-pass" class="form-control" required>
+      <label>Password</label>
     </div>
 
     <div class="d-flex align-items-stretch mb-4">

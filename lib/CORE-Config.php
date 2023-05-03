@@ -6,8 +6,8 @@ define("HOST_BASE_PATH", parse_url(HOST_BASE, PHP_URL_PATH));
 define("HOST_ASSETS", HOST_BASE . "assets/");
 
 // (B) API ENDPOINT
-define("HOST_API", HOST_BASE_PATH . "api/");
-define("HOST_API_BASE", HOST_BASE . "api/");
+define("HOST_API", "api/");
+define("HOST_API_BASE", HOST_BASE . HOST_API);
 define("API_HTTPS", false);
 define("API_CORS", false);
 // define("API_CORS", false); // no cors, accept host_name only
@@ -29,10 +29,10 @@ define("PATH_ASSETS", PATH_BASE . "assets" . DIRECTORY_SEPARATOR);
 define("PATH_PAGES", PATH_BASE . "pages" . DIRECTORY_SEPARATOR);
 
 // (E) JSON WEB TOKEN
-define("JWT_SECRET", "YOUR-SECRET-KEY");
-define("JWT_ISSUER", "YOUR-NAME");
 define("JWT_ALGO", "HS256");
-define("JWT_EXPIRE", 0); // in seconds, 0 for none
+define("JWT_EXPIRE", 0);
+define("JWT_ISSUER", "YOUR-NAME");
+define("JWT_SECRET", "YOUR-SECRET-KEY");
 
 // (F) PUSH NOTIFICATION KEYS
 define("PUSH_PUBLIC", "PUBLIC-KEY");
@@ -51,3 +51,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors", 1);
 ini_set("log_errors", 0);
 define("ERR_SHOW", true);
+
+// (H) USER LEVELS
+define("USR_LVL", [
+  "A" => "Admin", "U" => "User"
+]);

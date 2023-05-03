@@ -37,7 +37,7 @@ var check = {
         check.verify();
         check.hnStat.innerHTML = "NFC";
       };
-      
+
       // (B3-2) ON NFC READ ERROR
       nfc.onerror = err => {
         nfc.stop();
@@ -58,16 +58,16 @@ var check = {
   // (C) VERIFY VALID SKU BEFORE SHOW HISTORY
   verify : () => {
     cb.api({
-      mod : "inventory", req : "get",
-      data : { sku : check.hSKU.value },
+      mod : "inventory", act : "get",
+      data : {
+        sku : check.hSKU.value,
+        check : true
+      },
       passmsg : false,
+      onfail : () => cb.modal("Invalid Item", "SKU is not found in database."),
       onpass : res => {
-        if (res.data===null) {
-          cb.modal("Invalid Item", "SKU is not found in database.");
-        } else {
-          check.load(check.hSKU.value);
-          check.hSKU.value = "";
-        }
+        check.load(check.hSKU.value);
+        check.hSKU.value = "";
       }
     });
     return false;
@@ -81,7 +81,7 @@ var check = {
     onload : () => {
       check.sku = sku;
       check.pg = 1;
-      cb.page(1);
+      cb.page(2);
       check.list();
     }
   }),

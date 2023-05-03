@@ -4,17 +4,21 @@ $_CORE->load("Inventory");
 $items = $_CORE->Inventory->getMonitor();
 
 // (B) DASHBOARD
-$_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-home.js", "defer"]]];
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-home.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-home-inv.js", "defer"]
+]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (B1) PUSH NOTIFICATIONS -->
 <div id="push-stat" class="alert alert-danger d-none">Test</div>
-<h3 class="mb-3">ITEMS WATCH LIST</h3>
+<h3 class="mb-1">ITEMS WATCH LIST</h3>
+<div class="mb-3 text-secondary">* click on an item to check the suppliers</div>
 
 <!-- (B2) WATCH LIST -->
-<ul class="list-group">
+<div class="zebra my-4">
 <?php if (is_array($items)) { foreach ($items as $i) {
 $low = $i["stock_qty"] <= $i["stock_low"]; ?>
-<li class="list-group-item d-flex align-items-center text-<?=$low?"danger":"secondary"?>">
+<div class="d-flex align-items-center border p-2<?=$low?" text-danger":""?>" onclick="inv.sup('<?=$i["stock_sku"]?>')">
   <div class="flex-grow-1">
     <div class="fw-bold">[<?=$i["stock_sku"]?>] <?=$i["stock_name"]?></div>
     <div>
@@ -30,7 +34,7 @@ $low = $i["stock_qty"] <= $i["stock_low"]; ?>
     <div class="display-6"><?=$i["stock_qty"]?></div>
     <div><?=$i["stock_unit"]?></div>
   </div>
-</li>
-<?php }} else { echo "<li class='list-group-item'>No items on the watch list.</li>"; } ?>
-</ul>
+</div>
+<?php }} else { echo "No items on the watch list."; } ?>
+</div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

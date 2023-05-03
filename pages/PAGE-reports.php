@@ -15,30 +15,24 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   <!-- (B1) MOVEMENT CSV -->
   <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/movement">
     <div class="fw-bold text-danger mb-3">ITEMS MOVEMENT</div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Range</span>
-      </div>
+    <div class="form-floating mb-4">
       <select class="form-select" name="range">
         <option value="A">All Items</option>
         <option value="S">Summary</option>
       </select>
+      <label>Range</label>
     </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Month</span>
-      </div>
+    <div class="form-floating mb-4">
       <select name="month" class="form-select"><?php foreach ($months as $m=>$mth) {
         printf("<option value='%u'%s>%s</option>",
           $m, $m==$monthNow?" selected":"", $mth
         );
       } ?></select>
+      <label>Month</label>
     </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Year</span>
-      </div>
+    <div class="form-floating mb-4">
       <input type="number" name="year" max="<?=$yearNow?>" step="1" class="form-control" required value="<?=$yearNow?>">
+      <label>Year</label>
     </div>
     <input type="submit" class="w-100 col btn btn-primary" value="CSV">
   </form>
@@ -46,14 +40,12 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   <!-- (B2) ITEMS LIST -->
   <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/items">
     <div class="fw-bold text-danger mb-3">ITEMS LIST</div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Range</span>
-      </div>
+    <div class="form-floating mb-4">
       <select class="form-select" name="range">
         <option value="">All Items</option>
         <option value="M">Monitored Items Only</option>
       </select>
+      <label>Range</label>
     </div>
     <input type="submit" class="w-100 col btn btn-primary" value="CSV">
   </form>

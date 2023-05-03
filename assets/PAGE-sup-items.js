@@ -7,7 +7,7 @@ var items = {
     items.pg = 1;
     items.find = "";
     items.id = id;
-    cb.page(1);
+    cb.page(2);
     cb.load({
       page : "suppliers/items",
       target : "cb-page-2",
@@ -18,7 +18,7 @@ var items = {
 
   // (B) LIST () : SHOW SUPPLIER ITEMS
   list : silent => {
-    if (silent!==true) { cb.page(1); }
+    if (silent!==true) { cb.page(2); }
     cb.load({
       page : "suppliers/items/list", target : "item-list",
       data : {
@@ -52,7 +52,7 @@ var items = {
       sku : sku ? sku : "",
       id : items.id
     },
-    onload : () => cb.page(2)
+    onload : () => cb.page(3)
   }),
 
   // (F) SAVE ITEM
@@ -74,7 +74,7 @@ var items = {
 
     // (F3) AJAX
     cb.api({
-      mod : "suppliers", req : "saveItem",
+      mod : "suppliers", act : "saveItem",
       data : data,
       passmsg : "Supplier item saved",
       onpass : items.list
@@ -85,7 +85,7 @@ var items = {
   // (G) DELETE ITEM
   //  sku : item sku
   del : sku => cb.modal("Please confirm", `Remove this item from the supplier?`, () => cb.api({
-    mod : "suppliers", req : "delItem",
+    mod : "suppliers", act : "delItem",
     data : { id : items.id, sku : sku },
     passmsg : "Supplier item deleted",
     onpass : items.list

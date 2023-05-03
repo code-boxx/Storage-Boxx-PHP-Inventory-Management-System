@@ -7,7 +7,7 @@ function save () {
 
   // (B) API CALL
   cb.api({
-    mod : "settings", req : "save",
+    mod : "settings", act : "save",
     data : { settings : JSON.stringify(data) },
     passmsg : "Settings Saved"
   });

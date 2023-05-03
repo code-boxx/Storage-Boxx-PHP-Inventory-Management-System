@@ -1,7 +1,7 @@
 var iimport = {
   // (A) LOAD "IMPORT ITEMS" PAGE
   init : () => {
-    cb.page(1);
+    cb.page(2);
     cb.load({
       page : "inventory/import",
       target : "cb-page-2"
@@ -79,7 +79,7 @@ var iimport = {
     if (row!=null) {
       let col = row.querySelectorAll("td");
       cb.api({
-        mod : "inventory", req : "import",
+        mod : "inventory", act : "import",
         passmsg : false, loading : false, nofail : true,
         data : {
           sku : col[0].innerHTML,
@@ -107,7 +107,7 @@ var iimport = {
     else {
       let btn = document.getElementById("item-import-go");
       btn.innerHTML = "Done - Go Back";
-      btn.onclick = () => cb.page(0);
+      btn.onclick = () => cb.page(1);
       btn.disabled = false;
       inv.list(true);
       cb.loading(false);

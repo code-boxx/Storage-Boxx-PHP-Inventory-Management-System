@@ -8,7 +8,7 @@ $sup = $_CORE->autoCall("Suppliers", "get");
     <h3 class="mb-0">SUPPLIER ITEMS</h3>
     <small class="fw-bold"><?=$sup["sup_name"]?></small>
   </div>
-  <button class="btn btn-danger mi me-1" onclick="cb.page(0)">
+  <button class="btn btn-danger mi me-1" onclick="cb.page(1)">
     reply
   </button>
 </div>

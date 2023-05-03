@@ -3,7 +3,7 @@ var usr = {
   pg : 1, // current page
   find : "", // current search
   list : () => {
-    cb.page(0);
+    cb.page(1);
     cb.load({
       page : "users/list", target : "user-list",
       data : {
@@ -33,7 +33,7 @@ var usr = {
   addEdit : id => cb.load({
     page : "users/form", target : "cb-page-2",
     data : { id : id ? id : "" },
-    onload : () => cb.page(1)
+    onload : () => cb.page(2)
   }),
 
   // (E) SAVE USER
@@ -55,7 +55,7 @@ var usr = {
 
     // (E3) AJAX
     cb.api({
-      mod : "users", req : "save", data : data,
+      mod : "users", act : "save", data : data,
       passmsg : "User Saved",
       onpass : usr.list
     });
@@ -65,7 +65,7 @@ var usr = {
   // (F) DELETE USER
   //  id : int, user ID
   del : id => cb.modal("Please confirm", "Delete user?", () => cb.api({
-    mod : "users", req : "del",
+    mod : "users", act : "del",
     data : { id : id },
     passmsg : "User Deleted",
     onpass : usr.list
@@ -88,7 +88,7 @@ var usr = {
       } else {
         usr.hnStat.innerHTML = "Web NFC not available";
       }
-      cb.page(1);
+      cb.page(2);
     }
   }),
 
@@ -99,7 +99,7 @@ var usr = {
 
     // (H2) REGISTER WITH SERVER + GET JWT
     cb.api({
-      mod : "users", req : "token",
+      mod : "users", act : "token",
       data : { id : id },
       passmsg : false,
       onpass : res => {
@@ -131,7 +131,7 @@ var usr = {
 
   // (I) NULLIFY NFC TOKEN
   nfcNull : id => cb.api({
-    mod : "users", req : "notoken",
+    mod : "users", act : "notoken",
     data : { id : id },
     passmsg : "Login token nullified.",
     onpass : res => usr.hnNull.disabled = true
@@ -140,7 +140,7 @@ var usr = {
   // (J) END WRITE NFC SESSION
   nfcBack : () => {
     nfc.stop();
-    cb.page(0);
+    cb.page(1);
   }
 };
 window.addEventListener("load", usr.list);

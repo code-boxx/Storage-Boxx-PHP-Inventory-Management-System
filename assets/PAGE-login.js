@@ -2,7 +2,7 @@ var login = {
   // (A) PROCESS LOGIN FORM
   go : () => {
     cb.api({
-      mod : "session", req : "login",
+      mod : "session", act : "login",
       data : {
         email : document.getElementById("login-email").value,
         password : document.getElementById("login-pass").value
@@ -39,7 +39,7 @@ var login = {
 
       // (C1-2) API LOGIN
       cb.api({
-        mod : "session", req : "intoken",
+        mod : "session", act : "intoken",
         data : { token : token },
         passmsg : false,
         onpass : () => location.href = cbhost.base,

@@ -65,7 +65,7 @@ var pusher = {
 
   // (E) UPDATE SERVER SUBSCRIPTION
   save : () => cb.api({
-    mod : "push", req : "save",
+    mod : "push", act : "save",
     data : {
       endpoint : pusher.sub.endpoint,
       sub : JSON.stringify(pusher.sub)

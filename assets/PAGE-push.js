@@ -1,6 +1,6 @@
 function send () {
   cb.api({
-    mod : "push", req : "send",
+    mod : "push", act : "send",
     data : {
       title : document.getElementById("push_title").value,
       body : document.getElementById("push_txt").value,

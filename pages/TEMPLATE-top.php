@@ -20,7 +20,7 @@
     <meta name="msapplication-TileImage" content="<?=HOST_ASSETS?>icon-512.png">
     <meta name="msapplication-TileColor" content="#ffffff">
 
-    <?php if (isset($_SESS["user"])) { ?>
+    <?php if (isset($_CORE->Session->data["user"])) { ?>
     <!-- (A3) WEB APP MANIFEST -->
     <!-- https://web.dev/add-manifest/ -->
     <link rel="manifest" href="<?=HOST_BASE?>CB-manifest.json">
@@ -59,7 +59,7 @@
     if (isset($_PMETA)) { unset($_PMETA); } ?>
   </head>
   <body class="bg-light">
-    <!-- (B) COMMON SHARED INTERFACE -->
+  <!-- (B) COMMON SHARED INTERFACE -->
     <!-- (B1) NOW LOADING -->
     <div id="cb-loading" class="d-flex justify-content-center align-items-center cb-hide">
       <div class="spinner-border text-light" role="status">
@@ -92,15 +92,13 @@
 
     <!-- (C) MAIN INTERFACE -->
     <div id="cb-body" class="d-flex">
-      <?php if (isset($_SESS["user"])) { ?>
+      <?php if (isset($_CORE->Session->data["user"])) { ?>
       <!-- (C1) LEFT SIDEBAR -->
       <nav id="cb-side" class="bg-dark text-white p-2">
       <ul class="navbar-nav">
         <li class="nav-item">
           <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="32" height="32" class="me-1">
           <hr>
-        </li>
-        <li class="nav-item">
           <a class="nav-link ms-2" href="<?=HOST_BASE?>">
             <span class="mi mi-smol">dashboard</span> Dashboard
           </a>
@@ -147,29 +145,29 @@
 
       <!-- (C2) RIGHT CONTENTS -->
       <div class="flex-grow-1">
-        <?php if (isset($_SESS["user"])) { ?>
+        <?php if (isset($_CORE->Session->data["user"])) { ?>
         <!-- (C2-1) TOP NAV -->
-        <nav class="d-flex bg-dark text-white p-1">
-          <div class="flex-grow-1">
-            <button id="cb-toggle" class="btn btn-sm mi text-white" onclick="cb.toggle()">
-              menu
-            </button>
-          </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark"><div class="container-fluid">
+          <button id="cb-toggle" class="navbar-toggler btn btn-sm mi text-white" onclick="cb.toggle()">
+            menu
+          </button>
+          <div class="navbar-nav me-auto mb-2 mb-lg-0"></div>
+
           <div class="dropdown">
             <button class="btn btn-sm text-white mi" type="button" data-bs-toggle="dropdown">
-              person_outline
+              person
             </button>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
               <li class="dropdown-header">
-                <?=$_SESS["user"]["user_name"]?><br>
-                <?=$_SESS["user"]["user_email"]?>
+                <?=$_CORE->Session->data["user"]["user_name"]?><br>
+                <?=$_CORE->Session->data["user"]["user_email"]?>
               </li>
               <li class="dropdown-item text-warning" onclick="cb.bye()">
                 <i class="mi mi-smol">logout</i> Logout
               </li>
             </ul>
           </div>
-        </nav>
+        </div></nav>
         <?php } ?>
 
         <!-- (C2-2) CONTENTS -->

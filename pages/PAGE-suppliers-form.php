@@ -9,35 +9,27 @@ if ($edit) { $sup = $_CORE->autoCall("Suppliers", "get"); }
   <div class="bg-white border p-4 mb-3">
     <input type="hidden" id="sup-id" value="<?=isset($sup)?$sup["sup_id"]:""?>">
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text mi">corporate_fare</span>
-      </div>
-      <input type="text" id="sup-name" class="form-control" required value="<?=$edit?$sup["sup_name"]:""?>" placeholder="Supplier Name">
+    <div class="form-floating mb-4">
+      <input type="text" id="sup-name" class="form-control" required value="<?=$edit?$sup["sup_name"]:""?>">
+      <label>Supplier Name</label>
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text mi">call</span>
-      </div>
-      <input type="text" id="sup-tel" class="form-control" required value="<?=$edit?$sup["sup_tel"]:""?>" placeholder="Supplier Telephone">
+    <div class="form-floating mb-4">
+      <input type="text" id="sup-tel" class="form-control" required value="<?=$edit?$sup["sup_tel"]:""?>">
+      <label>Supplier Telephone</label>
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text mi">email</span>
-      </div>
-      <input type="email" id="sup-email" class="form-control" required value="<?=$edit?$sup["sup_email"]:""?>" placeholder="Supplier Email">
+    <div class="form-floating mb-4">
+      <input type="email" id="sup-email" class="form-control" required value="<?=$edit?$sup["sup_email"]:""?>">
+      <label>Supplier Email</label>
     </div>
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text mi">signpost</span>
-      </div>
-      <input type="text" id="sup-address" class="form-control" value="<?=$edit?$sup["sup_address"]:""?>" placeholder="Supplier Address (if any)">
+    <div class="form-floating">
+      <input type="text" id="sup-address" class="form-control" value="<?=$edit?$sup["sup_address"]:""?>">
+      <label>Supplier Address (If Any)</label>
     </div>
   </div>
 
-  <input type="button" class="col btn btn-danger" value="Back" onclick="cb.page(0)">
+  <input type="button" class="col btn btn-danger" value="Back" onclick="cb.page(1)">
   <input type="submit" class="col btn btn-primary" value="Save">
 </form>

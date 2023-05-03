@@ -1,5 +1,6 @@
 <?php
 // (A) GET USER
+$_POST["hash"] = "N";
 $user = $_CORE->autoCall("Users", "get");
 if (!is_array($user)) { exit("Invalid user"); }
 ?>
@@ -20,7 +21,7 @@ if (!is_array($user)) { exit("Invalid user"); }
 <div class="fw-bold text-danger">NULLIFY NFC TOKEN</div>
 <div class="bg-white border p-4 mb-3">
   <input type="button" id="nfc-null" value="Nullify Login Token" onclick="usr.nfcNull(<?=$_POST["id"]?>)"
-         class="btn btn-primary"<?=$user["user_token"]==""?" disabled":""?>>
+         class="btn btn-primary"<?=$user["hash_code"]==""?" disabled":""?>>
   <div class="text-secondary mt-2">
     * The user's NFC login token will be nullified, but the login email/password remains unaffected.
   </div>

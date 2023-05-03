@@ -3,7 +3,7 @@ var sup = {
   pg : 1, // current page
   find : "", // current search
   list : silent => {
-    if (silent!==true) { cb.page(0); }
+    if (silent!==true) { cb.page(1); }
     cb.load({
       page : "suppliers/list", target : "sup-list",
       data : {
@@ -33,7 +33,7 @@ var sup = {
   addEdit : id => cb.load({
     page : "suppliers/form", target : "cb-page-2",
     data : { id : id ? id : "" },
-    onload : () => cb.page(1)
+    onload : () => cb.page(2)
   }),
 
   // (E) SAVE SUPPLIER
@@ -50,7 +50,7 @@ var sup = {
 
     // (E2) AJAX
     cb.api({
-      mod : "suppliers", req : "save",
+      mod : "suppliers", act : "save",
       data : data,
       passmsg : "Supplier saved",
       onpass : sup.list
@@ -61,7 +61,7 @@ var sup = {
   // (F) DELETE SUPPLIER
   //  id : supplier id
   del : id => cb.modal("Please confirm", `Delete supplier? This supplier and its items will be lost!`, () => cb.api({
-    mod : "suppliers", req : "del",
+    mod : "suppliers", act : "del",
     data : { id : id },
     passmsg : "Supplier deleted",
     onpass : sup.list

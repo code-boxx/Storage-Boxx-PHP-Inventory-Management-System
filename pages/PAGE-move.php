@@ -11,36 +11,28 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) ITEM MOVEMENT -->
 <div class="fw-bold text-danger">DIRECTION &amp; QUANTITY</div>
 <form id="mvt-form" class="bg-white border p-4 mb-4" autocomplete="off" onsubmit="return move.save()">
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">compare_arrows</span>
-    </div>
+  <div class="form-floating mb-4">
     <select class="form-select" id="mvt-direction"><?php
       foreach (STOCK_MVT as $c=>$m) {
         echo "<option value='$c'>$m</option>";
       }
     ?></select>
+    <label>Direction</label>
   </div>
 
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">confirmation_number</span>
-    </div>
-    <input type="number" class="form-control" id="mvt-qty" min="0.01" step="0.01" required placeholder="Quantity">
+  <div class="form-floating mb-4">
+    <input type="number" class="form-control" id="mvt-qty" min="0.01" step="0.01" required>
+    <label>Quantity</label>
   </div>
 
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">speaker_notes</span>
-    </div>
-    <input type="text" class="form-control" id="mvt-notes" placeholder="Notes (if any)">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="mvt-notes">
+    <label>Notes (if any)</label>
   </div>
 
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">inventory_2</span>
-    </div>
-    <input type="text" class="form-control" id="mvt-sku" required placeholder="Item SKU (manual enter or scan)">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="mvt-sku" required>
+    <label>Item SKU (manual enter or scan)</label>
   </div>
 
   <div class="d-flex align-items-stretch">

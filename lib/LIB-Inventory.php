@@ -1,6 +1,7 @@
 <?php
 class Inventory extends Core {
   // (A) ADD OR EDIT ITEM
+  // NOTE: WILL AUTO-ADAPT USER ID FROM SESSION
   //  $sku : item SKU
   //  $name : item name
   //  $unit : item unit
@@ -19,7 +20,6 @@ class Inventory extends Core {
     }
 
     // (A2) AUTO COMMIT OFF
-    global $_SESS;
     $this->DB->start();
 
     // (A3) ADD ITEM
@@ -30,7 +30,7 @@ class Inventory extends Core {
       );
       $this->DB->insert("stock_mvt",
         ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_left", "mvt_notes"],
-        [$sku, date("Y-m-d H:i:s"), "T", $_SESS["user"]["user_id"], $stock, $stock, "Item added to system - Initial stock."]
+        [$sku, date("Y-m-d H:i:s"), "T", $this->Session->data["user"]["user_id"], $stock, $stock, "Item added to system - Initial stock."]
       );
     }
 
@@ -62,10 +62,12 @@ class Inventory extends Core {
     return true;
   }
 
-  // (C) GET ITEM BY SKU
+  // (C) GET/CHECK ITEM BY SKU
   //  $sku : item SKU
-  function get ($sku) {
-    return $this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]);
+  //  $check : optional check flag
+  function get ($sku, $check=false) {
+    $item = $this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]);
+    return $check && $item==false ? false : $item ;
   }
 
   // (D) GET OR SEARCH ITEMS
@@ -93,7 +95,7 @@ class Inventory extends Core {
   }
 
   // (E) ADD STOCK MOVEMENT
-  // NOTE: WILL AUTO-ADAPT USER ID FROM GLOBALS
+  // NOTE: WILL AUTO-ADAPT USER ID FROM SESSION
   // RETURNS NEW ITEM QUANTITY IF OK, FALSE IF FAIL
   //  $sku : item SKU
   //  $direction : "I"n, "O"ut, "T"ake, "D"iscard
@@ -123,11 +125,10 @@ class Inventory extends Core {
     if ($direction == "T") { $newqty = $qty; }
 
     // (E3) ADD MOVEMENT & QUANTITY
-    global $_SESS;
     $this->DB->start();
     $this->DB->insert("stock_mvt",
       ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_left", "mvt_notes"],
-      [$sku, date("Y-m-d H:i:s"), $direction, $_SESS["user"]["user_id"], $qty, $newqty, $notes]
+      [$sku, date("Y-m-d H:i:s"), $direction, $this->Session->data["user"]["user_id"], $qty, $newqty, $notes]
     );
     $this->DB->update("stock", ["stock_qty"], "`stock_sku`=?", [$newqty, $sku]);
     $this->DB->end();

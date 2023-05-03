@@ -9,7 +9,7 @@ $item = $_CORE->autoCall("Inventory", "get"); ?>
       <?=$item["stock_qty"]?> <?=$item["stock_unit"]?>
     </div>
   </div>
-  <button class="btn btn-danger mi" onclick="cb.page(0)">
+  <button class="btn btn-danger mi" onclick="cb.page(1)">
     undo
   </button>
 </nav>

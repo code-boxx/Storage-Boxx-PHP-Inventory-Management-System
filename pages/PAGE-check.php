@@ -9,11 +9,9 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (A) MANUAL ENTRY -->
 <div class="fw-bold text-danger">MANUAL ENTRY / SCANNER</div>
 <form id="check-form" class="bg-white border p-4 mb-3" autocomplete="off" onsubmit="return check.verify()">
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text mi">inventory_2</span>
-    </div>
-    <input type="text" class="form-control" id="check-sku" required placeholder="Item SKU (manual enter or scan)">
+  <div class="form-floating mb-4">
+    <input type="text" class="form-control" id="check-sku" required>
+    <label>Item SKU (manual enter or scan)</label>
   </div>
 
   <div class="d-flex align-items-stretch">
@@ -23,7 +21,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     </button>
   </div>
 </form>
-  
+
 <!-- (B) WEBCAM SCANNER -->
 <div class="fw-bold text-danger">SCAN QR CODE</div>
 <div class="bg-white border p-4 mb-3">

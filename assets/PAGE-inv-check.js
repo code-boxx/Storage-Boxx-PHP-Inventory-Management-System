@@ -7,7 +7,7 @@ var check = {
     onload : () => {
       check.sku = sku;
       check.pg = 1;
-      cb.page(1);
+      cb.page(2);
       check.list();
     }
   }),
@@ -34,7 +34,7 @@ var check = {
   verify : () => {
     var field = document.getElementById("mvt-check");
     cb.api({
-      mod : "inventory", req : "get",
+      mod : "inventory", act : "get",
       data : { sku : field.value },
       passmsg : false,
       onpass : res => {

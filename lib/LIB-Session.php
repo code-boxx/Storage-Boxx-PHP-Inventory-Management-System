@@ -1,6 +1,10 @@
 <?php
 class Session extends Core {
-  // (A) COMMON COOKIE "TEMPLATE"
+  // (A) PROPERTIES
+  // (A1) SESSION DATA
+  public $data = [];
+
+  // (A2) COMMON COOKIE "TEMPLATE"
   private $cookie = [
     "domain" => HOST_NAME,
     "path" => "/",
@@ -10,16 +14,15 @@ class Session extends Core {
     // "samesite" => "None"
   ];
 
-  // (B) CONSTRUCTOR - AUTO VALIDATE JWT COOKIE & RESTORE $_SESS
+  // (B) CONSTRUCTOR - AUTO VALIDATE JWT COOKIE & RESTORE SESSION DATA
   function __construct ($core) {
     // (B1) INIT - CORE LINKS
     parent::__construct($core);
-    global $_SESS;
 
     // (B2) DECODE JWT COOKIE
     $valid = false;
     if (isset($_COOKIE["cbsess"])) { try {
-      require PATH_LIB . "jwt/autoload.php";
+      require PATH_LIB . "JWT/autoload.php";
       $token = Firebase\JWT\JWT::decode(
         $_COOKIE["cbsess"], new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO)
       );
@@ -37,58 +40,44 @@ class Session extends Core {
       }
     }
 
-    // (B4) UNPACK COOKIE DATA
+    // (B4) UNPACK COOKIE DATA INTO SESSION
     if ($valid) {
-      $_SESS = (array) $token->data;
-      foreach ($_SESS as $k=>$v) {
-        if (is_object($v)) { $_SESS[$k] = (array) $v; }
+      $this->data = (array) $token->data;
+      foreach ($this->data as $k=>$v) {
+        if (is_object($v)) { $this->data[$k] = (array) $v; }
       }
       unset($token);
     }
 
-    // (B5) GET USER FROM DATABASE
-    if ($valid && isset($_SESS["user"])) {
-      $user = $this->DB->fetch(
-        "SELECT * FROM `users` WHERE `user_id`=?", [$_SESS["user"]["user_id"]]
-      );
-      $valid = is_array($user);
-      if ($valid) {
-        unset($user["user_password"]);
-        $_SESS["user"] = $user;
-      }
-    }
-
-    // (B6) INVALID SESSION
+    // (B5) INVALID SESSION
     if (!$valid && isset($_COOKIE["cbsess"])) {
       $this->destroy();
       throw new Exception("Invalid or expired session.");
     }
 
-    // (B7) OK
+    // (B6) OK - VALID SESSION HOOK
     unset($_COOKIE["cbsess"]);
+    require PATH_LIB . "HOOK-SESS-Load.php";
   }
 
   // (C) CREATE CBSESS COOKIE
-  function create () {
-    // (C1) GRAB ALL DATA FROM $_SESS - EXCEPT USER
-    global $_SESS;
-    $data = $_SESS;
-    if (isset($data["user"])) {
-      $data["user"] = ["user_id" => $data["user"]["user_id"]];
-    }
+  function save () {
+    // (C1) FILTER SESSION DATA TO PUT INTO COOKIE
+    $data = $this->data;
+    require PATH_LIB . "HOOK-SESS-Save.php";
 
     // (C2) GENERATE JWT COOKIE
-    require PATH_LIB . "jwt/autoload.php";
+    require PATH_LIB . "JWT/autoload.php";
     $now = strtotime("now");
     $token = [
-      "iat" => $now, // ISSUED AT
-      "nbf" => $now, // NOT BEFORE
-      "jti" => base64_encode(random_bytes(16)), // JSON TOKEN ID
-      "iss" => JWT_ISSUER, // ISSUER
-      "aud" => HOST_NAME, // AUDIENCE
-      "data" => $data // ADDITIONAL DATA
+      "iat" => $now, // issued at
+      "nbf" => $now, // not before
+      "jti" => base64_encode(random_bytes(16)), // json token id
+      "iss" => JWT_ISSUER, // issuer
+      "aud" => HOST_NAME, // audience
+      "data" => $data // additional data
     ];
-    if (JWT_EXPIRE > 0) { $token["exp"] = $now + JWT_EXPIRE; } // EXPIRY
+    if (JWT_EXPIRE > 0) { $token["exp"] = $now + JWT_EXPIRE; } // expiry
     $token = Firebase\JWT\JWT::encode($token, JWT_SECRET, JWT_ALGO);
     setcookie("cbsess", $token, $this->cookie);
   }
@@ -100,8 +89,7 @@ class Session extends Core {
     $options["expires"] = -1;
     setcookie("cbsess", "", $options);
 
-    // (D2) CLEAR ALL SESSION VARS
-    global $_SESS;
-    $_SESS = [];
+    // (D2) CLEAR ALL SESSION DATA
+    $this->data = [];
   }
 }

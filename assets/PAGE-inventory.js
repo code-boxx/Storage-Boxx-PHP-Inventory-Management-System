@@ -3,7 +3,7 @@ var inv = {
   pg : 1, // current page
   find : "", // current search
   list : silent => {
-    if (silent!==true) { cb.page(0); }
+    if (silent!==true) { cb.page(1); }
     cb.load({
       page : "inventory/list", target : "inv-list",
       data : {
@@ -38,7 +38,7 @@ var inv = {
   addEdit : sku => cb.load({
     page : "inventory/form", target : "cb-page-2",
     data : { sku : sku ? sku : "" },
-    onload : () => cb.page(1)
+    onload : () => cb.page(2)
   }),
 
   // (E) RANDOM SKU
@@ -70,7 +70,7 @@ var inv = {
 
     // (F2) AJAX
     cb.api({
-      mod : "inventory", req : "save",
+      mod : "inventory", act : "save",
       data : data,
       passmsg : "Item saved",
       onpass : inv.list
@@ -81,7 +81,7 @@ var inv = {
   // (G) DELETE ITEM
   //  sku : item SKU
   del : sku => cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => cb.api({
-    mod : "inventory", req : "del",
+    mod : "inventory", act : "del",
     data : { sku : sku },
     passmsg : "Item Deleted",
     onpass : inv.list
@@ -100,7 +100,7 @@ var inv = {
       onload : () => {
         inv.nfcSKU = sku;
         inv.hnStat = document.getElementById("nfc-stat");
-        cb.page(1);
+        cb.page(2);
         inv.nfcWrite();
       }
     });
@@ -131,7 +131,7 @@ var inv = {
   // (K) END WRITE NFC SESSION
   nfcBack : () => {
     nfc.stop();
-    cb.page(0);
+    cb.page(1);
   },
 
   // (L) SUPPLIERS FOR ITEM
@@ -141,7 +141,7 @@ var inv = {
     page : "inventory/sup", target : "cb-page-2",
     data : { sku : sku },
     onload : () => {
-      cb.page(1);
+      cb.page(2);
       inv.suppg = 1;
       inv.supsku = sku;
       inv.suplist();

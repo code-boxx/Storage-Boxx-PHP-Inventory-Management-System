@@ -1,36 +1,42 @@
 <?php
 class Forgot extends Core {
   // (A) SETTINGS
-  // request will be valid for n seconds.
-  // also to prevent spam, cannot make another request until expire.
-  private $valid = 900; // 15 mins = 900 secs
+  private $valid = 900; // request valid for 15 minutes
+  private $plen = 5; // random password will be 10 characters
+  private $hlen = 12; // hash will be 24 characters
 
   // (B) GET PASSWORD RESET REQUEST
   function get ($id) {
-    return $this->DB->fetch("SELECT * FROM `password_reset` WHERE `user_id`=?", [$id]);
+    return $this->DB->fetch(
+      "SELECT * FROM `users_hash` WHERE `user_id`=? AND `hash_for`=?",
+      [$id, "P"]
+    );
   }
 
   // (C) PASSWORD RESET REQUEST
   function request ($email) {
     // (C1) ALREADY SIGNED IN
-    global $_SESS;
-    if (isset($_SESS["user"])) {
+    if (isset($this->Session->data["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }
 
     // (C2) CHECK IF VALID USER
     $this->Core->load("Users");
-    $user = $this->Users->get($email);
+    $user = $this->Users->get($email, "A");
     if (!is_array($user)) {
       $this->error = "$email is not registered.";
+      return false;
+    }
+    if (isset($user["hash_code"])) {
+      $this->error = "$email is not an active account.";
       return false;
     }
 
     // (C3) CHECK PREVIOUS REQUEST (PREVENT SPAM)
     $req = $this->get($user["user_id"]);
     if (is_array($req)) {
-      $expire = strtotime($req["reset_time"]) + $this->valid;
+      $expire = strtotime($req["hash_time"]) + $this->valid;
       $now = strtotime("now");
       $left = $now - $expire;
       if ($left <0) {
@@ -41,10 +47,10 @@ class Forgot extends Core {
 
     // (C4) CHECKS OK - CREATE NEW RESET REQUEST
     $now = strtotime("now");
-    $hash = md5($user["user_email"] . $now); // random hash
-    $this->DB->insert("password_reset",
-      ["user_id", "reset_hash", "reset_time"],
-      [$user["user_id"], $hash, date("Y-m-d H:i:s")], true
+    $hash = $this->Core->random($this->hlen);
+    $this->DB->insert("users_hash",
+      ["user_id", "hash_for", "hash_code", "hash_time"],
+      [$user["user_id"], "P", $hash, date("Y-m-d H:i:s")], true
     );
 
     // (C5) SEND EMAIL TO USER
@@ -62,8 +68,7 @@ class Forgot extends Core {
   // (D) PROCESS PASSWORD RESET
   function reset ($id, $hash) {
     // (D1) ALREADY SIGNED IN
-    global $_SESS;
-    if (isset($_SESS["user"])) {
+    if (isset($this->Session->data["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }
@@ -71,16 +76,16 @@ class Forgot extends Core {
     // (D2) CHECK REQUEST
     $req = $this->get($id);
     $pass = is_array($req);
-
+    
     // (D3) CHECK EXPIRE
     if ($pass) {
-      $expire = strtotime($req["reset_time"]) + $this->valid;
+      $expire = strtotime($req["hash_time"]) + $this->valid;
       $now = strtotime("now");
       $pass = $now <= $expire;
     }
 
     // (D4) CHECK HASH
-    if ($pass) { $pass = $hash==$req["reset_hash"]; }
+    if ($pass) { $pass = $hash==$req["hash_code"]; }
 
     // (D5) GET USER
     if ($pass) {
@@ -98,14 +103,14 @@ class Forgot extends Core {
     // (D7) CHECK PASS - PROCEED RESET
     // (D7-1) UPDATE USER PASSWORD
     $this->DB->start();
-    $password = $this->Core->random(5);
+    $password = $this->Core->random($this->plen);
     $this->DB->update(
       "users", ["user_password"], "`user_id`=?",
       [password_hash($password, PASSWORD_DEFAULT), $id]
     );
 
     // (D7-2) REMOVE REQUEST
-    $this->DB->delete("password_reset", "`user_id`=?", [$id]);
+    $this->DB->delete("users_hash", "`user_id`=? AND `hash_for`=?", [$id, "P"]);
 
     // (D7-3) EMAIL TO USER
     $this->Core->load("Mail");

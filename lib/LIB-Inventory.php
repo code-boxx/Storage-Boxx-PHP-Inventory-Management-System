@@ -30,7 +30,7 @@ class Inventory extends Core {
       );
       $this->DB->insert("stock_mvt",
         ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_left", "mvt_notes"],
-        [$sku, date("Y-m-d H:i:s"), "T", $this->Session->data["user"]["user_id"], $stock, $stock, "Item added to system - Initial stock."]
+        [$sku, date("Y-m-d H:i:s"), "T", $_SESSION["user"]["user_id"], $stock, $stock, "Item added to system - Initial stock."]
       );
     }
 
@@ -128,7 +128,7 @@ class Inventory extends Core {
     $this->DB->start();
     $this->DB->insert("stock_mvt",
       ["stock_sku", "mvt_date", "mvt_direction", "user_id", "mvt_qty", "mvt_left", "mvt_notes"],
-      [$sku, date("Y-m-d H:i:s"), $direction, $this->Session->data["user"]["user_id"], $qty, $newqty, $notes]
+      [$sku, date("Y-m-d H:i:s"), $direction, $_SESSION["user"]["user_id"], $qty, $newqty, $notes]
     );
     $this->DB->update("stock", ["stock_qty"], "`stock_sku`=?", [$newqty, $sku]);
     $this->DB->end();

@@ -1,10 +1,6 @@
 <?php
 class Session extends Core {
-  // (A) PROPERTIES
-  // (A1) SESSION DATA
-  public $data = [];
-
-  // (A2) COMMON COOKIE "TEMPLATE"
+  // (A) COMMON COOKIE "TEMPLATE"
   private $cookie = [
     "domain" => HOST_NAME,
     "path" => "/",
@@ -18,9 +14,10 @@ class Session extends Core {
   function __construct ($core) {
     // (B1) INIT - CORE LINKS
     parent::__construct($core);
+    $_SESSION = [];
+    $valid = false;
 
     // (B2) DECODE JWT COOKIE
-    $valid = false;
     if (isset($_COOKIE["cbsess"])) { try {
       require PATH_LIB . "JWT/autoload.php";
       $token = Firebase\JWT\JWT::decode(
@@ -42,9 +39,9 @@ class Session extends Core {
 
     // (B4) UNPACK COOKIE DATA INTO SESSION
     if ($valid) {
-      $this->data = (array) $token->data;
-      foreach ($this->data as $k=>$v) {
-        if (is_object($v)) { $this->data[$k] = (array) $v; }
+      $_SESSION = (array) $token->data;
+      foreach ($_SESSION as $k=>$v) {
+        if (is_object($v)) { $_SESSION[$k] = (array) $v; }
       }
       unset($token);
     }
@@ -63,7 +60,7 @@ class Session extends Core {
   // (C) CREATE CBSESS COOKIE
   function save () {
     // (C1) FILTER SESSION DATA TO PUT INTO COOKIE
-    $data = $this->data;
+    $data = $_SESSION;
     require PATH_LIB . "HOOK-SESS-Save.php";
 
     // (C2) GENERATE JWT COOKIE
@@ -90,6 +87,6 @@ class Session extends Core {
     setcookie("cbsess", "", $options);
 
     // (D2) CLEAR ALL SESSION DATA
-    $this->data = [];
+    $_SESSION = [];
   }
 }

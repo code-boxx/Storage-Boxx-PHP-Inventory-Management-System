@@ -5,7 +5,7 @@
 // (A) REDIRECT TO LOGIN PAGE IF NOT SIGNED IN
 $override = function ($path) {
   global $_CORE;
-  if (!isset($_CORE->Session->data["user"]) && $path!="login/" && $path!="forgot/") {
+  if (!isset($_SESSION["user"]) && $path!="login/" && $path!="forgot/") {
     if (isset($_POST["ajax"])) { exit("E"); }
     else { $_CORE->redirect("login/"); }
   }

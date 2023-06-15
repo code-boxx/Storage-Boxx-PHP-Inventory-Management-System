@@ -178,10 +178,10 @@ class CoreBoxx {
   // $redirect : redirect to this page, web mode only
   function ucheck ($lvl=true, $redirect="login/") : void {
     // (L1) ACCESS CHECK
-    if ($lvl===true) { $access = isset($this->Session->data["user"]); }
-    else if (is_array($lvl)) { $access = isset($this->Session->data["user"]) && in_array($this->Session->data["user"]["user_level"], $lvl); }
+    if ($lvl===true) { $access = isset($_SESSION["user"]); }
+    else if (is_array($lvl)) { $access = isset($_SESSION["user"]) && in_array($_SESSION["user"]["user_level"], $lvl); }
     else {
-      $access = (isset($this->Session->data["user"]) && $this->Session->data["user"]["user_level"]==$lvl) || $this->Route->path==$redirect;
+      $access = (isset($_SESSION["user"]) && $_SESSION["user"]["user_level"]==$lvl) || $this->Route->path==$redirect;
     }
 
     // (L2) STOP IF NO GO

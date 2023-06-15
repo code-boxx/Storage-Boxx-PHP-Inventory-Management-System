@@ -115,17 +115,17 @@ class Users extends Core {
   //  $password : user password
   function login ($email, $password) {
     // (H1) ALREADY SIGNED IN
-    if (isset($this->Session->data["user"])) { return true; }
+    if (isset($_SESSION["user"])) { return true; }
 
     // (H2) VERIFY EMAIL PASSWORD ACCOUNT
     $user = $this->verify($email, $password);
     if ($user===false) { return false; }
 
     // (H3) SESSION START
-    $this->Session->data["user"] = $user;
-    unset($this->Session->data["user"]["user_password"]);
-    unset($this->Session->data["user"]["hash_code"]);
-    unset($this->Session->data["user"]["hash_time"]);
+    $_SESSION["user"] = $user;
+    unset($_SESSION["user"]["user_password"]);
+    unset($_SESSION["user"]["hash_code"]);
+    unset($_SESSION["user"]["hash_time"]);
     $this->Session->save();
     return true;
   }
@@ -133,7 +133,7 @@ class Users extends Core {
   // (I) LOGOUT
   function logout () {
     // (I1) ALREADY SIGNED OFF
-    if (!isset($this->Session->data["user"])) { return true; }
+    if (!isset($_SESSION["user"])) { return true; }
 
     // (I2) END SESSION
     $this->Session->destroy();
@@ -185,11 +185,11 @@ class Users extends Core {
 
     // (L3) SESSION START
     if ($valid) {
-      $this->Session->data["user"] = $user;
-      unset($this->Session->data["user"]["user_password"]);
-      unset($this->Session->data["user"]["hash_code"]);
-      unset($this->Session->data["user"]["hash_time"]);
-      unset($this->Session->data["user"]["hash_tries"]);
+      $_SESSION["user"] = $user;
+      unset($_SESSION["user"]["user_password"]);
+      unset($_SESSION["user"]["hash_code"]);
+      unset($_SESSION["user"]["hash_time"]);
+      unset($_SESSION["user"]["hash_tries"]);
       $this->Session->save();
       return true;
     }

@@ -16,7 +16,7 @@ class Forgot extends Core {
   // (C) PASSWORD RESET REQUEST
   function request ($email) {
     // (C1) ALREADY SIGNED IN
-    if (isset($this->Session->data["user"])) {
+    if (isset($_SESSION["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }
@@ -68,7 +68,7 @@ class Forgot extends Core {
   // (D) PROCESS PASSWORD RESET
   function reset ($id, $hash) {
     // (D1) ALREADY SIGNED IN
-    if (isset($this->Session->data["user"])) {
+    if (isset($_SESSION["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }

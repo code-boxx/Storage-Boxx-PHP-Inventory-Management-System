@@ -268,7 +268,7 @@ if ($_PHASE == "D") {
       The installer cannot verify if you are running Apache Web Server, or if <code>MOD_REWRITE</code> is enabled.
       You can still try to proceed if you want.
       If you are not running Apache, you need to create your own "translated" <code>.htaccess</code> file.
-      See <code>lib/LIB-Route.php &gt; function htaccess()</code>.
+      See <code>lib/LIB-Route.php &gt; function init()</code>.
     </div>
     <?php } ?>
 

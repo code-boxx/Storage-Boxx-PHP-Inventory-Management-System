@@ -88,7 +88,6 @@ var cb = {
   //  url : string, target URL
   //  data : optional object, data to send
   //  loading : boolean, show "now loading" screen? default true.
-  //  debug : boolean, debug mode. default false.
   //  onpass : function, run this function on server response
   //  onerr : optional function, run this function on error
   ajax : opt => {
@@ -96,7 +95,6 @@ var cb = {
     if (opt.url === undefined) { cb.modal("AJAX ERROR", "Target URL is not set!"); return false; }
     if (opt.onpass === undefined) { cb.modal("AJAX ERROR", "Function to call on onpass is not set!"); return false; }
     if (opt.loading === undefined) { opt.loading = true; }
-    if (opt.debug === undefined) { opt.debug = false; }
 
     // (C2) DATA TO SEND
     var data = new FormData();
@@ -105,19 +103,16 @@ var cb = {
     // (C3) AJAX REQUEST
     if (opt.loading) { cb.loading(true); }
     fetch(opt.url, { method:"POST", credentials:"include", body:data })
-    .then(res => {
-      if (opt.debug) { console.log(res); }
+    .then(async res => {
       if (res.status==200) { return res.text(); }
       else {
+        console.error(await res.text());
         cb.modal("SERVER ERROR", "Bad server response - " + res.status);
-        console.error(res.status, res);
         if (opt.onerr) { opt.onerr(); }
+        throw new Error("Bad server response");
       }
     })
-    .then(txt => {
-      if (opt.debug) { console.log(txt); }
-      opt.onpass(txt);
-    })
+    .then(txt => opt.onpass(txt))
     .catch(err => {
       cb.modal("AJAX ERROR", err.message);
       console.error(err);
@@ -133,7 +128,6 @@ var cb = {
   //  act : string, action to perform
   //  data : object, data to send
   //  loading : boolean, show loading screen?
-  //  debug : boolean, optional debug mode. default false.
   //  passmsg : boolean false to supress toast "success message".
   //            boolean true to use server response message.
   //            string to override "OK" message.
@@ -147,7 +141,6 @@ var cb = {
     options.url = `${cbhost.api}${opt.mod}/${opt.act}/`;
     if (opt.data) { options.data = opt.data; }
     if (opt.loading!=undefined) { options.loading = opt.loading; }
-    if (opt.debug!=undefined) { options.debug = opt.debug; }
     if (opt.onerr) { options.onerr = opt.onerr; }
     if (opt.passmsg === undefined) { opt.passmsg = "OK"; }
     if (opt.nofail === undefined) { opt.nofail = false; }
@@ -155,7 +148,7 @@ var cb = {
     // (D2) ON AJAX LOAD
     options.onpass = res => {
       // (D2-1) PARSE RESULTS
-      try { var res = JSON.parse(res); }
+      try { var r = JSON.parse(res); }
       catch (err) {
         console.error(res);
         cb.modal("AJAX ERROR", "Failed to parse JSON data.");
@@ -163,15 +156,15 @@ var cb = {
       }
 
       // (D2-2) RESULTS FEEBACK
-      if (res.status=="E") { location.href = cbhost.base + "login/"; }
-      else if (res.status) {
+      if (r.status=="E") { location.href = cbhost.base + "login/"; }
+      else if (r.status) {
         if (opt.passmsg !== false) {
-          cb.toast(1, "Success", opt.passmsg===true ? res.message : opt.passmsg);
+          cb.toast(1, "Success", opt.passmsg===true ? r.message : opt.passmsg);
         }
-        if (opt.onpass) { opt.onpass(res); }
+        if (opt.onpass) { opt.onpass(r); }
       } else {
-        if (!opt.nofail) { cb.modal("ERROR", res.message); }
-        if (opt.onfail) { opt.onfail(res.message); }
+        if (!opt.nofail) { cb.modal("ERROR", r.message); }
+        if (opt.onfail) { opt.onfail(r.message); }
       }
     };
 
@@ -184,7 +177,6 @@ var cb = {
   //  target : string, ID of target HTML element
   //  data : object, data to send
   //  loading : boolean, show loading screen? Default false.
-  //  debug : boolean, optional debug mode. default false.
   //  onload : optional function, do this on loaded
   //  onerr : optional function, do this on ajax error
   load : opt => {
@@ -192,7 +184,6 @@ var cb = {
     var options = {};
     options.url = `${cbhost.base}${opt.page}/`;
     if (opt.loading!=undefined) { options.loading = opt.loading; }
-    if (opt.debug!=undefined) { options.debug = opt.debug; }
     if (opt.onerr) { options.onerr = opt.onerr; }
     if (opt.data) {
       opt.data["ajax"] = 1;
@@ -200,7 +191,7 @@ var cb = {
     } else { options.data = { "ajax" : 1 }; }
 
     // (E2) ON AJAX LOAD
-    options.onpass = (res) => {
+    options.onpass = res => {
       if (res=="E") { location.href = cbhost.base + "login/"; }
       else {
         document.getElementById(opt.target).innerHTML = res;

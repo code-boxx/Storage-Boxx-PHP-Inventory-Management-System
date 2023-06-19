@@ -70,13 +70,16 @@ if ($_PHASE=="B") {
     exit("At least PHP ".I_MIN_PHP." is required. You are using ".PHP_VERSION);
   }
 
-  // (B2-2) MYSQL PDO
+  // (B2-2) MOD REWRITE
+  if (I_APACHE && !I_REWRITE) { exit("Please enable Apache MOD_REWRITE"); }
+
+  // (B2-3) MYSQL PDO
   if (I_PDO===false) { exit("PDO MYSQL extension is not enabled."); }
 
-  // (B2-3) OPENSSL
+  // (B2-4) OPENSSL
   if (I_PUSH && I_OPENSSL===false) { exit("OPENSSL extension is not enabled."); }
 
-  // (B2-4) FILES & FOLDERS - READ/WRITE PERMISSIONS
+  // (B2-5) FILES & FOLDERS - READ/WRITE PERMISSIONS
   foreach (I_ALL as $p) {
     if (!file_exists($p)) { exit("$p does not exist!"); }
     if (!is_readable($p)) { exit("Please give PHP read permission to $p"); }
@@ -265,10 +268,11 @@ if ($_PHASE == "D") {
     <?php if (I_APACHE === false || I_REWRITE === false) { ?>
     <!-- (DD8) WARNINGS -->
     <div class="danger">
-      The installer cannot verify if you are running Apache Web Server, or if <code>MOD_REWRITE</code> is enabled.
-      You can still try to proceed if you want.
-      If you are not running Apache, you need to create your own "translated" <code>.htaccess</code> file.
-      See <code>lib/LIB-Route.php &gt; function init()</code>.
+      If you are running Apache Web Server - Please enable <code>MOD_REWRITE</code>.
+    </div>
+    <div class="danger">
+      If you are not running Apache Web Server, you can still try to proceed.
+      After the installation, "translate" your own <code>.htaccess</code> file.
     </div>
     <?php } ?>
 

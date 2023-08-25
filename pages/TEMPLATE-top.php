@@ -108,17 +108,17 @@
         </li>
         <li class="nav-item">
           <div class="my-2 fw-bold">Inventory</div>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>move">
-            <i class="text-secondary ico-sm icon-truck"></i> Movement
-          </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>check">
-            <i class="text-secondary ico-sm icon-qrcode"></i> Check
-          </a>
           <a class="nav-link ms-2" href="<?=HOST_BASE?>items">
             <i class="text-secondary ico-sm icon-price-tag"></i> Items
           </a>
           <a class="nav-link ms-2" href="<?=HOST_BASE?>batch">
             <i class="text-secondary ico-sm icon-tree"></i> Batches
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>move">
+            <i class="text-secondary ico-sm icon-truck"></i> Movement
+          </a>
+          <a class="nav-link ms-2" href="<?=HOST_BASE?>check">
+            <i class="text-secondary ico-sm icon-qrcode"></i> Check
           </a>
           <hr>
         </li>

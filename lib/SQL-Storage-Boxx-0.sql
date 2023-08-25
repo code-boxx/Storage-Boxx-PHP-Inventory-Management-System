@@ -80,7 +80,7 @@ CREATE TABLE `item_batches` (
   `batch_name` varchar(255) NOT NULL,
   `batch_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `batch_qty` decimal(12,2) NOT NULL DEFAULT 0.00,
-  `batch_expire` datetime NULL
+  `batch_expire` date NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `item_batches`

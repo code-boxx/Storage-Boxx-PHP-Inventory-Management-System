@@ -20,13 +20,13 @@ if ($edit) { $batch = $_CORE->autoCall("Move", "getB"); }
     <span class="text-secondary" onclick="batch.nowName()">[Use current date/time]</span>
 
     <div class="form-floating mt-4">
-      <input type="datetime-local" class="form-control" id="batch-expire" value="<?=$edit?$batch["batch_expire"]:""?>">
+      <input type="date" class="form-control" id="batch-expire" value="<?=$edit?$batch["batch_expire"]:""?>">
       <label>Expire Date (if any)</label>
     </div>
 
     <?php if (!$edit) { ?>
     <div class="form-floating mt-4">
-      <input type="number" class="form-control" id="batch-qty" value="0" min="0" required>
+      <input type="number" class="form-control" id="batch-qty" value="0.01" min="0.01" step="0.01" required>
       <label>Batch Quantity</label>
     </div>
     <?php } ?>

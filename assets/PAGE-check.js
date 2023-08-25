@@ -98,15 +98,17 @@ var check = {
   pre : () => {
     cb.api({
       mod : "items", act : "check",
-      data : { sku : check.hSKU.value },
-      passmsg : false, nofail : true,
+      data : {
+        sku : check.hSKU.value,
+        batch : check.hBatch.value
+      },
+      passmsg : false,
       onpass : res => {
         check.sku = check.hSKU.value;
         check.batch = check.hBatch.value;
         check.pg = 1;
         check.go();
-      },
-      onfail : () => cb.modal("Invalid SKU", `${check.hSKU.value} is not found in the database.`)
+      }
     });
     return false;
   },

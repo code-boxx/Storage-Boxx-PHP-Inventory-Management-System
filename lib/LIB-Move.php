@@ -44,7 +44,7 @@ class Move extends Core {
     }
 
     // (C2) GET ENTRIES
-    $sql = "SELECT b.*, i.`item_name`, i.`item_unit`, DATE_FORMAT(b.`batch_expire`, '".DT_LONG."') `ex`
+    $sql = "SELECT b.*, i.`item_name`, i.`item_unit`, DATE_FORMAT(b.`batch_expire`, '".D_LONG."') `ex`
     FROM `item_batches` b
     LEFT JOIN `items` i USING (`item_sku`)";
     $data = null;

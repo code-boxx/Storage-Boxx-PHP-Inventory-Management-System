@@ -37,17 +37,26 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <input type="submit" class="w-100 col btn btn-primary" value="CSV">
   </form>
 
-  <!-- (B2) ITEMS LIST -->
-  <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/items">
+  <div class="m-1 p-4 bg-white border">
+    <!-- (B2) ITEMS LIST -->
     <div class="fw-bold text-danger mb-2">ITEMS LIST</div>
-    <div class="form-floating mb-4">
-      <select class="form-select" name="range">
-        <option value="">All Items</option>
-        <option value="M">Monitored Items Only</option>
-      </select>
-      <label>Range</label>
-    </div>
-    <input type="submit" class="w-100 col btn btn-primary" value="CSV">
-  </form>
+    <form class="mb-4" method="post" target="_blank" action="<?=HOST_BASE?>report/items">
+      <div class="form-floating mb-4">
+        <select class="form-select" name="range">
+          <option value="">All Items</option>
+          <option value="M">Monitored Items Only</option>
+        </select>
+        <label>Range</label>
+      </div>
+      <input type="submit" class="w-100 col btn btn-primary" value="CSV">
+    </form>
+
+    <!-- (B3) EXPIRING -->
+    <div class="fw-bold text-danger mb-2">EXPIRING BATCHES</div>
+    <form method="post" target="_blank" action="<?=HOST_BASE?>report/expire">
+      <input type="submit" class="w-100 col btn btn-primary" value="CSV">
+    </form>
+  </div>
+  </div>
 </div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

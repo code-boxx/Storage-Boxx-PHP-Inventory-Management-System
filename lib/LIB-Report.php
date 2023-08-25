@@ -121,4 +121,49 @@ class Report extends Core {
     }
     fclose($f);
   }
+
+  // (D) GET MONITORED ITEMS
+  function getMonitor () {
+    return $this->DB->fetchAll( "SELECT * FROM `items` WHERE `item_low`>0");
+  }
+
+  // (E) GET BATCHES WITH EXPIRY
+  function getExpiry ($limit=null) {
+    $today = date("Y-m-d");
+    return $this->DB->fetchAll(sprintf(
+      "SELECT b.*, i.`item_name`, i.`item_unit`, DATEDIFF(b.`batch_expire`, '%s') `r`, DATE_FORMAT(b.`batch_expire`, '%s') `e`
+       FROM `item_batches` b
+       LEFT JOIN `items` i USING (`item_sku`)
+       WHERE `batch_expire`>='%s'
+       ORDER BY `r`%s",
+      $today, D_LONG, $today, $limit==null?"":" LIMIT 0,$limit"
+    ));
+  }
+
+  // (F) EXPIRING BATCHES
+  function expire () {
+    // (F1) HEADER
+    header("Content-Disposition: attachment; filename=expire-list.csv;");
+    $f = fopen("php://output", "w");
+    fputcsv($f, ["SKU", "Batch", "Name", "Quantity", "Unit", "Expiry", "Remaining"]);
+
+    // (F2) BATCHES
+    $today = date("Y-m-d");
+    $this->DB->query(sprintf(
+      "SELECT b.*, i.`item_name`, i.`item_unit`, DATEDIFF(b.`batch_expire`, '%s') `r`, DATE_FORMAT(b.`batch_expire`, '%s') `e`
+       FROM `item_batches` b
+       LEFT JOIN `items` i USING (`item_sku`)
+       WHERE `batch_expire`>='%s'
+       ORDER BY `r`",
+      $today, D_LONG, $today
+    ));
+    while ($r = $this->DB->stmt->fetch()) {
+      fputcsv($f, [
+        $r["item_sku"], $r["batch_name"], $r["item_name"],
+        $r["batch_qty"], $r["item_unit"],
+        $r["e"], $r["r"]
+      ]);
+    }
+    fclose($f);
+  }
 }

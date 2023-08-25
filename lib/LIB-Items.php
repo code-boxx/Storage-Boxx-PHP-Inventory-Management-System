@@ -125,9 +125,4 @@ class Items extends Core {
     // (F3) VALID
     return true;
   }
-
-  // (G) GET MONITORED ITEMS
-  function getMonitor () {
-    return $this->DB->fetchAll( "SELECT * FROM `items` WHERE `item_low`>0");
-  }
 }

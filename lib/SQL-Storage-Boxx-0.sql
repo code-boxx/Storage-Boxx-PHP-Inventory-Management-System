@@ -98,13 +98,13 @@ CREATE TABLE `item_mvt` (
   `mvt_notes` text DEFAULT NULL,
   `item_left` decimal(12,2) NOT NULL,
   `batch_left` decimal(12,2) NOT NULL,
-  `user_id` bigint(20) NOT NULL
+  `user_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `item_mvt`
   ADD PRIMARY KEY (`item_sku`,`batch_name`,`mvt_date`),
   ADD KEY `mvt_direction` (`mvt_direction`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_name` (`user_name`);
 
 -- (H) SUPPLIERS
 CREATE TABLE `suppliers` (

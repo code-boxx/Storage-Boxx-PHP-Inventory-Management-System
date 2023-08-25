@@ -12,9 +12,9 @@ class Move extends Core {
        [$sku, $batch]
     );
     if ($qty == null) { return false; }
-    $qty["item_low"] = floatval($qty["item_low"]);
-    $qty["batch_qty"] = floatval($qty["batch_qty"]);
-    $qty["item_qty"] = floatval($qty["item_qty"]);
+    $qty["item_low"] = (float)$qty["item_low"];
+    $qty["batch_qty"] = (float)$qty["batch_qty"];
+    $qty["item_qty"] = (float)$qty["item_qty"];
     return $qty;
   }
 
@@ -76,13 +76,12 @@ class Move extends Core {
     }
 
     // (D2) GET ENTRIES
-    $sql = "SELECT m.*, DATE_FORMAT(m.`mvt_date`, '".DT_LONG."') `md`, u.`user_name`
-    FROM `item_mvt` m
-    LEFT JOIN `users` u USING (`user_id`)
-    WHERE m.`item_sku`=?";
+    $sql = "SELECT *, DATE_FORMAT(`mvt_date`, '".DT_LONG."') `md`
+    FROM `item_mvt`
+    WHERE `item_sku`=?";
     $data = [$sku];
     if ($batch!=null && $batch!="") {
-      $sql .= " AND m.`batch_name`=?";
+      $sql .= " AND `batch_name`=?";
       $data[] = $batch;
     }
     $sql .= " ORDER BY `mvt_date` DESC";
@@ -93,7 +92,7 @@ class Move extends Core {
   }
 
   // (E) SAVE STOCK MOVEMENT
-  // NOTE: WILL AUTO-ADAPT USER ID FROM SESSION
+  // NOTE: WILL AUTO-ADAPT USER NAME FROM SESSION
   // RETURNS NEW ITEM QUANTITY IF OK, FALSE IF FAIL
   //  $sku : item SKU
   //  $batch : batch name
@@ -109,7 +108,7 @@ class Move extends Core {
     }
 
     // (E2) CALCULATE NEW QUANTITY
-    $qty = floatval($qty);
+    $qty = (float)$qty;
     $qnew = [
       "batch_qty" => $qnow["batch_qty"],
       "item_qty" => $qnow["item_qty"]
@@ -130,8 +129,8 @@ class Move extends Core {
 
     // (E3) ADD MOVEMENT & UPDATE QUANTITIES
     $this->DB->insert("item_mvt",
-      ["item_sku", "batch_name", "mvt_direction", "user_id", "mvt_qty", "mvt_notes", "item_left", "batch_left"],
-      [$sku, $batch, $direction, $_SESSION["user"]["user_id"], $qty, $notes, $qnew["item_qty"], $qnew["batch_qty"]]
+      ["item_sku", "batch_name", "mvt_direction", "user_name", "mvt_qty", "mvt_notes", "item_left", "batch_left"],
+      [$sku, $batch, $direction, $_SESSION["user"]["user_name"], $qty, $notes, $qnew["item_qty"], $qnew["batch_qty"]]
     );
     $this->DB->update("items",
       ["item_qty"], "`item_sku`=?",
@@ -212,7 +211,7 @@ class Move extends Core {
       // note - insert 0 quantity, add movement below will update to the correct quantity.
       $this->DB->insert("item_batches",
         ["item_sku", "batch_name", "batch_expire", "batch_qty"],
-        [$sku, $name, $expire, 0]
+        [$sku, $name, $expire==""?null:$expire, 0]
       );
 
       // (G3-2) UPDATE QUANTITY & ADD MOVEMENT

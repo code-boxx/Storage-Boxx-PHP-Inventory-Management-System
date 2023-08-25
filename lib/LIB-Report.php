@@ -46,10 +46,9 @@ class Report extends Core {
     if ($range=="A") {
       fputcsv($f, ["Date", "Staff", "SKU", "Batch", "Item", "Direction", "Quantity", "Unit", "Notes"]);
       $this->DB->query(
-        "SELECT m.*, DATE_FORMAT(m.`mvt_date`, '".DT_LONG."') `md`, i.`item_name`, i.`item_unit`, u.`user_name` 
+        "SELECT m.*, DATE_FORMAT(m.`mvt_date`, '".DT_LONG."') `md`, i.`item_name`, i.`item_unit` 
          FROM `item_mvt` m
          LEFT JOIN `items` i USING (`item_sku`)
-         LEFT JOIN `users` u USING (`user_id`)
          WHERE `mvt_date` BETWEEN ? AND ?
          ORDER BY m.`item_sku`, m.`mvt_date`",
         [$start, $end]

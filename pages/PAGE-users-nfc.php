@@ -1,16 +1,15 @@
 <?php
 // (A) GET USER
-$_POST["hash"] = "N";
+$_POST["hash"] = "NFC";
 $user = $_CORE->autoCall("Users", "get");
-if (!is_array($user)) { exit("Invalid user"); }
-?>
+if (!is_array($user)) { exit("Invalid user"); } ?>
 <h3 class="mb-3">USER NFC LOGIN TOKEN</h3>
 
 <!-- (B) CREATE NEW TOKEN -->
 <div class="fw-bold text-danger">CREATE NEW TOKEN</div>
 <div class="bg-white border p-4 mb-3">
-  <button id="nfc-btn" disabled class="btn btn-primary d-flex align-items-center" onclick="usr.nfcNew(<?=$_POST["id"]?>)">
-    <i class="mi me-2">nfc</i> <span id="nfc-stat">Initializing</span>
+  <button id="nfc-btn" disabled class="my-1 btn btn-primary d-flex-inline" onclick="usr.nfcNew(<?=$_POST["id"]?>)">
+    <i class="ico-sm icon-feed"></i> <span id="nfc-stat">Initializing</span>
   </button>
   <div class="text-secondary mt-2">
     * A user can only have one login token, creating a new token will nullify the previous one.
@@ -20,11 +19,15 @@ if (!is_array($user)) { exit("Invalid user"); }
 <!-- (C) NULL NFC TOKEN -->
 <div class="fw-bold text-danger">NULLIFY NFC TOKEN</div>
 <div class="bg-white border p-4 mb-3">
-  <input type="button" id="nfc-null" value="Nullify Login Token" onclick="usr.nfcNull(<?=$_POST["id"]?>)"
-         class="btn btn-primary"<?=$user["hash_code"]==""?" disabled":""?>>
+  <button id="nfc-null" class="my-1 btn btn-primary d-flex-inline"
+          onclick="usr.nfcNull(<?=$_POST["id"]?>)"<?=$user["hash_code"]==""?" disabled":""?>>
+    <i class="ico-sm icon-blocked"></i> Nullify Login Token
+  </button>
   <div class="text-secondary mt-2">
     * The user's NFC login token will be nullified, but the login email/password remains unaffected.
   </div>
 </div>
 
-<input type="button" value="Back" class="btn btn-danger" onclick="usr.nfcBack()">
+<button type="button" class="my-1 btn btn-danger d-flex-inline" onclick="usr.nfcBack()">
+  <i class="ico-sm icon-undo2"></i> Back
+</button>

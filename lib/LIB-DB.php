@@ -15,6 +15,7 @@ class DB extends Core {
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
+    $this->query("SET time_zone='".SYS_TZ_OFFSET."'");
   }
 
   // (C) DESTRUCTOR - CLOSE DATABASE CONNECTION

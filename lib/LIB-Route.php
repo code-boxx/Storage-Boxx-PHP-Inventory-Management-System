@@ -147,17 +147,17 @@ class Route extends Core {
   }
 
   // (E) REGENERATE HTACCESS + MANIFEST FILES
-  function init () : void {
+  function init ($hbase=HOST_BASE_PATH) : void {
     // (E1) HTACCESS
     $file = PATH_BASE . ".htaccess";
     if (file_put_contents($file, implode("\r\n", [
       "RewriteEngine On",
       "RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]",
-      "RewriteBase " . HOST_BASE_PATH,
+      "RewriteBase " . $hbase,
       "RewriteRule ^index\.php$ - [L]",
       "RewriteCond %{REQUEST_FILENAME} !-f",
       "RewriteCond %{REQUEST_FILENAME} !-d",
-      "RewriteRule . " . HOST_BASE_PATH . "index.php [L]"
+      "RewriteRule . " . $hbase . "index.php [L]"
     ])) === false) { throw new Exception("Failed to create $file"); }
 
     // (E2) WEB MANIFEST
@@ -165,7 +165,11 @@ class Route extends Core {
     $replace = ["start_url", "scope"];
     $cfg = file($file) or exit("Cannot read $file");
     foreach ($cfg as $j=>$line) { foreach ($replace as $r) { if (strpos($line, "\"$r\"") !== false) {
-      $cfg[$j] = "  \"$r\": \"".HOST_BASE_PATH."\",\r\n";
+      $cfg[$j] = "  \"$r\": \"".$hbase."\",\r\n";
+    }}}
+    $replace = ["short_name", "name"];
+    foreach ($cfg as $j=>$line) { foreach ($replace as $r) { if (strpos($line, "\"$r\"") !== false) {
+      $cfg[$j] = "  \"$r\": \"".SITE_NAME."\",\r\n";
     }}}
     if (file_put_contents($file, implode("", $cfg)) === false) {
       throw new Exception("Failed to write $file");

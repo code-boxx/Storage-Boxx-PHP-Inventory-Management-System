@@ -1,12 +1,15 @@
 <?php
 // (A-B) PROPERTIES, SETTINGS, HELPER
 // (C-D) GET USERS
-// (E-F) SAVE & DELETE USER
-// (G-I) VERIFY, LOGIN, LOGOUT
-// (J-L) NFC LOGIN TOKEN
+// (E-G) SAVE & DELETE USER
+// (H-J) VERIFY, LOGIN, LOGOUT
+// (K-M) REGISTRATION, ACTIVATION
+// (N-P) USER HASH
+// (Q) IMPORT
 class Users extends Core {
   // (A) SETTINGS
-  private $nlen = 6; // 12 characters nfc login random hash
+  private $hvalid = 900; // validation link good for 15 mins
+  private $hlen = 12; // 24 characters validation hash
 
   // (B) PASSWORD CHECKER (HELPER)
   //  $password : password to check
@@ -62,9 +65,9 @@ class Users extends Core {
   //  $name : user name
   //  $email : user email
   //  $password : user password
-  //  $lvl : user level - use this if you want to implement user roles
+  //  $lvl : user level
   //  $id : user id (for updating only)
-  function save ($name, $email, $password, $lvl="A", $id=null) {
+  function save ($name, $email, $password, $lvl, $id=null) {
     // (E1) DATA SETUP + PASSWORD CHECK
     if (!$this->checker($password)) { return false; }
     $fields = ["user_name", "user_email", "user_password", "user_level"];
@@ -90,19 +93,52 @@ class Users extends Core {
     return true;
   }
 
-  // (G) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
+  // (G) UPDATE ACCOUNT (LIMITED "MY ACCOUNT" USER SAVE)
+  //  $name : name
+  //  $cpass : current password
+  //  $pass : new password
+  function update ($name, $cpass, $pass) {
+    // (G1) MUST BE SIGNED IN
+    if (!isset($_SESSION["user"])) {
+      $this->error = "Please sign in first";
+      return false;
+    }
+
+    // (G2) PASSWORD STRENGTH
+    if (!$this->checker($pass)) { return false; }
+
+    // (G3) VERIFY CURRENT PASSWORD
+    if (!$this->verify($_SESSION["user"]["user_email"], $cpass)) {
+      return false;
+    }
+
+    // (G4) UPDATE DATABASE
+    $this->DB->update("users",
+      ["user_name", "user_password"], "`user_id`=?",
+      [$name, password_hash($pass, PASSWORD_DEFAULT), $_SESSION["user"]["user_id"]]
+    );
+    return true;
+  }
+
+  // (H) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
   // RETURNS USER ARRAY IF VALID, FALSE IF INVALID
   //  $email : user email
   //  $password : user password
   function verify ($email, $password) {
-    // (G1) GET USER
-    $user = $this->get($email);
+    // (H1) GET USER
+    $user = $this->get($email, "A");
     if (!is_array($user)) {
       $this->error = "Invalid user or password.";
       return false;
     }
 
-    // (G2) PASSWORD CHECK
+    // (H2) PENDING ACTIVATION
+    if ($user["hash_code"]!=null) {
+      $this->error = "Please activate your account first.";
+      return false;
+    }
+
+    // (H3) PASSWORD CHECK
     if (!password_verify($password, $user["user_password"])) {
       $this->error = "Invalid user or password.";
       return false;
@@ -110,18 +146,18 @@ class Users extends Core {
     return $user;
   }
 
-  // (H) LOGIN
+  // (I) LOGIN
   //  $email : user email
   //  $password : user password
   function login ($email, $password) {
-    // (H1) ALREADY SIGNED IN
+    // (I1) ALREADY SIGNED IN
     if (isset($_SESSION["user"])) { return true; }
 
-    // (H2) VERIFY EMAIL PASSWORD ACCOUNT
+    // (I2) VERIFY EMAIL PASSWORD ACCOUNT
     $user = $this->verify($email, $password);
     if ($user===false) { return false; }
 
-    // (H3) SESSION START
+    // (I3) SESSION START
     $_SESSION["user"] = $user;
     unset($_SESSION["user"]["user_password"]);
     unset($_SESSION["user"]["hash_code"]);
@@ -130,72 +166,171 @@ class Users extends Core {
     return true;
   }
 
-  // (I) LOGOUT
+  // (J) LOGOUT
   function logout () {
-    // (I1) ALREADY SIGNED OFF
+    // (J1) ALREADY SIGNED OFF
     if (!isset($_SESSION["user"])) { return true; }
 
-    // (I2) END SESSION
+    // (J2) END SESSION
     $this->Session->destroy();
     return true;
   }
-  
-  // (J) CREATE NEW NFC LOGIN TOKEN
-  //  $id : user id
-  function token ($id) {
-    // (J1) UPDATE TOKEN
-    $token = $this->Core->random($this->nlen);
-    $this->DB->replace("users_hash",
-      ["user_id", "hash_for", "hash_code", "hash_time", "hash_tries"],
-      [$id, "N", $token, date("Y-m-d H:i:s"), 0]
-    );
 
-    // (J2) RETURN ENCODED TOKEN
-    require PATH_LIB . "JWT/autoload.php";
-    return Firebase\JWT\JWT::encode([$id, $token], JWT_SECRET, JWT_ALGO);
+  // (K) REGISTER USER (SIGN UP)
+  //  $name : user name
+  //  $email : user email
+  //  $password : user password
+  function register ($name, $email, $password) {
+    // (K1) ALREADY SIGNED IN
+    if (isset($_SESSION["user"])) {
+      $this->error = "You are already signed in.";
+      return false;
+    }
+
+    // (K2) CHECK USER EXIST
+    if (is_array($this->get($email))) {
+      $this->error = "$email is already registered.";
+      return false;
+    }
+
+    // (K3) CREATE ACCOUNT + SEND ACTIVATION LINK
+    $this->DB->start();
+    $ok = $this->save($name, $email, $password, "U");
+    if ($ok) { $ok = $this->hsend($this->DB->lastID); }
+    $this->DB->end($ok);
+    return $ok;
   }
 
-  // (K) NULLIFY NFC TOKEN
-  function notoken ($id) {
-    $this->DB->delete("users_hash", "`user_id`=? AND `hash_for`='N'", [$id]);
+  // (L) GENERATE HASH & SEND ACTIVATION LINK
+  //  $id : user id or email
+  function hsend ($id) {
+    // (L1) ALREADY SIGNED IN
+    if (isset($_SESSION["user"])) {
+      $this->error = "You are already signed in.";
+      return false;
+    }
+
+    // (L2) GET USER + HASH
+    $user = $this->get($id, "A");
+    if (!is_array($user)) {
+      $this->error = "Invalid user";
+      return false;
+    }
+
+    // (L3) HAS EXISTING HASH - CHECK EXPIRY
+    if ($user["hash_code"]!=null) {
+      $now = strtotime("now");
+      $till = strtotime($user["hash_time"]) + $this->hvalid;
+      if ($now < $till) {
+        $this->error = "Please wait for another ".($till - $now)." seconds.";
+        return false;
+      }
+    }
+
+    // (L4) GENERATE RANDOM HASH
+    $hash = $this->Core->random($this->hlen);
+    $this->hashAdd($user["user_id"], "A", $hash);
+
+    // (L5) SEND ACTIVATION LINK TO USER EMAIL
+    $this->Core->load("Mail");
+    return $this->Mail->send([
+      "to" => $user["user_email"],
+      "subject" => "Validate Your Email",
+      "template" => PATH_PAGES . "MAIL-activate.php",
+      "vars" => [
+        "link" => HOST_BASE."activate?i={$user["user_id"]}&h={$hash}"
+      ]
+    ]);
+  }
+
+  // (M) ACTIVATE ACCOUNT
+  //  $i : user id
+  //  $h : hash code
+  function hactivate ($i, $h) {
+    // (M1) ALREADY SIGNED IN
+    if (isset($_SESSION["user"])) {
+      $this->error = "Already signed in";
+      return false;
+    }
+    
+    // (M2) GET USER + HASH
+    $user = $this->get($i, "A");
+    if (!is_array($user)) {
+      $this->error = "Invalid user";
+      return false;
+    }
+    if ($user["hash_time"]==null) {
+      $this->error = "Account already active";
+      return false;
+    }
+
+    // (M3) HASH CHECK
+    if (strtotime("now") >= strtotime($user["hash_time"]) + $this->hvalid) {
+      $this->error = "Activation link expired";
+      return false;
+    }
+    if ($user["hash_code"]!=$h) {
+      $this->error = "Invalid activation link";
+      return false;
+    }
+
+    // (M4) ACTIVATE ACCOUNT
+    $this->hashDel($i, "A");
+
+    // (M5) LOGIN
+    unset($user["user_password"]);
+    unset($user["hash_code"]);
+    unset($user["hash_time"]);
+    $_SESSION["user"] = $user;
+    $this->Session->save();
     return true;
   }
 
-  // (L) NFC TOKEN LOGIN
-  function intoken ($token) {
-    // (L1) DECODE TOKEN
-    $valid = true;
-    try {
-      require PATH_LIB . "JWT/autoload.php";
-      $token = Firebase\JWT\JWT::decode(
-        $token, new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO)
-      );
-      $valid = is_object($token);
-      if ($valid) {
-        $token = (array) $token;
-        $valid = count($token)==2;
-      }
-    } catch (Exception $e) { $valid = false; }
+  // (N) HASH ADD
+  //  $id : user id
+  //  $for : hash for - "A"ctivation, "OTP", "P"assword reset, "GOO"gle, "NFC"
+  //  $time : timestamp
+  //    - null : use current time
+  //    - string : specify your own
+  //    - "" : don't change
+  function hashAdd ($id, $for, $code, $time=null) : void {
+    $fields = ["user_id", "hash_for", "hash_code"];
+    $data = [$id, $for, $code];
+    if ($time===null) { $fields[] = "hash_time"; $data[] = date("Y-m-d H:i:s"); }
+    else if ($time!="") { $fields[] = "hash_time"; $data[] = $time; }
+    $this->DB->replace("users_hash", $fields, $data);
+  }
 
-    // (L2) VERIFY TOKEN
-    if ($valid) {
-      $user = $this->get($token[0], "N");
-      $valid = (is_array($user) && $user["hash_code"]==$token[1]);
+  // (O) HASH GET
+  //  $id : user id
+  //  $for : hash for
+  function hashGet ($id, $for) {
+    return $this->DB->fetch(
+      "SELECT * FROM `users_hash` WHERE `user_id`=? AND `hash_for`=?",
+      [$id, $for]
+    );
+  }
+
+  // (P) HASH DELETE
+  //  $id : user id
+  //  $for : hash for
+  function hashDel ($id, $for) : void {
+    $this->DB->delete(
+      "users_hash", "`user_id`=? AND `hash_for`=?", [$id, $for]
+    );
+  }
+
+  // (Q) IMPORT USER
+  //  $name : user name
+  //  $email : user email
+  //  $password : user password
+  function import ($name, $email, $password) {
+    // (Q1) CHECK REGISTERED
+    if (is_array($this->get($email))) {
+      $this->error = "$email is already registered";
     }
 
-    // (L3) SESSION START
-    if ($valid) {
-      $_SESSION["user"] = $user;
-      unset($_SESSION["user"]["user_password"]);
-      unset($_SESSION["user"]["hash_code"]);
-      unset($_SESSION["user"]["hash_time"]);
-      unset($_SESSION["user"]["hash_tries"]);
-      $this->Session->save();
-      return true;
-    }
-
-    // (L4) NADA
-    $this->error = "Invalid token";
-    return false;
+    // (Q2) SAVE
+    return $this->save($name, $email, $password, "A");
   }
 }

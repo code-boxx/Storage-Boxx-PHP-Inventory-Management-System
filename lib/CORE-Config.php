@@ -1,5 +1,6 @@
 <?php
 // (A) HOST
+define("SITE_NAME", "Storage Boxx");
 define("HOST_BASE", "http://localhost/");
 define("HOST_NAME", parse_url(HOST_BASE, PHP_URL_HOST));
 define("HOST_BASE_PATH", parse_url(HOST_BASE, PHP_URL_PATH));
@@ -34,25 +35,31 @@ define("JWT_EXPIRE", 0);
 define("JWT_ISSUER", "YOUR-NAME");
 define("JWT_SECRET", "YOUR-SECRET-KEY");
 
-// (F) PUSH NOTIFICATION KEYS
-define("PUSH_PUBLIC", "PUBLIC-KEY");
-define("PUSH_PRIVATE", "SECRET-KEY");
-
-// (G) ERROR HANDLING
-/* (G1) RECOMMENDED FOR LIVE SERVER
+// (F) ERROR HANDLING
+/* (F1) RECOMMENDED FOR LIVE SERVER
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors", 0);
 ini_set("log_errors", 1);
 ini_set("error_log", "PATH/error.log");
 define("ERR_SHOW", false); */
 
-// (G2) RECOMMENDED FOR DEVELOPMENT SERVER
+// (F2) RECOMMENDED FOR DEVELOPMENT SERVER
 error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors", 1);
 ini_set("log_errors", 0);
 define("ERR_SHOW", true);
 
-// (H) USER LEVELS
+// (G) TIMEZONE
+// https://www.php.net/manual/en/timezones.php
+define("SYS_TZ", "UTC");
+define("SYS_TZ_OFFSET", "+00:00");
+date_default_timezone_set(SYS_TZ);
+
+// (H) USER LEVELS - IF YOU WANT TO INCLUDE ROLES IN THE FUTURE
 define("USR_LVL", [
   "A" => "Admin", "U" => "User"
 ]);
+
+// (I) PUSH NOTIFICATION
+define("PUSH_PUBLIC", "KEY");
+define("PUSH_PRIVATE", "KEY");

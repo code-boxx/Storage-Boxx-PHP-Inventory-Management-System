@@ -47,9 +47,9 @@ var cb = {
   //  head : string, title text
   //  body : string, body text
   toast : (status, head, body) => {
-    if (status==1 || status=="1" || status==true) { cb.hToast.i.innerHTML = "thumb_up"; }
-    else if (status==0 || status=="0" || status==false) { cb.hToast.i.innerHTML = "error"; }
-    else { cb.hToast.i.innerHTML = "help"; }
+    if (status==1 || status=="1" || status==true) { cb.hToast.i.className = "ico icon-checkmark"; }
+    else if (status==0 || status=="0" || status==false) { cb.hToast.i.className = "ico icon-cross"; }
+    else { cb.hToast.i.className = "ico icon-question"; }
     cb.hToast.h.innerHTML = head;
     cb.hToast.b.innerHTML = body;
     cb.hToast.o.show();
@@ -76,7 +76,11 @@ var cb = {
 
   // (B4) CHANGE "LOCAL" PAGE
   //  num : int, page number (1 to 5)
-  page : num => { num--; for (let i in cb.hPages) {
+  page : num => {
+    num --;
+    cb.transit(() => cb.pswitch(num));
+  },
+  pswitch : num => { for (let i in cb.hPages) {
     if (i==num) { cb.hPages[i].classList.remove("d-none"); }
     else { cb.hPages[i].classList.add("d-none"); }
   }},
@@ -210,7 +214,13 @@ var cb = {
   })),
 
   // (G) PASSWORD/HASH STRENGTH CHECKER
-  checker : hash => /^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(hash)
+  checker : hash => /^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(hash),
+
+  // (H) TRANSITION
+  transit : swap => {
+    if (document.startViewTransition) { document.startViewTransition(swap); }
+    else { swap(); }
+  }
 };
 
 // (H) INIT INTERFACE

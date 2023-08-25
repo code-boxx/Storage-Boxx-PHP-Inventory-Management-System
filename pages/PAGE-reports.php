@@ -14,7 +14,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <div class="d-flex flex-wrap">
   <!-- (B1) MOVEMENT CSV -->
   <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/movement">
-    <div class="fw-bold text-danger mb-3">ITEMS MOVEMENT</div>
+    <div class="fw-bold text-danger mb-2">ITEMS MOVEMENT</div>
     <div class="form-floating mb-4">
       <select class="form-select" name="range">
         <option value="A">All Items</option>
@@ -39,7 +39,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 
   <!-- (B2) ITEMS LIST -->
   <form class="m-1 p-4 bg-white border" method="post" target="_blank" action="<?=HOST_BASE?>report/items">
-    <div class="fw-bold text-danger mb-3">ITEMS LIST</div>
+    <div class="fw-bold text-danger mb-2">ITEMS LIST</div>
     <div class="form-floating mb-4">
       <select class="form-select" name="range">
         <option value="">All Items</option>

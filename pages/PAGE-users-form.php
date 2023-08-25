@@ -18,12 +18,32 @@ if ($edit) { $user = $_CORE->autoCall("Users", "get"); }
       <label>User Email</label>
     </div>
 
-    <div class="form-floating">
-      <input type="password" class="form-control" id="user_password" required>
-      <label>Password, at least 8 characters alphanumeric.</label>
+    <!-- FIXED TO "ADMIN" - ENABLE THIS SECTION IF YOU WANT USER ROLES
+    <div class="form-floating mb-4">
+      <select class="form-select" id="user_level" required><?php
+        foreach (USR_LVL as $k=>$v) {
+          printf("<option %svalue='%s'>%s</option>",
+            $edit && $user["user_level"]==$k ? "selected " : "" ,
+            $k, $v
+          );
+        }
+      ?></select>
+      <label>User Level</label>
     </div>
+    -->
+    <input type="hidden" id="user_level" value="A">
+
+    <div class="form-floating mb-1">
+      <input type="password" class="form-control" id="user_password" required>
+      <label>Password</label>
+    </div>
+    <div class="text-secondary">* At least 8 alphanumeric characters.</div>
   </div>
 
-  <input type="button" class="col btn btn-danger" value="Back" onclick="cb.page(1)">
-  <input type="submit" class="col btn btn-primary" value="Save">
+  <button type="button" class="my-1 btn btn-danger d-flex-inline" onclick="cb.page(1)">
+    <i class="ico-sm icon-undo2"></i> Back
+  </button>
+  <button type="submit" class="my-1 btn btn-primary d-flex-inline">
+    <i class="ico-sm icon-checkmark"></i> Save
+  </button>
 </form>

@@ -4,10 +4,16 @@ var pusher = {
   worker : null, // registered service worker
   sub : null, // push notification subscription
 
-  // (B) HELPER - SHOW HTML "ALERT MESSAGE"
-  show : msg => {
-    pusher.hStat.innerHTML = msg;
-    pusher.hStat.classList.remove("d-none");
+  // (B) SHOW MESSAGE
+  msg : (txt, good) => {
+    pusher.hStat.classList.remove("bg-white");
+    pusher.hStat.classList.add("text-white");
+    if (good) {
+      pusher.hStat.classList.add("bg-success");
+    } else {
+      pusher.hStat.classList.add("bg-danger");
+    }
+    pusher.hStat.innerHTML = `<i class="ico-sm icon-${good?"checkmark":"warning"}"></i> ${txt}`;
   },
 
   // (C) INIT
@@ -17,11 +23,11 @@ var pusher = {
 
     // (C2) FEATURE CHECK
     if (!("serviceWorker" in navigator)) {
-      pusher.show("Service worker not supported.");
+      pusher.msg("Service worker not supported.");
       return;
     }
     if (!("Notification" in window)) {
-      pusher.show("Push notifications not supported.");
+      pusher.msg("Push notifications not supported.");
       return;
     }
 
@@ -32,17 +38,17 @@ var pusher = {
         Notification.requestPermission()
         .then(perm => {
           if (perm == "granted") { pusher.reg(); }
-          else { pusher.show("Notifications denied - Manually enable permissions to allow low stock warning."); }
+          else { pusher.msg("Notifications denied - Manually enable permissions to allow low stock warning."); }
         })
-        .catch(err => pusher.show("ERROR - " + err.message));
+        .catch(err => pusher.msg("ERROR - " + err.message))
       } else if (Notification.permission == "granted") {
         pusher.reg();
       } else {
-        pusher.show("Notifications denied - Manually enable permissions to allow low stock warning.");
+        pusher.msg("Notifications denied - Manually enable permissions to allow low stock warning.");
       }
     })
     .catch(err => {
-      pusher.show("ERROR - " + err.message);
+      pusher.msg("ERROR - " + err.message);
       console.error(err);
     });
   },
@@ -57,10 +63,10 @@ var pusher = {
           applicationServerKey: cbvapid
         })
         .then(sub => { pusher.sub = sub; pusher.save(); })
-        .catch(err => pusher.show("ERROR - " + err.message));
+        .catch(err => pusher.msg("ERROR - " + err.message));
       } else { pusher.sub = sub; pusher.save(); }
     })
-    .catch(err => pusher.show("ERROR - " + err.message));
+    .catch(err => pusher.msg("ERROR - " + err.message));
   },
 
   // (E) UPDATE SERVER SUBSCRIPTION
@@ -70,7 +76,8 @@ var pusher = {
       endpoint : pusher.sub.endpoint,
       sub : JSON.stringify(pusher.sub)
     },
-    passmsg : false
+    passmsg : false,
+    onpass : () => pusher.msg("Push notification successfully registered.", 1)
   })
 };
 window.addEventListener("load", pusher.init);

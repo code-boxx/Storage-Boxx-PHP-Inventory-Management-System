@@ -14,13 +14,10 @@ class Push extends Core {
 
   // (C) SEND PUSH
   function send ($title, $body, $icon=null, $image=null) {
-    // (C1) THIS SHOULD BE ADMIN-ONLY FUNCTION!
-    // $this->Core->ucheck("A");
-
-    // (C2) MAY TAKE A LONG TIME IF THERE ARE A LOT OF INACTIVE...
+    // (C1) MAY TAKE A LONG TIME IF THERE ARE A LOT OF INACTIVE...
     set_time_limit(45);
 
-    // (C3) LOAD WEB PUSH LIBRARY
+    // (C2) LOAD WEB PUSH LIBRARY
     require PATH_LIB . "webpush/autoload.php";
     $push = new Minishlink\WebPush\WebPush(["VAPID" => [
       "subject" => EMAIL_FROM,
@@ -28,13 +25,13 @@ class Push extends Core {
       "privateKey" => PUSH_PRIVATE
     ]]);
 
-    // (C4) SEND TO SUBSCRIBERS
+    // (C3) SEND TO SUBSCRIBERS
     $this->DB->query("SELECT `data` FROM `webpush`");
     while ($r = $this->DB->stmt->fetchColumn()) {
-      // (C4-1) SUBSCRIBER
+      // (C3-1) SUBSCRIBER
       $sub = Minishlink\WebPush\Subscription::create(json_decode($r, true));
 
-      // (C4-2) PUSH
+      // (C3-2) PUSH
       $result = $push->sendOneNotification($sub, json_encode([
         "title" => $title,
         "body" => $body,
@@ -42,13 +39,13 @@ class Push extends Core {
         "image" => $image
       ]), ["TTL" => 1000]);
 
-      // (C4-3) RESULT
+      // (C3-3) RESULT
       if (!$result->isSuccess() && $result->isSubscriptionExpired()) {
         $this->del($result->getRequest()->getUri()->__toString());
       }
     }
 
-    // (C5) DONE
+    // (C4) DONE
     return true;
   }
 }

@@ -1,40 +1,36 @@
 <?php
-// (A) GET "WATCHED ITEMS"
-$_CORE->load("Inventory");
-$items = $_CORE->Inventory->getMonitor();
-
-// (B) DASHBOARD
+// (A) PAGE META
 $_PMETA = ["load" => [
-  ["s", HOST_ASSETS."PAGE-home.js", "defer"],
-  ["s", HOST_ASSETS."PAGE-home-inv.js", "defer"]
+  ["s", HOST_ASSETS."PAGE-home.js", "defer"]
 ]];
+
+// (B) HTML PAGE
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <!-- (B1) PUSH NOTIFICATIONS -->
-<div id="push-stat" class="alert alert-danger d-none">Test</div>
-<h3 class="mb-1">ITEMS WATCH LIST</h3>
-<div class="mb-3 text-secondary">* click on an item to check the suppliers</div>
+<script>var cbvapid="<?=PUSH_PUBLIC?>";</script>
+<div class="fw-bold text-danger mb-2">PUSH NOTIFICATIONS</div>
+<div class="bg-white border p-3 mb-4" id="push-stat">Initializing...</div>
 
 <!-- (B2) WATCH LIST -->
-<div class="zebra my-4">
-<?php if (is_array($items)) { foreach ($items as $i) {
-$low = $i["stock_qty"] <= $i["stock_low"]; ?>
-<div class="d-flex align-items-center border p-2<?=$low?" text-danger":""?>" onclick="inv.sup('<?=$i["stock_sku"]?>')">
+<div class="fw-bold text-danger mb-2">ITEMS WATCH LIST</div>
+
+<?php
+$_CORE->load("Items");
+$items = $_CORE->Items->getMonitor();
+if (is_array($items)) { foreach ($items as $i) {
+$low = $i["item_qty"] <= $i["item_low"]; ?>
+<div class="d-flex align-items-center bg-white border px-3 py-1 mb-1<?=$low?" text-danger":""?>" onclick="inv.sup('<?=$i["item_sku"]?>')">
+  <div class="pe-4">
+    <i class="ico icon-<?=$low?"cross":"checkmark"?>"></i>
+  </div>
   <div class="flex-grow-1">
-    <div class="fw-bold">[<?=$i["stock_sku"]?>] <?=$i["stock_name"]?></div>
-    <div>
-      <?php if ($low) { ?>
-      <span class="badge bg-danger">LOW</span>
-      <?php } else { ?>
-      <span class="badge bg-primary">OK</span>
-      <?php } ?>
-      Min : <?=$i["stock_low"]?> <?=$i["stock_unit"]?>
-    </div>
+    <div class="fw-bold">[<?=$i["item_sku"]?>] <?=$i["item_name"]?></div>
+    <div>Min : <?=$i["item_low"]?> <?=$i["item_unit"]?></div>
   </div>
-  <div class="ms-1 text-center">
-    <div class="display-6"><?=$i["stock_qty"]?></div>
-    <div><?=$i["stock_unit"]?></div>
+  <div class="text-center">
+    <div class="display-6"><?=$i["item_qty"]?></div>
+    <div><?=$i["item_unit"]?></div>
   </div>
 </div>
-<?php }} else { echo "No items on the watch list."; } ?>
-</div>
+<?php }} else { echo '<div class="bg-white border p-3 mb-4">No items on the watch list.</div>'; } ?>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

@@ -89,7 +89,7 @@ class Suppliers extends Core {
   //  $osku : old SKU, for editing only
   function saveItem ($id, $sku, $ssku, $price, $osku=null) {
     // (F1) CHECKS
-    if (!is_array($this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]))) {
+    if (!is_array($this->DB->fetch("SELECT * FROM `items` WHERE `item_sku`=?", [$sku]))) {
       $this->error = "$sku is not a valid item";
       return false;
     }
@@ -103,7 +103,7 @@ class Suppliers extends Core {
     // (F2) ADD ITEM
     if ($osku===null) {
       $this->DB->insert("suppliers_items", 
-        ["sup_id", "stock_sku", "sup_sku", "unit_price"],
+        ["sup_id", "item_sku", "sup_sku", "unit_price"],
         [$id, $sku, $ssku, $price]
       );
     }
@@ -111,8 +111,8 @@ class Suppliers extends Core {
     // (F3) UPDATE ITEM
     else {
       $this->DB->update(
-        "suppliers_items", ["stock_sku", "sup_sku", "unit_price"], 
-        "`sup_id`=? AND `stock_sku`=?", [$sku, $ssku, $price, $id, $osku]
+        "suppliers_items", ["item_sku", "sup_sku", "unit_price"], 
+        "`sup_id`=? AND `item_sku`=?", [$sku, $ssku, $price, $id, $osku]
       );
     }
 
@@ -124,7 +124,7 @@ class Suppliers extends Core {
   //  $id : supplier id
   //  $sku : item sku
   function delItem ($id, $sku) {
-    $this->DB->delete("suppliers_items", "`sup_id`=? AND `stock_sku`=?", [$id, $sku]);
+    $this->DB->delete("suppliers_items", "`sup_id`=? AND `item_sku`=?", [$id, $sku]);
     return true;
   }
 
@@ -134,10 +134,10 @@ class Suppliers extends Core {
   //  $page : optional, current page number
   function getItems ($id, $search=null, $page=null) {
     // (H1) PARITAL SUPPLIERS SQL + DATA
-    $sql = "FROM `suppliers_items` i JOIN `stock` s USING (`stock_sku`) WHERE i.`sup_id`=?";
+    $sql = "FROM `suppliers_items` i JOIN `items` s USING (`item_sku`) WHERE i.`sup_id`=?";
     $data = [$id];
     if ($search != null) {
-      $sql .= " AND s.`stock_sku` LIKE ? OR s.`stock_name` LIKE ? OR s.`stock_desc` LIKE ?";
+      $sql .= " AND s.`item_sku` LIKE ? OR s.`item_name` LIKE ? OR s.`item_desc` LIKE ?";
       array_push($data, "%$search%", "%$search%", "%$search%");
     }
 
@@ -148,7 +148,7 @@ class Suppliers extends Core {
     }
 
     // (H3) RESULTS
-    return $this->DB->fetchAll("SELECT * $sql", $data, "stock_sku");
+    return $this->DB->fetchAll("SELECT * $sql", $data, "item_sku");
   }
 
   // (I) GET SUPPLIER ITEM
@@ -156,7 +156,7 @@ class Suppliers extends Core {
   //  $sku : item sku
   function getItem ($id, $sku) {
     return $this->DB->fetch(
-      "SELECT * FROM `suppliers_items` WHERE `sup_id`=? AND `stock_sku`=?",
+      "SELECT * FROM `suppliers_items` WHERE `sup_id`=? AND `item_sku`=?",
       [$id, $sku]
     );
   }
@@ -168,14 +168,14 @@ class Suppliers extends Core {
   //  $price : unit price
   function importItem ($id, $sku, $ssku, $price) {
     // (J1) CHECK VALID SKU
-    if (!is_array($this->DB->fetch("SELECT * FROM `stock` WHERE `stock_sku`=?", [$sku]))) {
+    if (!is_array($this->DB->fetch("SELECT * FROM `items` WHERE `item_sku`=?", [$sku]))) {
       $this->error = "$sku is not a valid item";
       return false;
     }
 
     // (J2) REPLACE
     $this->DB->insert("suppliers_items", 
-      ["sup_id", "stock_sku", "sup_sku", "unit_price"],
+      ["sup_id", "item_sku", "sup_sku", "unit_price"],
       [$id, $sku, ($ssku==""||$ssku==null?$sku:$ssku), $price], true
     );
     return true;
@@ -188,8 +188,8 @@ class Suppliers extends Core {
     // (K1) PARITAL SUPPLIERS SQL + DATA
     $sql = "FROM `suppliers_items` i
             LEFT JOIN `suppliers` su USING(`sup_id`) 
-            LEFT JOIN `stock` st USING (`stock_sku`)
-            WHERE i.`stock_sku`=?";
+            LEFT JOIN `items` st USING (`item_sku`)
+            WHERE i.`item_sku`=?";
     $data = [$sku];
 
     // (K2) PAGINATION
@@ -201,6 +201,6 @@ class Suppliers extends Core {
     }
 
     // (K3) RESULTS
-    return $this->DB->fetchAll("SELECT i.*, su.*, st.`stock_unit` $sql", $data, "sup_id");
+    return $this->DB->fetchAll("SELECT i.*, su.*, st.`item_unit` $sql", $data, "sup_id");
   }
 }

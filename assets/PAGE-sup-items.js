@@ -9,7 +9,7 @@ var items = {
     items.id = id;
     cb.page(2);
     cb.load({
-      page : "suppliers/items",
+      page : "sup/items",
       target : "cb-page-2",
       data : { id : id },
       onload : () => items.list()
@@ -20,7 +20,7 @@ var items = {
   list : silent => {
     if (silent!==true) { cb.page(2); }
     cb.load({
-      page : "suppliers/items/list", target : "item-list",
+      page : "sup/items/list", target : "item-list",
       data : {
         id : items.id,
         page : items.pg,
@@ -47,7 +47,7 @@ var items = {
   // (E) SHOW ADD/EDIT DOCKET
   //  id : item sku, for edit only
   addEdit : sku => cb.load({
-    page : "suppliers/items/form", target : "cb-page-3",
+    page : "sup/items/form", target : "cb-page-3",
     data : {
       sku : sku ? sku : "",
       id : items.id
@@ -89,5 +89,20 @@ var items = {
     data : { id : items.id, sku : sku },
     passmsg : "Supplier item deleted",
     onpass : items.list
-  }))
+  })),
+
+  // (H) IMPORT SUPPLIER ITEMS
+  import : () => im.init({
+    name : "SUPPLIER ITEMS",
+    at : 3, back : 2,
+    eg : "dummy-supplier-items.csv",
+    api : { mod : "suppliers", act : "importItem" },
+    after : () => items.list(true),
+    data : { id : items.id },
+    cols : [
+      ["SKU", "sku", true],
+      ["Supplier SKU", "ssku", false],
+      ["Price", "price", "N"]
+    ]
+  })
 };

@@ -1,55 +1,47 @@
 var move = {
   // (A) PROPERTIES
-  // movement form
-  hmForm : null, hmSKU : null, hmDir : null, hmQty : null, hmNote : null,
-  // last entry
-  hlQty : null, hlUnit : null, hlDir : null,  hlSKU : null, hlNote : null,
-  // qr scanner
-  qrscan : null,
-  // nfc scanner
-  hnBtn : null, hnStat : null,
+  hForm : null, // entire movement form
+  hDir : null, hQty : null, hNote : null, // direction, qty, notes
+  hSKU : null, hBatch : null, // sku, batch
+  hnBtn : null, hnStat : null, // nfc
+  hlQty : null, hlDir : null,  hlSKU : null, hlNote : null, // last entry
+  qrscan : null, // qr scanner
 
   // (B) INIT
   init : () => {
     // (B1) GET HTML FIELDS
-    move.hmForm = document.getElementById("mvt-form");
-    move.hmSKU = document.getElementById("mvt-sku");
-    move.hmDir = document.getElementById("mvt-direction");
-    move.hmQty = document.getElementById("mvt-qty");
-    move.hmNote = document.getElementById("mvt-notes");
+    move.hForm = document.getElementById("mvt-form");
+    move.hDir = document.getElementById("mvt-direction");
+    move.hQty = document.getElementById("mvt-qty");
+    move.hNote = document.getElementById("mvt-notes");
+    move.hSKU = document.getElementById("mvt-sku");
+    move.hBatch = document.getElementById("mvt-batch");
+    move.hnBtn = document.getElementById("nfc-btn");
+    move.hnStat = document.getElementById("nfc-stat");
     move.hlQty = document.getElementById("last-qty");
-    move.hlUnit = document.getElementById("last-unit");
     move.hlDir = document.getElementById("last-mvt");
     move.hlSKU = document.getElementById("last-sku");
     move.hlNote = document.getElementById("last-notes");
-    move.hnBtn = document.getElementById("nfc-btn");
-    move.hnStat = document.getElementById("nfc-stat");
 
-    // (B2) INIT WEBCAM SCANNER
-    move.qrscan = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
-    move.qrscan.render((txt, res) => {
-      let buttons = document.querySelectorAll("#reader button");
-      buttons[1].click();
-      move.hmSKU.value = txt;
-      if (move.hmForm.checkValidity()) { window.scrollTo(0, 0); move.save(); }
-      else { move.hmForm.reportValidity(); }
-    });
-
-    // (B3) INIT NFC
+    // (B2) INIT NFC
     if ("NDEFReader" in window) {
-      // (B3-1) ON SUCCESSFUL NFC READ
+      // (B2-1) ON SUCCESSFUL NFC READ
       nfc.onread = evt => {
-        nfc.standby();
-        const decoder = new TextDecoder();
-        for (let record of evt.message.records) {
-          move.hmSKU.value = decoder.decode(record.data);
-        }
-        if (move.hmForm.checkValidity()) { move.save(); }
-        else { move.hmForm.reportValidity(); }
-        move.hnStat.innerHTML = "NFC";
+        try {
+          nfc.standby();
+          const decoder = new TextDecoder();
+          let code = JSON.parse(decoder.decode(evt.message.records[0].data));
+          move.hSKU.value = code.S;
+          move.hBatch.value = code.B;
+          if (move.hForm.checkValidity()) { move.save(); }
+          else { move.hForm.reportValidity(); }
+        } catch (e) {
+          console.error(e);
+          cb.modal("ERROR!", "Failed to decode NFC tag.");
+        } finally { move.hnStat.innerHTML = "NFC"; }
       };
 
-      // (B3-2) ON NFC READ ERROR
+      // (B2-2) ON NFC READ ERROR
       nfc.onerror = err => {
         nfc.stop();
         console.error(err);
@@ -57,33 +49,78 @@ var move = {
         move.hnStat.innerHTML = "ERROR";
       };
 
-      // (B3-3) ENABLE NFC BUTTON
+      // (B2-3) ENABLE NFC BUTTON
       move.hnBtn.onclick = () => {
         move.hnStat.innerHTML = "Scanning - Tap token";
         nfc.scan();
       };
-      move.hnBtn.classList.remove("d-none");
+      move.hnBtn.disabled = false;
+    } else {
+      move.hnStat.innerHTML = "Web NFC Not Supported";
     }
   },
 
-  // (C) SAVE MOVEMENT
+  // (C) "SWITCH ON" QR SCANNER
+  qron : () => {
+    // (C1) INITIALIZE SCANNER
+    if (move.qrscan==null) {
+      move.qrscan = new Html5QrcodeScanner("qr-cam", { fps: 10, qrbox: 250 });
+      move.qrscan.render((txt, res) => {
+        move.qroff();
+        try {
+          let item = JSON.parse(txt);
+          move.hSKU.value = item.S;
+          move.hBatch.value = item.B;
+          if (move.hForm.checkValidity()) { move.save(); }
+          else { move.hForm.reportValidity(); }
+        } catch (e) {
+          console.error(e);
+          cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
+        }
+      });
+    }
+
+    // (C2) SHOW SCANNER
+    cb.transit(() => {
+      document.getElementById("qr-wrapA").classList.remove("d-none");
+      window.scrollTo(0, 0);
+    });
+  },
+
+  // (D) "SWITCH OFF" QR SCANNER
+  qroff : () => {
+    // (D1) SEEMINGLY NO SMART WAY TO "STOP SCANNING"
+    let stop = document.getElementById("html5-qrcode-button-camera-stop"),
+        wrap = document.getElementById("qr-wrapA");
+    if (stop != null) {
+      if (stop.style.display!="none") { stop.click(); }
+    }
+
+    // (D2) HIDE SCANNER
+    cb.transit(() => {
+      wrap.classList.add("d-none");
+      window.scrollTo(0, 0);
+    });
+  },
+
+  // (E) SAVE MOVEMENT
   save : () => {
     cb.api({
-      mod : "inventory", act : "move",
+      mod : "move", act : "saveM",
       data : {
-        sku : move.hmSKU.value,
-        direction : move.hmDir.value,
-        qty : move.hmQty.value,
-        notes : move.hmNote.value
+        sku : move.hSKU.value,
+        batch : move.hBatch.value,
+        direction : move.hDir.value,
+        qty : move.hQty.value,
+        notes : move.hNote.value
       },
       passmsg : "Stock Movement Saved",
       onpass : res => {
-        move.hlQty.innerHTML = move.hmQty.value;
-        move.hlUnit.innerHTML = res.data["stock_unit"];
-        move.hlDir.innerHTML = move.hmDir.options[move.hmDir.selectedIndex].text;
-        move.hlSKU.innerHTML = `[${move.hmSKU.value}] ${res.data["stock_name"]}`;
-        move.hlNote.innerHTML = move.hmNote.value;
-        move.hmForm.reset();
+        move.hlQty.innerHTML = move.hQty.value;
+        move.hlSKU.innerHTML = `${move.hSKU.value} - ${move.hBatch.value}`;
+        move.hlDir.innerHTML = move.hDir.options[move.hDir.selectedIndex].text;
+        move.hlNote.innerHTML = move.hNote.value;
+        move.hForm.reset();
       }
     });
     return false;

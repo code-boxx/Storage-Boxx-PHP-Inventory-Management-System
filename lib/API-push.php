@@ -1,13 +1,10 @@
 <?php
-// (A) ADMIN ONLY
-$_CORE->ucheck("A");
-
-// (B) API ENDPOINTS
+// (A) API ENDPOINTS
 $_CORE->autoAPI([
   "save" => ["Push", "save"],
-  "del" => ["Push", "del"],
-  "send" => ["Push", "send"]
+  "del" => ["Push", "del", "A"],
+  "send" => ["Push", "send", "A"]
 ]);
 
-// (C) INVALID REQUEST
+// (B) INVALID REQUEST
 $_CORE->respond(0, "Invalid request", null, null, 400);

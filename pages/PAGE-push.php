@@ -7,18 +7,24 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <input type="text" class="form-control" id="push_title" required>
     <label>Title</label>
   </div>
+
   <div class="form-floating mb-4">
     <input type="text" class="form-control" id="push_txt" required>
     <label>Message</label>
   </div>
+
   <div class="form-floating mb-4">
-    <input type="text" class="form-control" id="push_ico" required value="<?=HOST_ASSETS?>push-a.webp">
+    <input type="text" class="form-control" id="push_ico" required value="<?=HOST_ASSETS?>ico-512.png">
     <label>Icon</label>
   </div>
+
   <div class="form-floating mb-4">
-    <input type="text" class="form-control" id="push_img" required value="<?=HOST_ASSETS?>push-b.webp">
+    <input type="text" class="form-control" id="push_img" required value="<?=HOST_ASSETS?>head-storage-boxx.webp">
     <label>Cover Image</label>
   </div>
-  <input type="submit" class="col btn btn-primary" value="Send">
+
+  <button type="submit" class="my-1 btn btn-primary d-flex-inline">
+    <i class="ico-sm icon-arrow-right"></i> Send
+  </button>
 </form>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

@@ -4,10 +4,11 @@ $_CORE->ucheck("A");
 
 // (B) API ENDPOINTS
 $_CORE->autoAPI([
+  "get" => ["Users", "get"],
+  "getAll" => ["Users", "getAll"],
   "save" => ["Users", "save"],
   "del" => ["Users", "del"],
-  "token" => ["Users", "token"],
-  "notoken" => ["Users", "notoken"]
+  "import" => ["Users", "import"]
 ]);
 
 // (C) INVALID REQUEST

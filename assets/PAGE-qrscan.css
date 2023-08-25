@@ -1,0 +1,9 @@
+#qr-wrapA {
+  position: fixed; top: 0; left: 0;
+  width:100vw; height: 100vh; z-index: 999;
+  background: #fff;
+}
+#qr-wrapB {
+  max-width: 600px; padding: 30px;
+  margin: 0 auto;
+}

@@ -74,18 +74,22 @@ class CoreBoxx {
   }
 
   // (F) AUTO RESOLVE API REQUEST
-  //  $actions : ["action" => ["module", "function"]]
+  //  $actions : ["action" => ["module", "function", "level"]]
   //  $mode : POST or GET
   function autoAPI ($actions, $mode="POST") : void {
     if (isset($actions[$this->Route->act])) {
-      $result = $this->autoCall($actions[$this->Route->act][0], $actions[$this->Route->act][1], $mode);
-      if ($result!==null) {
-        $this->respond(
-          is_bool($result) ? $result : true, null,
-          is_bool($result) ? null : $result,
-          $this->DB->lastID!==null ? $this->DB->lastID : null
-        );
+      // (F1) ACCESS CHECK
+      if (isset($actions[$this->Route->act][2])) {
+        $this->ucheck($actions[$this->Route->act][2]);
       }
+
+      // (F2) RUN FUNCTION
+      $result = $this->autoCall($actions[$this->Route->act][0], $actions[$this->Route->act][1], $mode);
+      $this->respond(
+        is_bool($result) ? $result : true, null,
+        is_bool($result) ? null : $result,
+        $this->DB->lastID!==null ? $this->DB->lastID : null
+      );
     }
   }
 
@@ -140,8 +144,10 @@ class CoreBoxx {
   }
 
   // (I) GENERATE RANDOM STRING
-  // $length : number of bytes
-  function random ($length=8) { return bin2hex(random_bytes($length)); }
+  // $length : number of characters to generate
+  function random ($length=8) {
+    return substr(preg_replace("/[^A-Za-z0-9]/", "", base64_encode(random_bytes($length * 2))), 0, $length);
+  }
 
   // (J) PAGINATION CALCULATOR
   //  $entries : total number of entries

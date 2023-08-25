@@ -34,7 +34,7 @@ $qr = json_encode(["S" => $_GET["sku"], "B" => $_GET["name"]]);
       <div id="qrcode"></div>
       <div id="qrsku"><?=$_GET["sku"]?> - <?=$_GET["name"]?></div>
       <div id="qritem"><?=$item["item_name"]?></div>
-      <div id="qrexpire">EXPIRE : <?=$item["batch_expire"]?></div>
+      <div id="qrexpire">EXPIRY : <?=strtoupper($item["ex"])?></div>
     </div>
   </body>
 </html>

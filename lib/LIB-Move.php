@@ -5,7 +5,7 @@ class Move extends Core {
   //  $batch : batch name
   function getQ ($sku, $batch) {
     $qty = $this->DB->fetch(
-      "SELECT `item_name`, `item_unit`, `batch_expire`, `item_low`, `batch_qty`, `item_qty`
+      "SELECT `item_name`, `item_unit`, DATE_FORMAT(b.`batch_expire`, '".D_LONG."') `ex`, `item_low`, `batch_qty`, `item_qty`
        FROM `item_batches` b
        JOIN `items` i ON (b.`item_sku`=i.`item_sku`)
        WHERE b.`item_sku`=? AND `batch_name`=?",

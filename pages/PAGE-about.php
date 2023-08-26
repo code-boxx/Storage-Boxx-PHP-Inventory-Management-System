@@ -53,11 +53,14 @@
       NFC Tags
     </a></li>
     <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=usb+fingerprint+scanner&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
-      USB Fingerprint Sensors
+      USB Fingerprint Sensor
+    </a></li>
+    <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=label+printer&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
+      Label Printer
     </a></li>
   </ul>
   <div>
-    * These are affiliate links, I make a small commission when you make a purchase from eBay.
+    * These are affiliate links, I earn a small commission when you make a purchase from eBay.
   </div>
 </div>
 

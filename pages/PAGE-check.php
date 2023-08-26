@@ -34,9 +34,9 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 </form>
 
 <!-- (B3) FLOATING QR SCANNER -->
-<div id="qr-wrapA" class="d-none"><div id="qr-wrapB">
-  <h3 class="mb-3">SCAN QR CODE</h3>
-  <div id="qr-cam"></div>
+<div id="qr-wrapA" class="d-none tran-zoom bg-dark"><div id="qr-wrapB">
+  <h3 class="mb-3 text-white">SCAN QR CODE</h3>
+  <div id="qr-cam" class="bg-light"></div>
   <button type="button" class="mt-4 btn btn-danger d-flex-inline" onclick="check.qroff()">
     <i class="ico-sm icon-cross"></i> Cancel
   </button>

@@ -98,49 +98,49 @@
         <li class="nav-item">
           <img src="<?=HOST_ASSETS?>favicon.png" loading="lazy" width="42" height="42">
           <hr>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>">
             <i class="text-secondary ico-sm icon-meter"></i> Dashboard
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>reports">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>reports">
             <i class="text-secondary ico-sm icon-pie-chart"></i> Reports
           </a>
           <hr>
         </li>
         <li class="nav-item">
           <div class="my-2 fw-bold">Inventory</div>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>items">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>items">
             <i class="text-secondary ico-sm icon-price-tag"></i> Items
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>batch">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>batch">
             <i class="text-secondary ico-sm icon-tree"></i> Batches
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>move">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>move">
             <i class="text-secondary ico-sm icon-truck"></i> Movement
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>check">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>check">
             <i class="text-secondary ico-sm icon-qrcode"></i> Check
           </a>
           <hr>
         </li>
         <li class="nav-item">
           <div class="my-2 fw-bold">Entities</div>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>users">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>users">
             <i class="text-secondary ico-sm icon-users"></i> Users
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>sup">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>sup">
             <i class="text-secondary ico-sm icon-address-book"></i> Suppliers
           </a><hr>
         </li>
         <li class="nav-item">
           <div class="my-2 fw-bold">System</div>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>push">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>push">
             <i class="text-secondary ico-sm icon-notification"></i> Notifications
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>settings">
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>settings">
             <i class="text-secondary ico-sm icon-cog"></i> Settings
           </a>
-          <a class="nav-link ms-2" href="<?=HOST_BASE?>about">
-            <i class="text-secondary ico-sm icon-info"></i> About
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>about">
+            <i class="text-secondary ico-sm icon-info"></i> Help &amp; About
           </a>
           <hr>
         </li>

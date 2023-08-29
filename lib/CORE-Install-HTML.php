@@ -61,7 +61,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="text" name="host" class="form-control" required value="<?=I_HOST?>">
           <label>Domain &amp; Path</label>
         </div>
-        <div class="notes">
+        <div class="text-secondary">
           * Change this only if wrong, include the path if not deployed in root.
           E.G. <code>site.com/myproject/</code>
         </div>
@@ -77,7 +77,7 @@ if (I_PUSH && I_OPENSSL) {
           </select>
           <label>Enforce HTTPS?</label>
         </div>
-        <div class="notes mb-2">
+        <div class="text-secondary mb-2">
           * If enforced, API will only respond to HTTPS calls - Recommended to set "yes" for live servers.
         </div>
 
@@ -88,17 +88,17 @@ if (I_PUSH && I_OPENSSL) {
           </select>
           <label>CORS</label>
         </div>
-        <div class="notes">
+        <div class="text-secondary">
           * Allow CORS only if you intend to develop mobile apps, or let third parties access your system.
         </div>
 
         <div id="corsmore" class="form-floating my-2 d-none">
           <input type="text" class="form-control" name="corsallow">
           <label>Allowed CORS Domains</label>
-          <div class="notes">
+          <div class="text-secondary">
             * Leave this blank to allow all websites and apps to access your system (not recommended).
           </div>
-          <div class="notes">
+          <div class="text-secondary">
             * To restrict which domains can access your system - Enter the domain name (<code>site-a.com</code>), or multiple domains separated by commas (<code>site-a.com, site-b.com</code>).
           </div>
         </div>
@@ -140,7 +140,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="text" name="timezone" class="form-control" value="<?=date_default_timezone_get()?>" required>
           <label>Timezone</label>
         </div>
-        <div class="notes">
+        <div class="text-secondary">
           * If you wish to change it, see the full list of <a href="https://www.php.net/manual/en/timezones.php" target="_blank">supported timezones here</a>.
         </div>
       </div>
@@ -152,7 +152,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="text" name="jwtkey" class="form-control" required>
           <label>Secret Key</label>
         </div>
-        <div class="notes mb-2" onclick="install.rnd()">
+        <div class="text-secondary mb-2" onclick="install.rnd()">
           * Click here to generate random key.
         </div>
 
@@ -160,7 +160,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="text" name="jwyiss" class="form-control" required value="<?=$_SERVER["HTTP_HOST"]?>">
           <label>Issuer</label>
         </div>
-        <div class="notes">
+        <div class="text-secondary">
           * Your company name or domain name.
         </div>
       </div>
@@ -183,7 +183,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="password" name="apass" class="form-control" required>
           <label>Password</label>
         </div>
-        <div class="notes">* At least 8 characters alphanumeric.</div>
+        <div class="text-secondary">* At least 8 characters alphanumeric.</div>
 
         <div class="form-floating mb-2">
           <input type="password" name="apassc" class="form-control" required>
@@ -205,7 +205,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="text" name="pushpublic" class="form-control" required value="<?=I_VAPID["publicKey"]?>">
           <label>Public Key</label>
         </div>
-        <div class="notes">
+        <div class="text-secondary">
           * You can regenerate these with:<br>
           <code>require "lib/webpush/autoload.php";</code><br>
           <code>$keys = Minishlink\WebPush\VAPID::createVapidKeys();</code>

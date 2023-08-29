@@ -1,12 +1,12 @@
 <?php
 // (PHASE A) BASE SETTINGS
-// @TODO - SET AS NECESSARY
 // (A1) MODULES
 define("I_USER", defined("USR_LVL")); // user module
 define("I_PUSH", defined("PUSH_PUBLIC")); // push notifications module
 
 // (A2) FILES & FOLDERS THAT REQUIRE READ/WRITE PERMISSION
 define("I_ALL", [
+  // @TODO - ADD AS REQUIRED
   PATH_BASE, PATH_ASSETS, PATH_LIB, PATH_PAGES, // PATH_UPLOADS,
   PATH_LIB . "CORE-Config.php",
   PATH_BASE . "index.php",
@@ -14,6 +14,7 @@ define("I_ALL", [
 ]);
 
 // (A3) SQL FILES - FROM OLDEST TO NEWEST VERSIONS
+// @TODO - SET AS REQUIRED
 define("I_SQL", ["SQL-Storage-Boxx-0.sql"]);
 
 // (A4) MINIMUM APACHE VERSION + PHP VERSION + EXTENSIONS
@@ -89,13 +90,22 @@ class Install extends Core {
     exit();
   }
 
-  // (PHASE E) GENERATE HTACCESS FILE
-  function E () {
+  // (PHASE E1) GENERATE HTACCESS FILE
+  function E1 () {
     $hbase = ($_POST["https"]=="1" ? "https://" : "http://") . $_POST["host"];
     $hbase = parse_url(rtrim($hbase, "/\\") . "/", PHP_URL_PATH);
     $this->Core->load("Route");
     $this->Route->init($hbase);
     exit("OK");
+  }
+
+  // (PHASE E2) VERIFY HTACCESS
+  function E2 () {
+    $check = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $len = strlen($check);
+    if ($len < 15) { exit("INVALID HOST URL"); }
+    $check = substr($check, $len-15, $len);
+    exit($check=="installer/test/" ? "OK" : "INVALID HOST URL");
   }
 
   // (PHASE F) VERIFY HTACCESS FILE + INSTALL

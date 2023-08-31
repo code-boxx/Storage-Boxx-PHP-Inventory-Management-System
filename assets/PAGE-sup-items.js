@@ -25,7 +25,12 @@ var items = {
         id : items.id,
         page : items.pg,
         search : items.find
-      }
+      },
+      onload : () => autocomplete.attach({
+        target : document.getElementById("item-search"),
+        mod : "autocomplete", act : "supitem",
+        onpick : res => items.search()
+      })
     });
   },
 

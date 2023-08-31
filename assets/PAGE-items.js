@@ -126,4 +126,11 @@ var item = {
     item.suplist();
   }}
 };
-window.addEventListener("load", item.list);
+window.addEventListener("load", () => {
+  item.list();
+  autocomplete.attach({
+    target : document.getElementById("item-search"),
+    mod : "autocomplete", act : "item",
+    onpick : res => item.search()
+  });
+});

@@ -3,6 +3,7 @@
 $_PMETA = ["load" => [
   ["s", HOST_ASSETS."csv.min.js", "defer"],
   ["s", HOST_ASSETS."PAGE-import.js", "defer"],
+  ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
   ["s", HOST_ASSETS."PAGE-items.js", "defer"],
   ["s", HOST_ASSETS."PAGE-items-check.js", "defer"]
 ]];

@@ -11,9 +11,10 @@ ALTER TABLE `settings`
   ADD KEY `setting_group` (`setting_group`);
 
 INSERT INTO `settings` (`setting_name`, `setting_description`, `setting_value`, `setting_group`) VALUES
-('APP_VER', 'App version', '1', 0),
+('APP_VER', 'App version', 1, 0),
 ('EMAIL_FROM', 'System email from', 'sys@site.com', 1),
-('PAGE_PER', 'Number of entries per page', '20', 1),
+('PAGE_PER', 'Number of entries per page', 20, 1),
+('SUGGEST_LIMIT', 'Autocomplete suggestion limit', 5, 1),
 ('D_LONG', 'MYSQL date format (long)', '%e %M %Y', 1),
 ('D_SHORT', 'MYSQL date format (short)', '%Y-%m-%d', 1),
 ('DT_LONG', 'MYSQL date time format (long)', '%e %M %Y %l:%i:%S %p', 1),

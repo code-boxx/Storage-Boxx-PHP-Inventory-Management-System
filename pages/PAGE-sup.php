@@ -2,6 +2,7 @@
 // (A) PAGE META
 $_PMETA = ["load" => [
   ["s", HOST_ASSETS."csv.min.js", "defer"],
+  ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
   ["s", HOST_ASSETS."PAGE-import.js", "defer"],
   ["s", HOST_ASSETS."PAGE-sup.js", "defer"],
   ["s", HOST_ASSETS."PAGE-sup-items.js", "defer"]

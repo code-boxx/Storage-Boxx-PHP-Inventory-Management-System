@@ -50,6 +50,17 @@ var check = {
     } else {
       check.hnStat.innerHTML = "Web NFC Not Supported";
     }
+
+    // (B3) INIT AUTOCOMPLETE
+    autocomplete.attach({
+      target : document.getElementById("check-sku"),
+      mod : "autocomplete", act : "sku"
+    });
+    autocomplete.attach({
+      target : document.getElementById("check-batch"),
+      mod : "autocomplete", act : "batch",
+      data : { sku : document.getElementById("check-sku") }
+    });
   },
 
   // (C) "SWITCH ON" QR SCANNER

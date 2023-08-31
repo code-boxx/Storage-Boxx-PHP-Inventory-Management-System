@@ -12,12 +12,12 @@ Storage Boxx is an open-source PHP Inventory Management System - With a built-in
 
 ## :camera: SCREENSHOTS
 <p float="left">
-  <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-boxx-1.png">
-  <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-boxx-2.png">
-  <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-boxx-3.png">
-  <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-boxx-4.png">
-  <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-boxx-5.png">
-  <img width="250" src="https://github.com/code-boxx/Storage-Boxx/blob/main/assets/storage-boxx-6.png">
+  <img width="250" src="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/blob/main/assets/storage-boxx-1.png">
+  <img width="250" src="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/blob/main/assets/storage-boxx-2.png">
+  <img width="250" src="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/blob/main/assets/storage-boxx-3.png">
+  <img width="250" src="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/blob/main/assets/storage-boxx-4.png">
+  <img width="250" src="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/blob/main/assets/storage-boxx-5.png">
+  <img width="250" src="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/blob/main/assets/storage-boxx-6.png">
 </p>
 <br><br>
 

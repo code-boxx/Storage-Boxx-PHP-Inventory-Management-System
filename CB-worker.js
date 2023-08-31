@@ -4,6 +4,7 @@ self.addEventListener("install", evt => {
   evt.waitUntil(
     caches.open("StorageBoxx")
     .then(cache => cache.addAll([
+      "assets/CB-autocomplete.js",
       "assets/PAGE-batch-check.js",
       "assets/PAGE-batch.js",
       "assets/PAGE-cb.js",

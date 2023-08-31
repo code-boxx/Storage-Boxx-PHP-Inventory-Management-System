@@ -3,6 +3,7 @@
 $_PMETA = ["load" => [
   ["l", HOST_ASSETS."PAGE-qrscan.css", "defer"],
   ["s", HOST_ASSETS."html5-qrcode.min.js", "defer"],
+  ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
   ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
   ["s", HOST_ASSETS."PAGE-check.js", "defer"]
 ]];

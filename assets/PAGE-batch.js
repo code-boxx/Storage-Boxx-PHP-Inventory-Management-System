@@ -151,4 +151,11 @@ var batch = {
     ]
   })
 };
-window.addEventListener("load", batch.list);
+window.addEventListener("load", () => {
+  batch.list();
+  autocomplete.attach({
+    target : document.getElementById("batch-search"),
+    mod : "autocomplete", act : "item",
+    onpick : res => batch.search()
+  });
+});

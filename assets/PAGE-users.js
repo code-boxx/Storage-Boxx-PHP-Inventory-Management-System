@@ -160,4 +160,11 @@ var usr = {
     ]
   })
 };
-window.addEventListener("load", usr.list);
+window.addEventListener("load", () => {
+  usr.list();
+  autocomplete.attach({
+    target : document.getElementById("user-search"),
+    mod : "autocomplete", act : "user",
+    onpick : res => usr.search()
+  });
+});

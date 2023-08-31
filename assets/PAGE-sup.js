@@ -88,4 +88,11 @@ var sup = {
     ]
   })
 };
-window.addEventListener("load", sup.list);
+window.addEventListener("load", () => {
+  sup.list();
+  autocomplete.attach({
+    target : document.getElementById("sup-search"),
+    mod : "autocomplete", act : "sup",
+    onpick : res => sup.search()
+  });
+});

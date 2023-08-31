@@ -1,5 +1,5 @@
 ## STORAGE BOXX
-Storage Boxx is an open-source PHP Inventory Management System. With built-in webcam QR scanner, NFC scanner, passwordless login, and an optional experimental AI assistant.
+Storage Boxx is an open-source PHP Inventory Management System. With a built-in webcam QR scanner, NFC scanner, passwordless login, and an optional experimental AI assistant.
 <br><br>
 
 ## :white_check_mark: "OUT OF THE BOX" FEATURES
@@ -39,6 +39,7 @@ Storage Boxx is an open-source PHP Inventory Management System. With built-in we
 1) [How To Use](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use)
 2) [FAQ](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-faq)
 3) [For The Developers](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev)
+4) [Experimental AI Module Setup](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-ai)
 
 ## :bulb: FRAMEWORKS
 1) PHP Packages

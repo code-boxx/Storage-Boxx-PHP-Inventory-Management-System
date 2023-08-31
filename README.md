@@ -41,7 +41,7 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
 3) [For The Developers](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev)
 4) [Experimental AI Module Setup](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-ai)
 
-## :bulb: FRAMEWORKS
+## :electric_plug: FRAMEWORKS
 1) PHP Packages
    - [Core Boxx](https://code-boxx.com/core-boxx-php-framework/)
    - [PHP Web Push](https://github.com/web-push-libs/web-push-php)

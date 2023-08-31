@@ -1,0 +1,7 @@
+SKU,"Supplier SKU",Name,Description,Unit,"Unit Price"
+BT-123,BT-123,"Bath Towel","White bath towels.",PCS,1.10
+SP-567,SP-567,Soap,"For cleaning... things.",BOX,5.50
+SP-678,SP-678,Shampoo,"For cleaning... hair.",CTN,6.60
+TB-234,TB-234,"Tooth Brush","Non electric.",BOX,2.20
+TP-345,TP-888ABC,"Tooth Paste","Not edible.",BOX,3.30
+TP-456,TP-888XYZ,"Toilet Paper","For wiping... things.",ROL,4.40

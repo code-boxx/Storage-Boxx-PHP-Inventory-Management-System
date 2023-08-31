@@ -1,5 +1,5 @@
 ## STORAGE BOXX
-Storage Boxx is an open-source PHP Inventory Management System - With a built-in webcam QR scanner, NFC, and passwordless login. No need for expensive equipment, a decent smartphone will do.
+Storage Boxx is an open-source PHP Inventory Management System. With built-in webcam QR scanner, NFC scanner, passwordless login, and an optional experimental AI assistant.
 <br><br>
 
 ## :white_check_mark: "OUT OF THE BOX" FEATURES
@@ -35,10 +35,23 @@ Storage Boxx is an open-source PHP Inventory Management System - With a built-in
 2) Access `http://your-site.com/` in your browser and walk through the installer.
 <br><br>
 
-## :bulb: DOCUMENTATION & FRAMEWORKS
-1) Visit [Storage Boxx](https://code-boxx.com/storage-boxx-php-inventory-system/) for the full documentation!
-2) PHP Packages - [Core Boxx](https://code-boxx.com/core-boxx-php-framework/), [PHP Web Push](https://github.com/web-push-libs/web-push-php), [PHP-JWT](https://github.com/firebase/php-jwt), [PHP WebAuthn](https://github.com/lbuchs/WebAuthn/tree/master).
-3) HTML JS - [Bootstrap](https://getbootstrap.com/), [IconMoon](https://icomoon.io/), [HTML5 QRCode Scanner](https://github.com/mebjas/html5-qrcode), [QRCodeJS](https://davidshimjs.github.io/qrcodejs/), [csv.js](https://github.com/okfn/csv.js/).
+## :bulb: DOCUMENTATION
+1) [How To Use](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use)
+2) [FAQ](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-faq)
+3) [For The Developers](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev)
+
+## :bulb: FRAMEWORKS
+1) PHP Packages
+   - [Core Boxx](https://code-boxx.com/core-boxx-php-framework/)
+   - [PHP Web Push](https://github.com/web-push-libs/web-push-php)
+   - [PHP-JWT](https://github.com/firebase/php-jwt)
+   - [PHP WebAuthn](https://github.com/lbuchs/WebAuthn/tree/master)
+2) HTML JS
+   - [Bootstrap](https://getbootstrap.com/)
+   - [IconMoon](https://icomoon.io/)
+   - [HTML5 QRCode Scanner](https://github.com/mebjas/html5-qrcode)
+   - [QRCodeJS](https://davidshimjs.github.io/qrcodejs/)
+   - [csv.js](https://github.com/okfn/csv.js/).
 <br><br>
 
 ## :star: SUPPORT

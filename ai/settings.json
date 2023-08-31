@@ -1,0 +1,11 @@
+{
+  "model_file" : "ggml-model-gpt4all-falcon-q4_0.bin",
+  "model_tokens" : 1000,
+  "doc_chunks" : 512,
+  "doc_overlap" : 30,
+  "chain_type" : "stuff",
+  "chain_kwargs" : 4,
+  "chain_source" : 0,
+  "ws_host" : "localhost",
+  "ws_port" : 5678
+}

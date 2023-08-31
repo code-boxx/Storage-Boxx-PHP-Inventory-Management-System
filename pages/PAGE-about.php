@@ -17,10 +17,10 @@
     <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev" target="_blank">
       For The Developers
     </a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx/issues/new/choose" target="_blank">
+    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/issues/new/choose" target="_blank">
       Report a bug
     </a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx" target="_blank">
+    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
       Storage Boxx GitHub
     </a></li>
   </ul>

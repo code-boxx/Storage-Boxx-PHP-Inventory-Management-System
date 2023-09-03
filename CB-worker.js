@@ -8,6 +8,7 @@ self.addEventListener("install", evt => {
       "assets/PAGE-batch-check.js",
       "assets/PAGE-batch.js",
       "assets/PAGE-cb.js",
+      "assets/PAGE-cb.css",
       "assets/PAGE-check.js",
       "assets/PAGE-forgot.js",
       "assets/PAGE-home.js",

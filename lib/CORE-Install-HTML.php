@@ -183,7 +183,7 @@ if (I_PUSH && I_OPENSSL) {
           <input type="password" name="apass" class="form-control" required>
           <label>Password</label>
         </div>
-        <div class="text-secondary">* At least 8 characters alphanumeric.</div>
+        <div class="text-secondary mb-2">* At least 8 characters alphanumeric.</div>
 
         <div class="form-floating mb-2">
           <input type="password" name="apassc" class="form-control" required>

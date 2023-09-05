@@ -33,13 +33,13 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
 ## :floppy_disk: INSTALLATION
 1) Just copy/unzip into your `http` folder.
 2) Access `http://your-site.com/` in your browser and walk through the installer.
+3) [Experimental AI Assistant](https://github.com/code-boxx/Storage-Boxx-AI)
 <br><br>
 
 ## :bulb: DOCUMENTATION
 1) [How To Use](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use)
 2) [FAQ](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-faq)
 3) [For The Developers](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev)
-4) [Experimental AI Module Setup](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-ai)
 
 ## :electric_plug: FRAMEWORKS
 1) PHP Packages

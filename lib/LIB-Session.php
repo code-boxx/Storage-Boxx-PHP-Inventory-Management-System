@@ -5,9 +5,9 @@ class Session extends Core {
     "domain" => HOST_NAME,
     "path" => "/",
     "httponly" => true,
-    "expires" => 0
-    // "secure" => true,
-    // "samesite" => "None"
+    "expires" => 0,
+    "samesite" => "Lax",
+    // "secure" => true
   ];
 
   // (B) CONSTRUCTOR - AUTO VALIDATE JWT COOKIE & RESTORE SESSION DATA

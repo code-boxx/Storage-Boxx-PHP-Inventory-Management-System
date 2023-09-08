@@ -57,7 +57,13 @@ var items = {
       sku : sku ? sku : "",
       id : items.id
     },
-    onload : () => cb.page(3)
+    onload : () => {
+      cb.page(3);
+      autocomplete.attach({
+        target : document.getElementById("item-sku"),
+        mod : "autocomplete", act : "sku"
+      });
+    }
   }),
 
   // (F) SAVE ITEM

@@ -24,6 +24,10 @@ class Forgot extends Core {
       $this->error = "$email is not an active account.";
       return false;
     }
+    if ($user["user_level"] == "S") {
+      $this->error = "$email is not an active account.";
+      return false;
+    }
 
     // (B3) CHECK PREVIOUS REQUEST (PREVENT SPAM)
     $req = $this->Users->hashGet($user["user_id"], "P");

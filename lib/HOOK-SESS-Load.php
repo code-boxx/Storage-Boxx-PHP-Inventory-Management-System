@@ -7,11 +7,11 @@ if (isset($_SESSION["user"])) {
   $user = $this->DB->fetch(
     "SELECT * FROM `users` WHERE `user_id`=?", [$_SESSION["user"]["user_id"]]
   );
-  if (is_array($user)) {
-    unset($user["user_password"]);
-    $_SESSION["user"] = $user;
-  } else {
+  if (!is_array($user) || (isset($user["user_level"]) && $user["user_level"]=="S")) {
     $this->destroy();
     throw new Exception("Invalid or expired session.");
+  } else {
+    unset($user["user_password"]);
+    $_SESSION["user"] = $user;
   }
 }

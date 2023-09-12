@@ -2,7 +2,14 @@
 class Push extends Core {
   // (A) SAVE SUBSCRIBER
   function save ($endpoint, $sub) {
-    $this->DB->replace("webpush", ["endpoint", "data"], [$endpoint, $sub]);
+    $this->DB->replace("webpush",
+      ["endpoint", "user_id", "data"],
+      [
+        $endpoint,
+        isset($_SESSION["user"]) ? $_SESSION["user"]["user_id"] : null,
+        $sub
+      ]
+    );
     return true;
   }
 
@@ -12,8 +19,8 @@ class Push extends Core {
     return true;
   }
 
-  // (C) SEND PUSH
-  function send ($title, $body, $icon=null, $image=null) {
+  // (C) SEND PUSH NOTIFICATION
+  function send ($title, $body, $icon=null, $image=null, $uid=null) {
     // (C1) MAY TAKE A LONG TIME IF THERE ARE A LOT OF INACTIVE...
     set_time_limit(45);
 
@@ -25,8 +32,12 @@ class Push extends Core {
       "privateKey" => PUSH_PRIVATE
     ]]);
 
-    // (C3) SEND TO SUBSCRIBERS
-    $this->DB->query("SELECT `data` FROM `webpush`");
+    // (C3) SEND TO SUBSCRIBER(S)
+    $this->DB->query(
+      "SELECT `data` FROM `webpush`" . 
+      ($uid==null ? "" : " WHERE `user_id`=?"),
+      $uid==null ? null : [$uid]
+    );
     while ($r = $this->DB->stmt->fetchColumn()) {
       // (C3-1) SUBSCRIBER
       $sub = Minishlink\WebPush\Subscription::create(json_decode($r, true));

@@ -1,11 +1,11 @@
 <?php
 // (A-B) PROPERTIES, SETTINGS, HELPER
 // (C-D) GET USERS
-// (E-G) SAVE & DELETE USER
-// (H-J) VERIFY, LOGIN, LOGOUT
-// (K-M) REGISTRATION, ACTIVATION
-// (N-P) USER HASH
-// (Q) IMPORT
+// (E-H) SAVE & DELETE USER
+// (I-K) VERIFY, LOGIN, LOGOUT
+// (L-N) REGISTRATION, ACTIVATION
+// (O-Q) USER HASH
+// (R) IMPORT
 class Users extends Core {
   // (A) SETTINGS
   private $hvalid = 900; // validation link good for 15 mins
@@ -26,7 +26,6 @@ class Users extends Core {
   //  $id : user id or email
   //  $hash : optional, also get validation hash
   function get ($id, $hash=null) {
-    // (C1) SELECT
     $sql = sprintf(
       "SELECT %s FROM `users` u%s WHERE u.`user_%s`=?",
       $hash==null ? "u.*" : "u.*, h.`hash_code`, h.`hash_time`, h.`hash_tries`",
@@ -93,26 +92,35 @@ class Users extends Core {
     return true;
   }
 
-  // (G) UPDATE ACCOUNT (LIMITED "MY ACCOUNT" USER SAVE)
+  // (G) SUSPEND USER
+  //  $id : user id
+  function suspend ($id) {
+    $this->DB->update("users",
+      ["`user_level`=?"], "`user_id`=?",
+      ["S", $id]
+    );
+  }
+
+  // (H) UPDATE ACCOUNT (LIMITED "MY ACCOUNT" USER SAVE)
   //  $name : name
   //  $cpass : current password
   //  $pass : new password
   function update ($name, $cpass, $pass) {
-    // (G1) MUST BE SIGNED IN
+    // (H1) MUST BE SIGNED IN
     if (!isset($_SESSION["user"])) {
       $this->error = "Please sign in first";
       return false;
     }
 
-    // (G2) PASSWORD STRENGTH
+    // (H2) PASSWORD STRENGTH
     if (!$this->checker($pass)) { return false; }
 
-    // (G3) VERIFY CURRENT PASSWORD
+    // (H3) VERIFY CURRENT PASSWORD
     if (!$this->verify($_SESSION["user"]["user_email"], $cpass)) {
       return false;
     }
 
-    // (G4) UPDATE DATABASE
+    // (H4) UPDATE DATABASE
     $this->DB->update("users",
       ["user_name", "user_password"], "`user_id`=?",
       [$name, password_hash($pass, PASSWORD_DEFAULT), $_SESSION["user"]["user_id"]]
@@ -120,25 +128,31 @@ class Users extends Core {
     return true;
   }
 
-  // (H) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
+  // (I) VERIFY EMAIL & PASSWORD (LOGIN OR SECURITY CHECK)
   // RETURNS USER ARRAY IF VALID, FALSE IF INVALID
   //  $email : user email
   //  $password : user password
   function verify ($email, $password) {
-    // (H1) GET USER
+    // (I1) GET USER
     $user = $this->get($email, "A");
     if (!is_array($user)) {
       $this->error = "Invalid user or password.";
       return false;
     }
 
-    // (H2) PENDING ACTIVATION
+    // (I2) PENDING ACTIVATION
     if ($user["hash_code"]!=null) {
       $this->error = "Please activate your account first.";
       return false;
     }
 
-    // (H3) PASSWORD CHECK
+    // (I3) SUSPENDED
+    if ($user["user_level"]=="S") {
+      $this->error = "Invalid user or password.";
+      return false;
+    }
+
+    // (I4) PASSWORD CHECK
     if (!password_verify($password, $user["user_password"])) {
       $this->error = "Invalid user or password.";
       return false;
@@ -146,18 +160,18 @@ class Users extends Core {
     return $user;
   }
 
-  // (I) LOGIN
+  // (J) LOGIN
   //  $email : user email
   //  $password : user password
   function login ($email, $password) {
-    // (I1) ALREADY SIGNED IN
+    // (J1) ALREADY SIGNED IN
     if (isset($_SESSION["user"])) { return true; }
 
-    // (I2) VERIFY EMAIL PASSWORD ACCOUNT
+    // (J2) VERIFY EMAIL PASSWORD ACCOUNT
     $user = $this->verify($email, $password);
     if ($user===false) { return false; }
 
-    // (I3) SESSION START
+    // (J3) SESSION START
     $_SESSION["user"] = $user;
     unset($_SESSION["user"]["user_password"]);
     unset($_SESSION["user"]["hash_code"]);
@@ -166,34 +180,34 @@ class Users extends Core {
     return true;
   }
 
-  // (J) LOGOUT
+  // (K) LOGOUT
   function logout () {
-    // (J1) ALREADY SIGNED OFF
+    // (K1) ALREADY SIGNED OFF
     if (!isset($_SESSION["user"])) { return true; }
 
-    // (J2) END SESSION
+    // (K2) END SESSION
     $this->Session->destroy();
     return true;
   }
 
-  // (K) REGISTER USER (SIGN UP)
+  // (L) REGISTER USER (SIGN UP)
   //  $name : user name
   //  $email : user email
   //  $password : user password
   function register ($name, $email, $password) {
-    // (K1) ALREADY SIGNED IN
+    // (L1) ALREADY SIGNED IN
     if (isset($_SESSION["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }
 
-    // (K2) CHECK USER EXIST
+    // (L2) CHECK USER EXIST
     if (is_array($this->get($email))) {
       $this->error = "$email is already registered.";
       return false;
     }
 
-    // (K3) CREATE ACCOUNT + SEND ACTIVATION LINK
+    // (L3) CREATE ACCOUNT + SEND ACTIVATION LINK
     $this->DB->start();
     $ok = $this->save($name, $email, $password, "U");
     if ($ok) { $ok = $this->hsend($this->DB->lastID); }
@@ -201,23 +215,23 @@ class Users extends Core {
     return $ok;
   }
 
-  // (L) GENERATE HASH & SEND ACTIVATION LINK
+  // (M) GENERATE HASH & SEND ACTIVATION LINK
   //  $id : user id or email
   function hsend ($id) {
-    // (L1) ALREADY SIGNED IN
+    // (M1) ALREADY SIGNED IN
     if (isset($_SESSION["user"])) {
       $this->error = "You are already signed in.";
       return false;
     }
 
-    // (L2) GET USER + HASH
+    // (M2) GET USER + HASH
     $user = $this->get($id, "A");
     if (!is_array($user)) {
       $this->error = "Invalid user";
       return false;
     }
 
-    // (L3) HAS EXISTING HASH - CHECK EXPIRY
+    // (M3) HAS EXISTING HASH - CHECK EXPIRY
     if ($user["hash_code"]!=null) {
       $now = strtotime("now");
       $till = strtotime($user["hash_time"]) + $this->hvalid;
@@ -227,11 +241,11 @@ class Users extends Core {
       }
     }
 
-    // (L4) GENERATE RANDOM HASH
+    // (M4) GENERATE RANDOM HASH
     $hash = $this->Core->random($this->hlen);
     $this->hashAdd($user["user_id"], "A", $hash);
 
-    // (L5) SEND ACTIVATION LINK TO USER EMAIL
+    // (M5) SEND ACTIVATION LINK TO USER EMAIL
     $this->Core->load("Mail");
     return $this->Mail->send([
       "to" => $user["user_email"],
@@ -243,17 +257,17 @@ class Users extends Core {
     ]);
   }
 
-  // (M) ACTIVATE ACCOUNT
+  // (N) ACTIVATE ACCOUNT
   //  $i : user id
   //  $h : hash code
   function hactivate ($i, $h) {
-    // (M1) ALREADY SIGNED IN
+    // (N1) ALREADY SIGNED IN
     if (isset($_SESSION["user"])) {
       $this->error = "Already signed in";
       return false;
     }
     
-    // (M2) GET USER + HASH
+    // (N2) GET USER + HASH
     $user = $this->get($i, "A");
     if (!is_array($user)) {
       $this->error = "Invalid user";
@@ -264,7 +278,7 @@ class Users extends Core {
       return false;
     }
 
-    // (M3) HASH CHECK
+    // (N3) HASH CHECK
     if (strtotime("now") >= strtotime($user["hash_time"]) + $this->hvalid) {
       $this->error = "Activation link expired";
       return false;
@@ -274,10 +288,10 @@ class Users extends Core {
       return false;
     }
 
-    // (M4) ACTIVATE ACCOUNT
+    // (N4) ACTIVATE ACCOUNT
     $this->hashDel($i, "A");
 
-    // (M5) LOGIN
+    // (N5) LOGIN
     unset($user["user_password"]);
     unset($user["hash_code"]);
     unset($user["hash_time"]);
@@ -286,7 +300,7 @@ class Users extends Core {
     return true;
   }
 
-  // (N) HASH ADD
+  // (O) HASH ADD
   //  $id : user id
   //  $for : hash for - "A"ctivation, "OTP", "P"assword reset, "GOO"gle, "NFC"
   //  $time : timestamp
@@ -301,7 +315,7 @@ class Users extends Core {
     $this->DB->replace("users_hash", $fields, $data);
   }
 
-  // (O) HASH GET
+  // (P) HASH GET
   //  $id : user id
   //  $for : hash for
   function hashGet ($id, $for) {
@@ -311,7 +325,7 @@ class Users extends Core {
     );
   }
 
-  // (P) HASH DELETE
+  // (Q) HASH DELETE
   //  $id : user id
   //  $for : hash for
   function hashDel ($id, $for) : void {
@@ -320,17 +334,17 @@ class Users extends Core {
     );
   }
 
-  // (Q) IMPORT USER
+  // (R) IMPORT USER
   //  $name : user name
   //  $email : user email
   //  $password : user password
   function import ($name, $email, $password) {
-    // (Q1) CHECK REGISTERED
+    // (R1) CHECK REGISTERED
     if (is_array($this->get($email))) {
       $this->error = "$email is already registered";
     }
 
-    // (Q2) SAVE
+    // (R2) SAVE
     return $this->save($name, $email, $password, "A");
   }
 }

@@ -57,7 +57,7 @@ date_default_timezone_set(SYS_TZ);
 
 // (H) USER LEVELS - IF YOU WANT TO INCLUDE ROLES IN THE FUTURE
 define("USR_LVL", [
-  "A" => "Admin", "U" => "User"
+  "A" => "Admin", "U" => "User", "S" => "Suspended"
 ]);
 
 // (I) PUSH NOTIFICATION

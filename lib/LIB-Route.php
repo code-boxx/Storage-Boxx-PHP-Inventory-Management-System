@@ -9,10 +9,20 @@ class Route extends Core {
 
   // (A) RUN URL ROUTING ENGINE
   function run () : void {
-    // (A1) CLEAN CURRENT URL PATH
+    // (A1) GET URL PATH SEGMENT
+    $this->path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+
+    // (A2) SPECIAL CASE
+    // e.g. http://site.com//, http://site.com//XYZ
+    if ($this->path == "") {
+      $this->load("PAGE-404.php", 404);
+      exit();
+    }
+
+    // (A3) CLEAN CURRENT URL PATH
     // http://site.com/ > $this->path = "/"
     // http://site.com/hello/world/ > $this->path = "hello/world/"
-    $this->path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $this->path = preg_replace("~/{2,}~", "/", $this->path);
     if (substr($this->path, 0, strlen(HOST_BASE_PATH)) == HOST_BASE_PATH) {
       $this->path = substr($this->path, strlen(HOST_BASE_PATH));
     }

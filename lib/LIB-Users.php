@@ -96,7 +96,7 @@ class Users extends Core {
   //  $id : user id
   function suspend ($id) {
     $this->DB->update("users",
-      ["`user_level`=?"], "`user_id`=?",
+      ["user_level"], "`user_id`=?",
       ["S", $id]
     );
   }

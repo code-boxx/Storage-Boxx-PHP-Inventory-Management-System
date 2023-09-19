@@ -43,6 +43,10 @@ class WAIN extends Core {
       $this->error = "Please register for passwordless login first.";
       return false;
     }
+    if ($user["user_level"]=="S") {
+      $this->error = "Invalid user or password.";
+      return false;
+    }
     $user["hash_code"] = json_decode($user["hash_code"]);
     $user["hash_code"]->credentialId = hex2bin($user["hash_code"]->credentialId);
     $user["hash_code"]->AAGUID = hex2bin($user["hash_code"]->AAGUID);

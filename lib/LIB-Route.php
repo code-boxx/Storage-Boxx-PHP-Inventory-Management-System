@@ -97,7 +97,7 @@ class Route extends Core {
       require PATH_PAGES . $file;
     } else {
       http_response_code(404);
-      require PATH_PAGES . "PAGE-404.php";
+      if (!isset($_POST["ajax"])) { require PATH_PAGES . "PAGE-404.php"; }
     }
   }
 

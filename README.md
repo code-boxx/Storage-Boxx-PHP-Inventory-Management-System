@@ -52,7 +52,7 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
    - [IconMoon](https://icomoon.io/)
    - [HTML5 QRCode Scanner](https://github.com/mebjas/html5-qrcode)
    - [QRCodeJS](https://davidshimjs.github.io/qrcodejs/)
-   - [csv.js](https://github.com/okfn/csv.js/).
+   - [csv.js](https://github.com/okfn/csv.js/)
 <br><br>
 
 ## :star: SUPPORT

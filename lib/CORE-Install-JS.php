@@ -67,7 +67,7 @@ var install = {
     // (E1) LOCK INSTALL FORM
     install.toggle(false);
 
-    // (E2) DUMMY PROOFING TO THE MAX!
+    // (E2) URL DUMMY PROOFING TO THE MAX!
     let hHost = document.getElementsByName("host")[0],
         domain = hHost.value;
     domain = domain.trim();
@@ -77,8 +77,17 @@ var install = {
     if (domain.charAt(domain.length-1) != "/") { domain = domain + "/"; }
     hHost.value = domain;
 
+    // (E3) DUMMY PROOFING - API ENFORCE HTTPS BUT HOST URL IS NOT HTTPS
+    let https = document.getElementsByName("https")[0].value,
+        enforce = document.getElementsByName("apihttps")[0].value;
+    if (enforce==1 && https==0) {
+      alert("Please set your HOST URL to HTTPS if you want to enforce HTTPS for API calls. Also make sure that you have a valid SSL cert.");
+      install.toggle(true);
+      return false;
+    }
+
     <?php if (I_USER) { ?>
-    // (E3) ADMIN PASSWORD
+    // (E4) ADMIN PASSWORD
     var pass = document.getElementsByName("apass")[0],
         cpass = document.getElementsByName("apassc")[0];
     if (pass.value != cpass.value) {
@@ -87,7 +96,7 @@ var install = {
       return false;
     }
 
-    // (E4) PASSWORD STRENGTH CHECK - AT LEAST 8 CHARACTERS ALPHANUMERIC
+    // (E5) PASSWORD STRENGTH CHECK - AT LEAST 8 CHARACTERS ALPHANUMERIC
     if (!/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/i.test(pass.value)) {
       alert("Password must be at least 8 characters alphanumeric");
       install.toggle(true);
@@ -95,15 +104,15 @@ var install = {
     }
     <?php } ?>
 
-    // (E5) URL PATH
+    // (E6) URL PATH
     let url = (document.getElementsByName("https")[0].value=="0" ? "http" : "https")
             + "://" + domain ;
 
-    // (E6) GENERATE HTACCESS
+    // (E7) GENERATE HTACCESS
     install.ajax(url, "E1", () => {
-      // (E7) VERIFY HTACCESS
+      // (E8) VERIFY HTACCESS
       install.ajax(url + "installer/test/", "E2", () => {
-        // (E8) PROCEED INSTALLATION
+        // (E9) PROCEED INSTALLATION
         install.ajax(url, "F", () => {
           alert("Installation complete, this page will now reload.");
           location.href = url;

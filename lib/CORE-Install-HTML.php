@@ -12,6 +12,9 @@ unset($uHOST); unset($uIDX);
 if (I_PUSH && I_OPENSSL) {
   require PATH_LIB . "webpush/autoload.php";
   define("I_VAPID", Minishlink\WebPush\VAPID::createVapidKeys());
+  if (I_VAPID==null || I_VAPID==false || I_VAPID=="") {
+    exit("Failed to generate push notification VAPID keys. Make sure that OpenSSL is properly installed and configured.");
+  }
 }
 
 // (C) HTML ?>
@@ -77,8 +80,11 @@ if (I_PUSH && I_OPENSSL) {
           </select>
           <label>Enforce HTTPS?</label>
         </div>
+        <div class="text-secondary">
+          * Once enforced, API will only respond to HTTPS calls. Recommended for live servers.
+        </div>
         <div class="text-secondary mb-2">
-          * If enforced, API will only respond to HTTPS calls - Recommended to set "yes" for live servers.
+          * The host URL above need to be set to "HTTPS" if you want to enforce this.
         </div>
 
         <div class="form-floating mb-2">

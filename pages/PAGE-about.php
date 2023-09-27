@@ -11,7 +11,7 @@
     <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use" target="_blank">
       How To Use?
     </a></li>
-    <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-faq" target="_blank">
+    <li><a href="https://code-boxx.com/core-boxx-php-framework/#sec-faq" target="_blank">
       FAQ
     </a></li>
     <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev" target="_blank">
@@ -35,6 +35,9 @@
   </a>
   <a class="my-1 btn btn-danger d-flex-inline" href="https://payhip.com/codeboxx" target="_blank">
     <i class="ico-sm icon-cart"></i> Code Boxx Store
+  </a>
+  <a class="my-1 btn btn-danger d-flex-inline" href="https://github.com/sponsors/code-boxx" target="_blank">
+    <i class="ico-sm icon-heart"></i> GitHub Sponsor
   </a>
 </div>
 

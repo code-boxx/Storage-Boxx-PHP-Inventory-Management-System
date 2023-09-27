@@ -1,7 +1,7 @@
 <?php require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <h1 class="mb-0">STORAGE BOXX</h1>
 <div class="text-secondary mb-4">open source php inventory management system</div>
-<img class="img-fluid d-block mx-auto mb-4" style="max-height:450px;" src="<?=HOST_ASSETS?>head-storage-boxx.webp">
+<img class="img-fluid d-block mx-auto mb-4" src="<?=HOST_ASSETS?>head-storage-boxx.webp">
 
 <h5 class="text-danger mb-2">
   <i class="ico-sm icon-sphere"></i> OFFICIAL

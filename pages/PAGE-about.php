@@ -1,70 +1,90 @@
 <?php require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <h1 class="mb-0">STORAGE BOXX</h1>
-<div class="text-secondary mb-4">open source php inventory management system</div>
-<img class="img-fluid d-block mx-auto mb-4" src="<?=HOST_ASSETS?>head-storage-boxx.webp">
+<div class="text-secondary mb-4"><small>
+  open source php inventory system
+</small></div>
 
 <h5 class="text-danger mb-2">
-  <i class="ico-sm icon-sphere"></i> OFFICIAL
+  <i class="ico-sm icon-question"></i> HOW TO USE
 </h5>
 <div class="bg-white border p-4 mb-4">
-  <ul class="mb-0">
-    <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use" target="_blank">
-      How To Use?
-    </a></li>
-    <li><a href="https://code-boxx.com/core-boxx-php-framework/#sec-faq" target="_blank">
-      FAQ
-    </a></li>
-    <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev" target="_blank">
-      For The Developers
-    </a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/issues/new/choose" target="_blank">
-      Report a bug
-    </a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
-      Storage Boxx GitHub
-    </a></li>
-  </ul>
+  <a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use" target="_blank">
+    Quick Tutorial
+  </a>
 </div>
 
-<h5 class="text-danger mb-2">
+<h5 class="text-danger mb-0">
   <i class="ico-sm icon-heart"></i> SUPPORT
 </h5>
+<div class="text-secondary mb-2"><small>
+  * Help keep Storage Boxx alive, even if it is just a little bit.
+</small></div>
 <div class="bg-white border p-4 mb-4">
   <a class="my-1 btn btn-danger d-flex-inline" href="https://www.paypal.com/paypalme/wstoh/5" target="_blank">
     <i class="ico-sm icon-mug"></i> Buy me a coffee
   </a>
-  <a class="my-1 btn btn-danger d-flex-inline" href="https://payhip.com/codeboxx" target="_blank">
-    <i class="ico-sm icon-cart"></i> Code Boxx Store
-  </a>
   <a class="my-1 btn btn-danger d-flex-inline" href="https://github.com/sponsors/code-boxx" target="_blank">
     <i class="ico-sm icon-heart"></i> GitHub Sponsor
   </a>
+  <a class="my-1 btn btn-danger d-flex-inline" href="https://payhip.com/codeboxx" target="_blank">
+    <i class="ico-sm icon-cart"></i> Code Boxx Store
+  </a>
+</div>
+
+<h5 class="text-danger mb-0">
+  <i class="ico-sm icon-power-cord"></i> RECOMMENDED EQUIPMENT
+</h5>
+<div class="text-secondary mb-2"><small>
+  * These are affiliate links, I earn a small commission when you make a purchase from eBay.
+</small></div>
+<div class="bg-white border p-4 mb-4">
+  <ul>
+    <li>
+      <a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=logitech+webcam&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
+        Webcam
+      </a> - For desktops that do not have one.
+    </li>
+    <li>
+      <a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=usb+qr+scanner&_sacat=0&rt=nc&LH_BIN=1&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
+        USB QR Code Scanner
+      </a> - If you prefer the "traditional way".
+    </li>
+    <li>
+      <a href="https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=nfc+tags&_sacat=0&LH_TitleDesc=0&toolid=10001&rt=nc&mkcid=1&campid=5338785898&_odkw=usb+qr+scanner&_osacat=0&LH_BIN=1&siteid=0&mkrid=711-53200-19255-0&customid=&mkevt=1" target="_blank">
+        NFC Tags
+      </a> - Buy these in bulk, and they costs just a few cents each.
+    </li>
+    <li>
+      <a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=usb+fingerprint+scanner&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
+        USB Fingerprint Sensor
+      </a> - For desktops/laptops that do not have one.
+    </li>
+    <li>
+      <a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=label+printer&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
+        Label Printer
+      </a> - Print your QR code labels.
+    </li>
+  </ul>
 </div>
 
 <h5 class="text-danger mb-2">
-  <i class="ico-sm icon-power-cord"></i> EQUIPMENT
+  <i class="ico-sm icon-wrench"></i> FOR THE DEVELOPERS
 </h5>
 <div class="bg-white border p-4 mb-4">
-  <ul>
-    <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=logitech+webcam&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
-      Webcam
+  <ul class="mb-0">
+    <li><a href="https://code-boxx.com/core-boxx-php-framework/#sec-faq" target="_blank">
+      FAQ
     </a></li>
-    <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=usb+qr+scanner&_sacat=0&rt=nc&LH_BIN=1&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
-      USB QR Code Scanner
+    <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev" target="_blank">
+      Developer Notes
     </a></li>
-    <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2334524.m570.l1313&_nkw=nfc+tags&_sacat=0&LH_TitleDesc=0&toolid=10001&rt=nc&mkcid=1&campid=5338785898&_odkw=usb+qr+scanner&_osacat=0&LH_BIN=1&siteid=0&mkrid=711-53200-19255-0&customid=&mkevt=1" target="_blank">
-      NFC Tags
+    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
+      Storage Boxx GitHub
     </a></li>
-    <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=usb+fingerprint+scanner&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
-      USB Fingerprint Sensor
-    </a></li>
-    <li><a href="https://www.ebay.com/sch/i.html?_from=R40&_nkw=label+printer&_sacat=0&LH_TitleDesc=0&rt=nc&LH_ItemCondition=1000&mkcid=1&mkrid=711-53200-19255-0&siteid=0&campid=5338785898&customid=&toolid=10001&mkevt=1" target="_blank">
-      Label Printer
+    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/issues/new/choose" target="_blank">
+      Report a bug / Feature Request
     </a></li>
   </ul>
-  <div>
-    * These are affiliate links, I earn a small commission when you make a purchase from eBay.
-  </div>
 </div>
 
 <h5 class="text-danger mb-2">
@@ -75,9 +95,9 @@
     <li><a href="https://code-boxx.com/" target="_blank">Code Boxx</a></li>
     <li><a href="https://www.youtube.com/c/CodeBoxx" target="_blank">YouTube</a></li>
     <li><a href="https://www.pinterest.com/codeboxx/" target="_blank">Pinterest</a></li>
+    <li><a href="https://www.facebook.com/real.code.boxx/" target="_blank">Facebook</a></li>
     <li><a href="https://github.com/code-boxx/" target="_blank">GitHub</a></li>
     <li><a href="https://codepen.io/code-boxx" target="_blank">CodePen</a></li>
-    <li><a href="https://dev.to/codeboxx" target="_blank">DEV</a></li>
   </ul>
 </div>
 

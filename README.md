@@ -7,7 +7,8 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
 2) Create item NFC tags, built-in NFC scanner.
 3) Passwordless login - NFC and Web Authentication (Biometric, PIN, Face Recognition)
 4) Stock level monitoring, push notifications on low stock.
-5) Installable progressive web app.
+5) Batch and expiration tracking.
+6) Installable progressive web app.
 <br><br>
 
 ## :camera: SCREENSHOTS
@@ -27,21 +28,27 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
 3) PHP MYSQL PDO Extension
 4) PHP OPENSSL Extension
 5) At least PHP 8.0
-6) Take note, Weccam, NFC and Passwordless (Web Authentication) support depends on the user's device and browser.
+6) Take note - Webcam, NFC and Passwordless (Web Authentication) support depends on the user's device and browser.
 <br><br>
 
 ## :floppy_disk: INSTALLATION
-1) Just copy/unzip into your `http` folder.
+1) Copy & unzip into your `http` folder.
 2) Access `http://your-site.com/` in your browser and walk through the installer.
 3) If you want, add the [optional AI Assistant](https://github.com/code-boxx/Storage-Boxx-AI) after the installation.
+<br><br>
+
+## :star: SUPPORT
+1) Just give this project a star. That will indirectly drive more traffic a little bit. :wink:
+2) [Sponsor this project](https://github.com/sponsors/code-boxx). Even a small one time amount helps.
 <br><br>
 
 ## :bulb: DOCUMENTATION
 1) [How To Use](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use)
 2) [FAQ](https://code-boxx.com/core-boxx-php-framework/#sec-faq)
 3) [For The Developers](https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev)
+<br><br>
 
-## :electric_plug: FRAMEWORKS
+## :electric_plug: CREDITS AND FRAMEWORKS USED
 1) PHP Packages
    - [Core Boxx](https://code-boxx.com/core-boxx-php-framework/)
    - [PHP Web Push](https://github.com/web-push-libs/web-push-php)
@@ -53,10 +60,6 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
    - [HTML5 QRCode Scanner](https://github.com/mebjas/html5-qrcode)
    - [QRCodeJS](https://davidshimjs.github.io/qrcodejs/)
    - [csv.js](https://github.com/okfn/csv.js/)
-<br><br>
-
-## :star: SUPPORT
-Like this project? Just give it a star. That will indirectly help grow my blog a little bit. :wink:
 <br><br>
 
 ## :newspaper: LICENSE

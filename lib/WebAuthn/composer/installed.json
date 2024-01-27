@@ -2,23 +2,23 @@
     "packages": [
         {
             "name": "lbuchs/webauthn",
-            "version": "v2.0.1",
-            "version_normalized": "2.0.1.0",
+            "version": "v2.1.1",
+            "version_normalized": "2.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lbuchs/WebAuthn.git",
-                "reference": "7d3ea0d83ac1dac35bb159f166202ee7a55ef1fe"
+                "reference": "e73ff007e8a1099e72e0dbdd9d0884057409fc54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lbuchs/WebAuthn/zipball/7d3ea0d83ac1dac35bb159f166202ee7a55ef1fe",
-                "reference": "7d3ea0d83ac1dac35bb159f166202ee7a55ef1fe",
+                "url": "https://api.github.com/repos/lbuchs/WebAuthn/zipball/e73ff007e8a1099e72e0dbdd9d0884057409fc54",
+                "reference": "e73ff007e8a1099e72e0dbdd9d0884057409fc54",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0.0"
             },
-            "time": "2023-05-16T07:27:49+00:00",
+            "time": "2024-01-15T15:46:57+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -44,7 +44,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lbuchs/WebAuthn/issues",
-                "source": "https://github.com/lbuchs/WebAuthn/tree/v2.0.1"
+                "source": "https://github.com/lbuchs/WebAuthn/tree/v2.1.1"
             },
             "install-path": "../lbuchs/webauthn"
         }

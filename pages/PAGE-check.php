@@ -5,6 +5,7 @@ $_PMETA = ["load" => [
   ["s", HOST_ASSETS."html5-qrcode.min.js", "defer"],
   ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
   ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-qrscan.js", "defer"],
   ["s", HOST_ASSETS."PAGE-check.js", "defer"]
 ]];
 
@@ -33,13 +34,4 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <i class="ico-sm icon-feed"></i> <span id="nfc-stat">NFC</span>
   </button>
 </form>
-
-<!-- (B3) FLOATING QR SCANNER -->
-<div id="qr-wrapA" class="d-none tran-zoom bg-dark"><div id="qr-wrapB">
-  <h3 class="mb-3 text-white">SCAN QR CODE</h3>
-  <div id="qr-cam" class="bg-light"></div>
-  <button type="button" class="mt-4 btn btn-danger d-flex-inline" onclick="check.qroff()">
-    <i class="ico-sm icon-cross"></i> Cancel
-  </button>
-</div></div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

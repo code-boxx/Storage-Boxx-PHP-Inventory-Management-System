@@ -4,17 +4,20 @@ if (isset($_SESSION["user"])) { $_CORE->redirect(); }
 
 // (B) PART 1 - ENTER EMAIL
 if (!isset($_GET["i"]) && !isset($_GET["h"])) {
-$_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-forgot.js", "defer"]]];
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-forgot.js", "defer"],
+  ["c", HOST_ASSETS."PAGE-login.css"]
+]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <div class="container">
 <div class="row justify-content-center">
-<div class="col-md-10 bg-white border">
+<div class="col-md-6 bg-white">
 <div class="row">
-  <div class="col-4" style="background:url('<?=HOST_ASSETS?>users.webp') center;background-size:cover"></div>
   <form class="col-8 p-4" onsubmit="return forgot();">
-    <img src="<?=HOST_ASSETS?>favicon.png" class="p-2 rounded-circle" style="width:128px;height:128px;background:#f1f1f1">
-    <h3 class="mt-4 mb-0">FORGOT PASSWORD</h3>
-    <div class="mb-4 text-secondary">No worries. Enter your email, and we will send you a password reset link.</div>
+    <h3 class="m-0">FORGOT PASSWORD</h3>
+    <div class="mb-4 text-secondary"><small>
+      Enter your email, and we will send you a password reset link.
+    </small></div>
 
     <div class="form-floating mb-4">
       <input type="email" id="forgot-email" class="form-control" required>
@@ -29,6 +32,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <a href="<?=HOST_BASE?>login">Back To Login</a>
     </div>
   </form>
+  <div class="col-4" id="login-r" style="background:url('<?=HOST_ASSETS?>users.webp') center;"></div>
 </div>
 </div>
 </div>
@@ -39,14 +43,15 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 else {
 $_CORE->load("Forgot");
 $pass = $_CORE->Forgot->reset($_GET["i"], $_GET["h"]);
+$_PMETA = ["load" => [
+  ["c", HOST_ASSETS."PAGE-login.css"]
+]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <div class="container">
 <div class="row justify-content-center">
-<div class="col-md-10 bg-white border">
+<div class="col-md-6 bg-white">
 <div class="row">
-  <div class="col-4" style="background:url('<?=HOST_ASSETS?>users.webp') center;background-size:cover"></div>
   <div class="col-8 p-4">
-    <img src="<?=HOST_ASSETS?>favicon.png" class="p-2 rounded-circle" style="width:128px;height:128px;background:#f1f1f1">
     <h3 class="my-4"><?=$pass ? "DONE!" : "OH NO..."?></h3>
     <div class="mb-4"><?php
       if ($pass) { echo "A new password has been sent to your email."; }
@@ -57,6 +62,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
       <a href="<?=HOST_BASE?>login">Back To Login</a>
     </div>
   </div>
+  <div class="col-4" id="login-r" style="background:url('<?=HOST_ASSETS?>users.webp') center;"></div>
 </div>
 </div>
 </div>

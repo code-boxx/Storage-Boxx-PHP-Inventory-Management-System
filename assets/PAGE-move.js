@@ -5,7 +5,6 @@ var move = {
   hSKU : null, hBatch : null, // sku, batch
   hnBtn : null, hnStat : null, // nfc
   hlQty : null, hlDir : null,  hlSKU : null, hlNote : null, // last entry
-  qrscan : null, // qr scanner
 
   // (B) INIT
   init : () => {
@@ -73,48 +72,16 @@ var move = {
 
   // (C) "SWITCH ON" QR SCANNER
   qron : () => {
-    // (C1) INITIALIZE SCANNER
-    if (move.qrscan==null) {
-      move.qrscan = new Html5QrcodeScanner("qr-cam", { fps: 10, qrbox: 250 });
-      move.qrscan.render((txt, res) => {
-        move.qroff();
-        try {
-          let item = JSON.parse(txt);
-          move.hSKU.value = item.S;
-          move.hBatch.value = item.B;
-          if (move.hForm.checkValidity()) { move.save(); }
-          else { move.hForm.reportValidity(); }
-        } catch (e) {
-          console.error(e);
-          cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
-        }
+    if (qrscan.scanner==null) {
+      qrscan.init(move.hSKU, move.hBatch, () => {
+        if (move.hForm.checkValidity()) { move.save(); }
+        else { move.hForm.reportValidity(); }
       });
     }
-
-    // (C2) SHOW SCANNER
-    cb.transit(() => {
-      document.getElementById("qr-wrapA").classList.remove("d-none");
-      window.scrollTo(0, 0);
-    });
+    qrscan.show();
   },
 
-  // (D) "SWITCH OFF" QR SCANNER
-  qroff : () => {
-    // (D1) SEEMINGLY NO SMART WAY TO "STOP SCANNING"
-    let stop = document.getElementById("html5-qrcode-button-camera-stop"),
-        wrap = document.getElementById("qr-wrapA");
-    if (stop != null) {
-      if (stop.style.display!="none") { stop.click(); }
-    }
-
-    // (D2) HIDE SCANNER
-    cb.transit(() => {
-      wrap.classList.add("d-none");
-      window.scrollTo(0, 0);
-    });
-  },
-
-  // (E) SAVE MOVEMENT
+  // (D) SAVE MOVEMENT
   save : () => {
     cb.api({
       mod : "move", act : "saveM",

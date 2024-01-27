@@ -1,0 +1,10 @@
+:root {
+  --bs-light-rgb: 150,150,150;
+}
+#cb-body {
+  align-items: center;
+}
+#login-r {
+  background-size: contain !important;
+  min-height: 380px;
+}

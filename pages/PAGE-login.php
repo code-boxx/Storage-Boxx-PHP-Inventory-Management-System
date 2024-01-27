@@ -4,10 +4,10 @@ if (isset($_SESSION["user"])) { $_CORE->redirect(); }
 
 // (B) PAGE META & SCRIPTS
 $_PMETA = ["load" => [
-  // NFC LOGIN
   ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
   ["s", HOST_ASSETS."PAGE-wa-helper.js", "defer"],
-  ["s", HOST_ASSETS."PAGE-login.js", "defer"]
+  ["s", HOST_ASSETS."PAGE-login.js", "defer"],
+  ["c", HOST_ASSETS."PAGE-login.css"]
 ]];
 
 // (C) HTML PAGE
@@ -20,14 +20,15 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 
   <!-- (C2) LOGIN FORM -->
   <div class="row justify-content-center">
-  <div class="col-md-10 bg-white border">
+  <div class="col-md-6 bg-white">
   <div class="row">
-    <div class="col-4" style="background:url('<?=HOST_ASSETS?>users.webp') center;background-size:cover"></div>
     <div class="col-8 p-4">
       <form onsubmit="return login();">
         <!-- (C2-1) NORMAL LOGIN -->
-        <img src="<?=HOST_ASSETS?>favicon.png" class="p-2 rounded-circle" style="width:128px;height:128px;background:#f1f1f1">
-        <h3 class="my-4">PLEASE SIGN IN</h3>
+        <h3 class="m-0">PLEASE SIGN IN</h3>
+        <div class="mb-4 text-secondary"><small>
+          Welcome to Storage Boxx.
+        </small></div>
 
         <div class="form-floating mb-4">
           <input type="email" id="login-email" class="form-control" required>
@@ -61,6 +62,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
         <a href="<?=HOST_BASE?>forgot">Forgot Password</a>
       </div>
     </div>
+    <div class="col-4" id="login-r" style="background:url('<?=HOST_ASSETS?>users.webp') center;"></div>
   </div>
   </div>
   </div>

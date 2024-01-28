@@ -3,7 +3,7 @@ var qrscan = {
   scanner : null, // scanner object
   
   // (B) INITIALIZE
-  init : (hSKU, hBatch, after) => {
+  init : after => {
     // (B1) ATTACH HTML
     let hScan = document.createElement("div");
     hScan.id = "qr-wrapA";
@@ -21,15 +21,7 @@ var qrscan = {
     qrscan.scanner = new Html5QrcodeScanner("qr-cam", { fps: 10, qrbox: 250 });
     qrscan.scanner.render((txt, res) => {
       qrscan.hide();
-      try {
-        let item = JSON.parse(txt);
-        hSKU.value = item.S;
-        hBatch.value = item.B;
-        after();
-      } catch (e) {
-        console.error(e);
-        cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
-      }
+      after(txt);
     });
   },
 

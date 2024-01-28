@@ -64,9 +64,17 @@ var check = {
 
   // (C) "SWITCH ON" QR SCANNER
   qron : () => {
-    if (qrscan.scanner==null) {
-      qrscan.init(check.hSKU, check.hBatch, check.pre);
-    }
+    qrscan.init(txt => {
+      try {
+        let item = JSON.parse(txt);
+        check.hSKU.value = item.S;
+        check.hBatch.value = item.B;
+        check.pre();
+      } catch (e) {
+        console.error(e);
+        cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
+      }
+    });
     qrscan.show();
   },
 

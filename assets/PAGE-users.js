@@ -146,7 +146,26 @@ var usr = {
     cb.page(1);
   },
 
-  // (K) IMPORT USERS
+  // (K) SHOW WRITE QR PAGE
+  hqNull : null, // html null token button
+  qrShow : id => cb.load({
+    page : "users/qr", target : "cb-page-2",
+    data : { id : id },
+    onload : () => {
+      usr.hqNull = document.getElementById("qr-null");
+      cb.page(2);
+    }
+  }),
+
+  // (L) NULLIFY QR TOKEN
+  qrNull : id => cb.api({
+    mod : "session", act : "qrdel",
+    data : { id : id },
+    passmsg : "Login token nullified.",
+    onpass : res => usr.hqNull.disabled = true
+  }),
+
+  // (M) IMPORT USERS
   import : () => im.init({
     name : "USERS",
     at : 2, back : 1,
@@ -160,6 +179,7 @@ var usr = {
     ]
   })
 };
+
 window.addEventListener("load", () => {
   usr.list();
   autocomplete.attach({

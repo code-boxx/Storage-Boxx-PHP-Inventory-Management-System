@@ -6,7 +6,10 @@ if (isset($_SESSION["user"])) { $_CORE->redirect(); }
 $_PMETA = ["load" => [
   ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
   ["s", HOST_ASSETS."PAGE-wa-helper.js", "defer"],
+  ["s", HOST_ASSETS."html5-qrcode.min.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-qrscan.js", "defer"],
   ["s", HOST_ASSETS."PAGE-login.js", "defer"],
+  ["c", HOST_ASSETS."PAGE-qrscan.css"],
   ["c", HOST_ASSETS."PAGE-login.css"]
 ]];
 
@@ -52,6 +55,10 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
         <!-- (LOGIN WITH NFC) -->
         <button type="button" id="nfc-a" onclick="nin.go()" disabled class="my-1 btn btn-primary d-flex-inline">
           <i class="ico-sm icon-feed"></i> <span id="nfc-b">NFC</span>
+        </button>
+        <!-- (LOGIN WITH QR) -->
+        <button type="button" id="qr-in" onclick="qr.go()" class="my-1 btn btn-primary d-flex-inline">
+          <i class="ico-sm icon-qrcode"></i> QR
         </button>
       </form>
 

@@ -103,6 +103,22 @@ var nin = {
   }
 };
 
-// (IV) INIT
+// (IV) QR LOGIN
+var qr = {
+  // (A) INITIALIZE QR SCANNER
+  go : () => {
+    if (qrscan.scanner==null) {
+      qrscan.init(token => cb.api({
+        mod : "session", act : "qrlogin",
+        data : { token : token },
+        passmsg : false,
+        onpass : () => location.href = cbhost.base
+      }));
+    }
+    qrscan.show();
+  }
+};
+
+// (V) INIT
 window.addEventListener("load", wa.init);
 window.addEventListener("load", nin.init);

@@ -9,7 +9,7 @@
 class Users extends Core {
   // (A) SETTINGS
   private $hvalid = 900; // validation link good for 15 mins
-  private $hlen = 12; // 24 characters validation hash
+  private $hlen = 12; // 12 characters validation hash
 
   // (B) PASSWORD CHECKER (HELPER)
   //  $password : password to check

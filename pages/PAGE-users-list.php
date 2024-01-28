@@ -16,6 +16,9 @@ if (is_array($users)) { foreach ($users as $id=>$u) { ?>
       <li class="dropdown-item" onclick="usr.addEdit(<?=$id?>)">
         <i class="text-secondary ico-sm icon-pencil"></i> Edit
       </li>
+      <li class="dropdown-item" onclick="usr.qrShow(<?=$id?>)">
+        <i class="text-secondary ico-sm icon-qrcode"></i> QR Login
+      </li>
       <li class="dropdown-item" onclick="usr.nfcShow(<?=$id?>)">
         <i class="text-secondary ico-sm icon-feed"></i> NFC Login
       </li>

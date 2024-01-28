@@ -73,9 +73,17 @@ var move = {
   // (C) "SWITCH ON" QR SCANNER
   qron : () => {
     if (qrscan.scanner==null) {
-      qrscan.init(move.hSKU, move.hBatch, () => {
-        if (move.hForm.checkValidity()) { move.save(); }
-        else { move.hForm.reportValidity(); }
+      qrscan.init(txt => {
+        try {
+          let item = JSON.parse(txt);
+          move.hSKU.value = item.S;
+          move.hBatch.value = item.B;
+          if (move.hForm.checkValidity()) { move.save(); }
+          else { move.hForm.reportValidity(); }
+        } catch (e) {
+          console.error(e);
+          cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
+        }
       });
     }
     qrscan.show();

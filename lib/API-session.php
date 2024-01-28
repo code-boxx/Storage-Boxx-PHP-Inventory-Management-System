@@ -16,7 +16,11 @@ $_CORE->autoAPI([
   // (A4) NFC LOGIN
   "nfcadd" => ["NFCIN", "add", "A"],
   "nfcdel" => ["NFCIN", "del", "A"],
-  "nfclogin" => ["NFCIN", "login"]
+  "nfclogin" => ["NFCIN", "login"],
+  // (A5) QR LOGIN
+  "qradd" => ["QRIN", "add", "A"],
+  "qrdel" => ["QRIN", "del", "A"],
+  "qrlogin" => ["QRIN", "login"]
 ]);
 
 // (B) INVALID REQUEST

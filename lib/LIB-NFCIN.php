@@ -10,11 +10,17 @@ class NFCIN extends Core {
   // (B) CREATE NEW NFC LOGIN TOKEN
   //  $id : user id
   function add ($id) {
-    // (B1) UPDATE TOKEN
+    // (B1) CHECK VALID USER
+    if (!is_array($this->Users->get($id))) {
+      $this->error = "Invalid user";
+      return false;
+    }
+
+    // (B2) UPDATE TOKEN
     $token = $this->Core->random($this->nlen);
     $this->Users->hashAdd($id, "NFC", password_hash($token, PASSWORD_DEFAULT));
 
-    // (B2) RETURN ENCODED TOKEN
+    // (B3) RETURN ENCODED TOKEN
     require PATH_LIB . "JWT/autoload.php";
     return Firebase\JWT\JWT::encode([$id, $token], JWT_SECRET, JWT_ALGO);
   }

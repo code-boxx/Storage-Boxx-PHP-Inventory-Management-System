@@ -8,7 +8,8 @@ if (!is_array($user)) { exit("Invalid user"); } ?>
 <!-- (B) CREATE NEW TOKEN -->
 <div class="fw-bold text-danger">CREATE NEW TOKEN</div>
 <form class="bg-white border p-4 mb-3" onsubmit="usr.hqNull.disabled = false"
-      method="post" target="_blank" action="<?=HOST_BASE?>users/qr/gen">
+      method="post" target="_blank" action="<?=HOST_BASE?>qrcode">
+  <input type="hidden" name="for" value="user">
   <input type="hidden" name="id" value="<?=$_POST["id"]?>">
   <button id="qr-btn" class="my-1 btn btn-primary d-flex-inline" type="submit">
     <i class="ico-sm icon-qrcode"></i> Create

@@ -81,7 +81,11 @@ var batch = {
   })),
 
   // (H) GENERATE QR CODE
-  qr : (sku, name) => window.open(cbhost.base + "qrcode/?sku="+sku+"&name="+name),
+  qr : (sku, name) => {
+    document.getElementById("qrsku").value = sku;
+    document.getElementById("qrbatch").value = name;
+    document.getElementById("qrform").submit();
+  },
 
   // (I) SHOW WRITE NFC SCREEN
   nfcSKU : null, // current sku to write
@@ -151,6 +155,7 @@ var batch = {
     ]
   })
 };
+
 window.addEventListener("load", () => {
   batch.list();
   autocomplete.attach({

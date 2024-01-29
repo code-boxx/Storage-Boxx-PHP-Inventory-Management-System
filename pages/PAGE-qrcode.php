@@ -1,9 +1,23 @@
 <?php
-// (A) GET ITEM
-$_CORE->load("Move");
-$item = $_CORE->Move->getQ($_GET["sku"], $_GET["name"]);
-if (!is_array($item)) { exit("Invalid SKU/batch"); }
-$qr = json_encode(["S" => $_GET["sku"], "B" => $_GET["name"]]);
+// (A) GENERATE QR CODE
+switch ($_POST["for"]) {
+  // (A1) INVALID
+  default: exit("Invalid request"); break;
+
+  // (A2) ITEM BATCH
+  case "batch":
+    $_CORE->load("Move");
+    $item = $_CORE->Move->getQ($_POST["sku"], $_POST["name"]);
+    if (!is_array($item)) { exit("Invalid SKU/batch"); }
+    $qr = json_encode(["S" => $_POST["sku"], "B" => $_POST["name"]]);
+    break;
+
+  // (A3) USER QR LOGIN
+  case "user":
+    $_CORE->load("QRIN");
+    $qr = $_CORE->QRIN->add($_POST["id"]);
+    break;
+}
 
 // (B) QR CODE HTML ?>
 <!DOCTYPE html>
@@ -32,9 +46,11 @@ $qr = json_encode(["S" => $_GET["sku"], "B" => $_GET["name"]]);
   <body>
     <div id="qrwrap">
       <div id="qrcode"></div>
-      <div id="qrsku"><?=$_GET["sku"]?> - <?=$_GET["name"]?></div>
+      <?php if ($_POST["for"]=="batch") { ?>
+      <div id="qrsku"><?=$_POST["sku"]?> - <?=$_POST["name"]?></div>
       <div id="qritem"><?=$item["item_name"]?></div>
       <div id="qrexpire">EXPIRY : <?=$item["ex"]?strtoupper($item["ex"]):""?></div>
+      <?php } ?>
     </div>
   </body>
 </html>

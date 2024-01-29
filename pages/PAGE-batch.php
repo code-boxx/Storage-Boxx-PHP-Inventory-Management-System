@@ -29,6 +29,13 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   </ul>
 </form>
 
-<!-- (B3) BATCH LIST -->
+<!-- (B3) HIDDEN GENERATE QR CODE -->
+<form id="qrform" method="post" target="_blank" action="<?=HOST_BASE?>qrcode">
+  <input type="hidden" name="for" value="batch">
+  <input type="hidden" id="qrsku" name="sku">
+  <input type="hidden" id="qrbatch" name="name">
+</form>
+
+<!-- (B4) BATCH LIST -->
 <div id="batch-list" class="zebra my-4"></div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

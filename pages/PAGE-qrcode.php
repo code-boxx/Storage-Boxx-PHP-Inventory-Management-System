@@ -16,6 +16,7 @@ switch ($_POST["for"]) {
   case "user":
     $_CORE->load("QRIN");
     $qr = $_CORE->QRIN->add($_POST["id"]);
+    if ($qr===false) { exit("Invalid user"); }
     break;
 }
 

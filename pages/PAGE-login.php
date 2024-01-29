@@ -30,7 +30,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
         <!-- (C2-1) NORMAL LOGIN -->
         <h3 class="m-0">PLEASE SIGN IN</h3>
         <div class="mb-4 text-secondary"><small>
-          Welcome to Storage Boxx.
+          Welcome to <?=SITE_NAME?>.
         </small></div>
 
         <div class="form-floating mb-4">

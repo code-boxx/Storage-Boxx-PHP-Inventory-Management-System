@@ -8,7 +8,7 @@ if (!is_array($user)) { exit("Invalid user"); } ?>
 <!-- (B) CREATE NEW TOKEN -->
 <div class="fw-bold text-danger">CREATE NEW TOKEN</div>
 <form class="bg-white border p-4 mb-3" onsubmit="usr.hqNull.disabled = false"
-      method="post" target="_blank" action="<?=HOST_BASE?>qrcode">
+      method="post" target="_blank" action="<?=HOST_BASE?>report/qr">
   <input type="hidden" name="for" value="user">
   <input type="hidden" name="id" value="<?=$_POST["id"]?>">
   <button id="qr-btn" class="my-1 btn btn-primary d-flex-inline" type="submit">
@@ -24,7 +24,7 @@ if (!is_array($user)) { exit("Invalid user"); } ?>
 <div class="bg-white border p-4 mb-3">
   <button id="qr-null" class="my-1 btn btn-primary d-flex-inline"
           onclick="usr.qrNull(<?=$_POST["id"]?>)"<?=$user["hash_code"]==""?" disabled":""?>>
-    <i class="ico-sm icon-blocked"></i> Nullify Login Token
+    <i class="ico-sm icon-blocked"></i> Nullify
   </button>
   <div class="text-secondary mt-2">
     * The user's QR login token will be nullified, but the login email/password remains unaffected.

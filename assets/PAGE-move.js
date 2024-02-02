@@ -1,10 +1,8 @@
 var move = {
   // (A) PROPERTIES
   hForm : null, // entire movement form
-  hDir : null, hQty : null, hNote : null, // direction, qty, notes
-  hSKU : null, hBatch : null, // sku, batch
-  hnBtn : null, hnStat : null, // nfc
-  hlQty : null, hlDir : null,  hlSKU : null, hlNote : null, // last entry
+  hDir : null, hQty : null, hNote : null, hSKU : null, // direction, qty, notes, sku
+  hlDir : null, hlQty : null, hlNote : null, hlSKU : null, // last entry
 
   // (B) INIT
   init : () => {
@@ -14,48 +12,19 @@ var move = {
     move.hQty = document.getElementById("mvt-qty");
     move.hNote = document.getElementById("mvt-notes");
     move.hSKU = document.getElementById("mvt-sku");
-    move.hBatch = document.getElementById("mvt-batch");
-    move.hnBtn = document.getElementById("nfc-btn");
-    move.hnStat = document.getElementById("nfc-stat");
-    move.hlQty = document.getElementById("last-qty");
     move.hlDir = document.getElementById("last-mvt");
-    move.hlSKU = document.getElementById("last-sku");
+    move.hlQty = document.getElementById("last-qty");
     move.hlNote = document.getElementById("last-notes");
-
+    move.hlSKU = document.getElementById("last-sku");
+    
     // (B2) INIT NFC
     if ("NDEFReader" in window) {
-      // (B2-1) ON SUCCESSFUL NFC READ
-      nfc.onread = evt => {
-        try {
-          nfc.standby();
-          const decoder = new TextDecoder();
-          let code = JSON.parse(decoder.decode(evt.message.records[0].data));
-          move.hSKU.value = code.S;
-          move.hBatch.value = code.B;
-          if (move.hForm.checkValidity()) { move.save(); }
-          else { move.hForm.reportValidity(); }
-        } catch (e) {
-          console.error(e);
-          cb.modal("ERROR!", "Failed to decode NFC tag.");
-        } finally { move.hnStat.innerHTML = "NFC"; }
-      };
-
-      // (B2-2) ON NFC READ ERROR
-      nfc.onerror = err => {
-        nfc.stop();
-        console.error(err);
-        cb.modal("ERROR", err.message);
-        move.hnStat.innerHTML = "ERROR";
-      };
-
-      // (B2-3) ENABLE NFC BUTTON
-      move.hnBtn.onclick = () => {
-        move.hnStat.innerHTML = "Scanning - Tap token";
-        nfc.scan();
-      };
-      move.hnBtn.disabled = false;
-    } else {
-      move.hnStat.innerHTML = "Web NFC Not Supported";
+      document.getElementById("nfc-btn").disabled = false;
+      nfc.init(sku => {
+        move.hSKU.value = sku;
+        if (move.hForm.checkValidity()) { move.save(); }
+        else { move.hForm.reportValidity(); }
+      });
     }
 
     // (B3) INIT AUTOCOMPLETE
@@ -63,27 +32,15 @@ var move = {
       target : document.getElementById("mvt-sku"),
       mod : "autocomplete", act : "sku"
     });
-    autocomplete.attach({
-      target : document.getElementById("mvt-batch"),
-      mod : "autocomplete", act : "batch",
-      data : { sku : document.getElementById("mvt-sku") }
-    });
   },
 
   // (C) "SWITCH ON" QR SCANNER
   qron : () => {
     if (qrscan.scanner==null) {
       qrscan.init(txt => {
-        try {
-          let item = JSON.parse(txt);
-          move.hSKU.value = item.S;
-          move.hBatch.value = item.B;
-          if (move.hForm.checkValidity()) { move.save(); }
-          else { move.hForm.reportValidity(); }
-        } catch (e) {
-          console.error(e);
-          cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
-        }
+        move.hSKU.value = txt;
+        if (move.hForm.checkValidity()) { move.save(); }
+        else { move.hForm.reportValidity(); }
       });
     }
     qrscan.show();
@@ -95,15 +52,14 @@ var move = {
       mod : "move", act : "saveM",
       data : {
         sku : move.hSKU.value,
-        batch : move.hBatch.value,
         direction : move.hDir.value,
         qty : move.hQty.value,
-        notes : move.hNote.value
+        notes : move.hNote.value 
       },
       passmsg : "Stock Movement Saved",
       onpass : res => {
         move.hlQty.innerHTML = move.hQty.value;
-        move.hlSKU.innerHTML = `${move.hSKU.value} - ${move.hBatch.value}`;
+        move.hlSKU.innerHTML = move.hSKU.value;
         move.hlDir.innerHTML = move.hDir.options[move.hDir.selectedIndex].text;
         move.hlNote.innerHTML = move.hNote.value;
         move.hForm.reset();
@@ -112,4 +68,6 @@ var move = {
     return false;
   }
 };
+
+// (E) INIT MANAGE ITEM MOVEMENT
 window.addEventListener("load", move.init);

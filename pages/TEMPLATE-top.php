@@ -43,7 +43,7 @@
       if ($load[0]=="s") {
         printf("<script src='%s'%s></script>", $load[1], isset($load[2]) ? " ".$load[2] : "");
       } else {
-        printf("<link rel='stylesheet' href='%s'>", $load[1], isset($load[2]) ? " ".$load[2] : "");
+        printf("<link rel='stylesheet' href='%s'>", $load[1]);
       }
     }}
     if (isset($_PMETA)) { unset($_PMETA); } ?>
@@ -101,9 +101,6 @@
           <a class="nav-link ms-1" href="<?=HOST_BASE?>items">
             <i class="text-secondary ico-sm icon-price-tag"></i> Items
           </a>
-          <a class="nav-link ms-1" href="<?=HOST_BASE?>batch">
-            <i class="text-secondary ico-sm icon-tree"></i> Batches
-          </a>
           <a class="nav-link ms-1" href="<?=HOST_BASE?>move">
             <i class="text-secondary ico-sm icon-truck"></i> Movement
           </a>
@@ -113,16 +110,32 @@
           <hr>
         </li>
         <li class="nav-item">
-          <div class="my-2 fw-bold">Entities</div>
-          <a class="nav-link ms-1" href="<?=HOST_BASE?>users">
-            <i class="text-secondary ico-sm icon-users"></i> Users
+          <div class="my-2 fw-bold">Delivery</div>
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>cus">
+            <i class="text-secondary ico-sm icon-address-book"></i> Customers
           </a>
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>deliver">
+            <i class="text-secondary ico-sm icon-file-text2"></i> Orders
+          </a>
+          <hr>
+        </li>
+        <li class="nav-item">
+          <div class="my-2 fw-bold">Purchase</div>
           <a class="nav-link ms-1" href="<?=HOST_BASE?>sup">
             <i class="text-secondary ico-sm icon-address-book"></i> Suppliers
-          </a><hr>
+          </a>
+          <!--
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>purchase">
+            <i class="text-secondary ico-sm icon-file-text2"></i> Orders -x
+          </a>
+          -->
+          <hr>
         </li>
         <li class="nav-item">
           <div class="my-2 fw-bold">System</div>
+          <a class="nav-link ms-1" href="<?=HOST_BASE?>users">
+            <i class="text-secondary ico-sm icon-users"></i> Users
+          </a>
           <a class="nav-link ms-1" href="<?=HOST_BASE?>push">
             <i class="text-secondary ico-sm icon-notification"></i> Notifications
           </a>

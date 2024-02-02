@@ -4,8 +4,6 @@ $_CORE->ucheck("A");
 
 // (B) API ENDPOINTS
 $_CORE->autoAPI([
-  "saveB" => ["Move", "saveB"],
-  "delB" => ["Move", "delB"],
   "saveM" => ["Move", "saveMC"]
 ]);
 

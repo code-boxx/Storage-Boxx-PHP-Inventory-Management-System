@@ -1,0 +1,5 @@
+#qrwrap { width: 340px; padding: 20px; border: 1px solid #eee; }
+#qrsku { font-weight: 700; }
+#qrsku { margin-top: 20px; font-size:1em; }
+#qritem { text-transform: uppercase; font-size: 1.7em; }
+#qrdesc { font-size: 0.9em; color: #555; }

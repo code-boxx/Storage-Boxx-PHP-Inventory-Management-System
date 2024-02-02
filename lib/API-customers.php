@@ -4,11 +4,9 @@ $_CORE->ucheck("A");
 
 // (B) API ENDPOINTS
 $_CORE->autoAPI([
-  "get" => ["Items", "get"],
-  "save" => ["Items", "save"],
-  "del" => ["Items", "del"],
-  "import" => ["Items", "import"],
-  "check" => ["Items", "check"]
+  "save" => ["Customers", "save"],
+  "del" => ["Customers", "del"],
+  "import" => ["Customers", "import"]
 ]);
 
 // (C) INVALID REQUEST

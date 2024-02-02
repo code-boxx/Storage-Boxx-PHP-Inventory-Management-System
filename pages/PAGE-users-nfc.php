@@ -9,7 +9,7 @@ if (!is_array($user)) { exit("Invalid user"); } ?>
 <div class="fw-bold text-danger">CREATE NEW TOKEN</div>
 <div class="bg-white border p-4 mb-3">
   <button id="nfc-btn" disabled class="my-1 btn btn-primary d-flex-inline" onclick="usr.nfcNew(<?=$_POST["id"]?>)">
-    <i class="ico-sm icon-feed"></i> <span id="nfc-stat">Initializing</span>
+    <i class="ico-sm icon-feed"></i> Create
   </button>
   <div class="text-secondary mt-2">
     * A user can only have one login token, creating a new token will nullify the previous one.
@@ -21,13 +21,13 @@ if (!is_array($user)) { exit("Invalid user"); } ?>
 <div class="bg-white border p-4 mb-3">
   <button id="nfc-null" class="my-1 btn btn-primary d-flex-inline"
           onclick="usr.nfcNull(<?=$_POST["id"]?>)"<?=$user["hash_code"]==""?" disabled":""?>>
-    <i class="ico-sm icon-blocked"></i> Nullify Login Token
+    <i class="ico-sm icon-blocked"></i> Nullify
   </button>
   <div class="text-secondary mt-2">
     * The user's NFC login token will be nullified, but the login email/password remains unaffected.
   </div>
 </div>
 
-<button type="button" class="my-1 btn btn-danger d-flex-inline" onclick="usr.nfcBack()">
+<button type="button" class="my-1 btn btn-danger d-flex-inline" onclick="cb.page(1)">
   <i class="ico-sm icon-undo2"></i> Back
 </button>

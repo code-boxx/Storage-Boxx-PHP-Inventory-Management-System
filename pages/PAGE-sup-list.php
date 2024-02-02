@@ -8,10 +8,11 @@ if (is_array($sup)) { foreach ($sup as $id=>$s) { ?>
   <div class="flex-grow-1">
     <strong><?=$s["sup_name"]?></strong><br>
     <small>
-      T: <a href="tel:<?=$s["sup_tel"]?>"><?=$s["sup_tel"]?></a> |
-      E: <a href="mailto:<?=$s["sup_email"]?>"><?=$s["sup_email"]?></a>
-    </small><br>
-    <small><?=$s["sup_address"]?></small>
+      <span class="badge bg-secondary">address</span> <?=$s["sup_address"]?>
+      <br>
+      <span class="badge bg-secondary">tel</span> <a href="tel:<?=$s["sup_tel"]?>"><?=$s["sup_tel"]?></a>
+      <span class="badge bg-secondary">email</span> <a href="mailto:<?=$s["sup_email"]?>"><?=$s["sup_email"]?></a>
+    </small>
   </div>
   <div class="dropdown">
     <button class="btn btn-primary p-3 ico-sm icon-arrow-right" type="button" data-bs-toggle="dropdown"></button>
@@ -23,7 +24,7 @@ if (is_array($sup)) { foreach ($sup as $id=>$s) { ?>
         <i class="text-secondary ico-sm icon-price-tag"></i> Items
       </li>
       <li class="dropdown-item" onclick="sup.csv(<?=$id?>)">
-        <i class="text-secondary ico-sm icon-folder-download"></i> Items List
+        <i class="text-secondary ico-sm icon-folder-download"></i> Items CSV
       </li>
       <li class="dropdown-item text-warning" onclick="sup.del('<?=$id?>')">
         <i class="ico-sm icon-bin2"></i> Delete

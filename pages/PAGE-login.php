@@ -4,13 +4,13 @@ if (isset($_SESSION["user"])) { $_CORE->redirect(); }
 
 // (B) PAGE META & SCRIPTS
 $_PMETA = ["load" => [
+  ["l", HOST_ASSETS."PAGE-scanner.css"],
+  ["l", HOST_ASSETS."PAGE-login.css"],
   ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
   ["s", HOST_ASSETS."PAGE-wa-helper.js", "defer"],
   ["s", HOST_ASSETS."html5-qrcode.min.js", "defer"],
   ["s", HOST_ASSETS."PAGE-qrscan.js", "defer"],
-  ["s", HOST_ASSETS."PAGE-login.js", "defer"],
-  ["c", HOST_ASSETS."PAGE-qrscan.css"],
-  ["c", HOST_ASSETS."PAGE-login.css"]
+  ["s", HOST_ASSETS."PAGE-login.js", "defer"]
 ]];
 
 // (C) HTML PAGE
@@ -53,8 +53,8 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
           <i class="ico-sm icon-key"></i> Passwordless
         </button>
         <!-- (LOGIN WITH NFC) -->
-        <button type="button" id="nfc-a" onclick="nin.go()" disabled class="my-1 btn btn-primary d-flex-inline">
-          <i class="ico-sm icon-feed"></i> <span id="nfc-b">NFC</span>
+        <button type="button" id="nfc-in" onclick="nfc.scan()" disabled class="my-1 btn btn-primary d-flex-inline">
+          <i class="ico-sm icon-feed"></i> NFC
         </button>
         <!-- (LOGIN WITH QR) -->
         <button type="button" id="qr-in" onclick="qr.go()" class="my-1 btn btn-primary d-flex-inline">

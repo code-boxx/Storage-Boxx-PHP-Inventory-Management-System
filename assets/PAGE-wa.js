@@ -46,4 +46,6 @@ var wa = {
     onpass : () => wa.hUnreg.disabled = true
   })
 };
+
+// (E) INIT WEBAUTHN
 window.addEventListener("load", wa.init);

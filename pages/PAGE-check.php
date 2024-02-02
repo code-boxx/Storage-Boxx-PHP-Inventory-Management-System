@@ -1,10 +1,10 @@
 <?php
 // (A) PAGE META
 $_PMETA = ["load" => [
-  ["l", HOST_ASSETS."PAGE-qrscan.css", "defer"],
+  ["l", HOST_ASSETS."PAGE-scanner.css"],
   ["s", HOST_ASSETS."html5-qrcode.min.js", "defer"],
-  ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
   ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
+  ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
   ["s", HOST_ASSETS."PAGE-qrscan.js", "defer"],
   ["s", HOST_ASSETS."PAGE-check.js", "defer"]
 ]];
@@ -18,10 +18,6 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
     <input type="text" class="form-control" id="check-sku" required>
     <label>Item SKU</label>
   </div>
-  <div class="form-floating mb-4">
-    <input type="text" class="form-control" id="check-batch">
-    <label>Batch</label>
-  </div>
 
   <!-- (B2) BUTTONS -->
   <button type="submit" class="my-1 btn btn-primary d-flex-inline">
@@ -30,8 +26,8 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   <button type="button" class="my-1 btn btn-primary d-flex-inline" onclick="check.qron()">
     <i class="ico-sm icon-qrcode"></i> Scan
   </button>
-  <button id="nfc-btn" type="button" disabled class="my-1 btn btn-primary d-flex-inline" onclick="">
-    <i class="ico-sm icon-feed"></i> <span id="nfc-stat">NFC</span>
+  <button id="nfc-btn" type="button" disabled class="my-1 btn btn-primary d-flex-inline" onclick="nfc.scan()">
+    <i class="ico-sm icon-feed"></i> Scan
   </button>
 </form>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

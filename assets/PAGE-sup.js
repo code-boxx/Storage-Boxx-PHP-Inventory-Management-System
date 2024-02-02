@@ -1,5 +1,5 @@
 var sup = {
-  // (A) LIST () : SHOW ALL SUPPLIERS
+  // (A) SHOW ALL SUPPLIERS
   pg : 1, // current page
   find : "", // current search
   list : silent => {
@@ -88,8 +88,13 @@ var sup = {
     ]
   })
 };
+
+// (I) INIT MANAGE SUPPLIERS
 window.addEventListener("load", () => {
+  // (I1) LIST SUPPLIERS
   sup.list();
+
+  // (I2) ATTACH AUTOCOMPLETE
   autocomplete.attach({
     target : document.getElementById("sup-search"),
     mod : "autocomplete", act : "sup",

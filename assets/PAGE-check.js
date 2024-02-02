@@ -1,79 +1,36 @@
 var check = {
   // (A) PROPERTIES
-  hForm : null, // html check form
-  hSKU : null, hBatch : null, // html sku & batch fields
-  hnBtn : null, hnStat : null, // html nfc button & status
-  sku : null, batch: null, // current item & batch
+  hSKU : null, // html sku field
+  sku : null, // current item
   pg : 1, // current page
 
   // (B) INIT
   init : () => {
     // (B1) GET HTML ELEMENTS
-    check.hForm = document.getElementById("check-form");
     check.hSKU = document.getElementById("check-sku");
-    check.hBatch = document.getElementById("check-batch");
-    check.hnBtn = document.getElementById("nfc-btn");
-    check.hnStat = document.getElementById("nfc-stat");
 
     // (B2) INIT NFC
     if ("NDEFReader" in window) {
-      // (B2-1) ON SUCCESSFUL NFC READ
-      nfc.onread = evt => {
-        try {
-          nfc.standby();
-          const decoder = new TextDecoder();
-          let code = JSON.parse(decoder.decode(evt.message.records[0].data));
-          check.hSKU.value = code.S;
-          check.hBatch.value = code.B;
-          check.pre();
-        } catch (e) {
-          console.error(e);
-          cb.modal("ERROR!", "Failed to decode NFC tag.");
-        } finally { check.hnStat.innerHTML = "NFC"; }
-      };
-
-      // (B2-2) ON NFC READ ERROR
-      nfc.onerror = err => {
-        nfc.stop();
-        console.error(err);
-        cb.modal("ERROR", err.message);
-        check.hnStat.innerHTML = "ERROR";
-      };
-
-      // (B2-3) ENABLE NFC BUTTON
-      check.hnBtn.onclick = () => {
-        check.hnStat.innerHTML = "Scanning - Tap token";
-        nfc.scan();
-      };
-      check.hnBtn.disabled = false;
-    } else {
-      check.hnStat.innerHTML = "Web NFC Not Supported";
+      document.getElementById("nfc-btn").disabled = false;
+      nfc.init(sku => {
+        check.hSKU.value = sku;
+        check.pre();
+      });
     }
 
     // (B3) INIT AUTOCOMPLETE
     autocomplete.attach({
       target : document.getElementById("check-sku"),
-      mod : "autocomplete", act : "sku"
-    });
-    autocomplete.attach({
-      target : document.getElementById("check-batch"),
-      mod : "autocomplete", act : "batch",
-      data : { sku : document.getElementById("check-sku") }
+      mod : "autocomplete", act : "sku",
+      onpick : check.pre
     });
   },
 
   // (C) "SWITCH ON" QR SCANNER
   qron : () => {
-    qrscan.init(txt => {
-      try {
-        let item = JSON.parse(txt);
-        check.hSKU.value = item.S;
-        check.hBatch.value = item.B;
-        check.pre();
-      } catch (e) {
-        console.error(e);
-        cb.modal("Invalid QR Code", "Failed to parse scanned QR code.");
-      }
+    qrscan.init(sku => {
+      check.hSKU.value = sku;
+      check.pre();
     });
     qrscan.show();
   },
@@ -82,14 +39,10 @@ var check = {
   pre : () => {
     cb.api({
       mod : "items", act : "check",
-      data : {
-        sku : check.hSKU.value,
-        batch : check.hBatch.value
-      },
+      data : { sku : check.hSKU.value },
       passmsg : false,
       onpass : res => {
         check.sku = check.hSKU.value;
-        check.batch = check.hBatch.value;
         check.pg = 1;
         check.go();
       }
@@ -100,10 +53,7 @@ var check = {
   // (E) LOAD MOVEMENT HISTORY "MAIN PAGE"
   go : () => cb.load({
     page : "check-main", target : "cb-page-2",
-    data : {
-      sku : check.sku,
-      batch : check.batch
-    },
+    data : { sku : check.sku },
     onload : () => {
       cb.page(2);
       check.list();
@@ -115,7 +65,6 @@ var check = {
     page : "check/list", target : "check-list",
     data : {
       sku : check.sku,
-      batch : check.batch,
       page : check.pg
     }
   }),
@@ -127,4 +76,6 @@ var check = {
     check.list();
   }}
 };
+
+// (H) INIT ITEM CHECK
 window.addEventListener("load", check.init);

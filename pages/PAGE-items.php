@@ -1,9 +1,11 @@
 <?php
 // (A) PAGE META
 $_PMETA = ["load" => [
+  ["l", HOST_ASSETS."PAGE-scanner.css"],
   ["s", HOST_ASSETS."csv.min.js", "defer"],
-  ["s", HOST_ASSETS."PAGE-import.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-nfc.js", "defer"],
   ["s", HOST_ASSETS."CB-autocomplete.js", "defer"],
+  ["s", HOST_ASSETS."PAGE-import.js", "defer"],
   ["s", HOST_ASSETS."PAGE-items.js", "defer"],
   ["s", HOST_ASSETS."PAGE-items-check.js", "defer"]
 ]];
@@ -28,6 +30,12 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   </ul>
 </form>
 
-<!-- (B3) INVENTORY LIST -->
+<!-- (B3) HIDDEN GENERATE QR CODE -->
+<form id="qrform" method="post" target="_blank" action="<?=HOST_BASE?>report/qr">
+  <input type="hidden" name="for" value="item">
+  <input type="hidden" id="qrsku" name="id">
+</form>
+
+<!-- (B4) INVENTORY LIST -->
 <div id="item-list" class="zebra my-4"></div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

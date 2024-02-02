@@ -1,5 +1,7 @@
 <?php
-$_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-push.js", "defer"]]];
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-push.js", "defer"]
+]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <h3 class="mb-3">SEND PUSH NOTIFICATION</h3>
 <form id="push_form" class="bg-white border p-4 mb-3" onsubmit="return send()">

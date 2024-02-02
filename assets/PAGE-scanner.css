@@ -1,0 +1,13 @@
+.scannerA {
+  position: fixed; top: 0; left: 0;
+  width:100vw; height: 100vh; z-index: 999;
+}
+.scannerB {
+  max-width: 600px; padding: 30px;
+  margin: 0 auto;
+}
+#nfc-wrapC {
+  padding: 60px 0; line-height: 2em;
+  text-align: center; color: #fff;
+}
+#nfc-wrapC i { font-size: 100px; }

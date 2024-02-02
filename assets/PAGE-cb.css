@@ -1,8 +1,8 @@
 /* (A) PAGE TRANSITION */
 ::view-transition-old(root),::view-transition-new(root){animation-duration:0.3s}
-@keyframes grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes shrink-x{from{transform:scaleX(1)}to{transform:scaleX(0)}}::view-transition-old(tx){animation:.3s linear both shrink-x}::view-transition-new(tx){animation:.23s linear both grow-x}.tran-x{view-transition-name:tx}
-@keyframes grow-y{from{transform:scaleY(0)}to{transform:scaleY(1)}}@keyframes shrink-y{from{transform:scaleY(1)}to{transform:scaleY(0)}}::view-transition-old(ty){animation:.3s linear both shrink-y}::view-transition-new(ty){animation:.23s linear both grow-y}.tran-y{view-transition-name:ty}
-@keyframes zoom-in{from{transform:scale(0)}to{transform:scale(1)}}@keyframes zoom-out{from{transform:scale(1)}to{transform:scale(0)}}::view-transition-old(zoom){animation:.3s linear both zoom-out}::view-transition-new(zoom){animation:.3s linear both zoom-in}.tran-zoom{view-transition-name:zoom}
+@keyframes grow-x{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes shrink-x{from{transform:scaleX(1)}to{transform:scaleX(0)}}::view-transition-old(tx){animation:.2s linear both shrink-x}::view-transition-new(tx){animation:.2s linear both grow-x}.tran-x{view-transition-name:tx}
+@keyframes grow-y{from{transform:scaleY(0)}to{transform:scaleY(1)}}@keyframes shrink-y{from{transform:scaleY(1)}to{transform:scaleY(0)}}::view-transition-old(ty){animation:.2s linear both shrink-y}::view-transition-new(ty){animation:.2s linear both grow-y}.tran-y{view-transition-name:ty}
+@keyframes zoom-in{from{transform:scale(0)}to{transform:scale(1)}}@keyframes zoom-out{from{transform:scale(1)}to{transform:scale(0)}}::view-transition-old(zoom){animation:.2s linear both zoom-out}::view-transition-new(zoom){animation:.2s linear both zoom-in}.tran-zoom{view-transition-name:zoom}
 
 /* (B) ICOMOON */
 @font-face{font-family:icomoon;src:url(icomoon.woff) format('woff');font-weight:400;font-style:normal;font-display:block}[class*=" icon-"],[class^=icon-]{font-family:icomoon!important;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}

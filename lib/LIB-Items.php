@@ -4,10 +4,11 @@ class Items extends Core {
   //  $sku : item SKU
   //  $name : item name
   //  $unit : item unit
+  //  $price : price per unit
   //  $low : low stock quantity monitor
   //  $desc : item description
   //  $osku : old SKU, for editing only
-  function save ($sku, $name, $unit, $low=0, $desc=null, $osku=null) {
+  function save ($sku, $name, $unit, $price=0, $low=0, $desc=null, $osku=null) {
     // (A1) CHECK SKU
     $checkSKU = $osku==null ? $sku : $osku ;
     $check = $this->get($sku);
@@ -23,20 +24,19 @@ class Items extends Core {
     // (A3) ADD ITEM
     if ($osku===null) {
       $this->DB->insert("items", 
-        ["item_sku", "item_name", "item_desc", "item_unit", "item_low"],
-        [$sku, $name, $desc, $unit, $low]
+        ["item_sku", "item_name", "item_desc", "item_unit", "item_price", "item_low"],
+        [$sku, $name, $desc, $unit, $price, $low]
       );
     }
 
     // (A4) UPDATE ITEM
     else {
       $this->DB->update(
-        "items", ["item_sku", "item_name", "item_desc", "item_unit", "item_low"], 
-        "`item_sku`=?", [$sku, $name, $desc, $unit, $low, $osku]
+        "items", ["item_sku", "item_name", "item_desc", "item_unit", "item_price", "item_low"], 
+        "`item_sku`=?", [$sku, $name, $desc, $unit, $price, $low, $osku]
       );
       if ($sku!=$osku) {
         $this->DB->update("item_mvt", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
-        $this->DB->update("item_batches", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
         $this->DB->update("suppliers_items", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
       }
     }
@@ -47,7 +47,7 @@ class Items extends Core {
   }
 
   // (B) IMPORT ITEM
-  function import ($sku, $name, $unit, $low=0, $desc=null) {
+  function import ($sku, $name, $unit, $price, $low=0, $desc=null) {
     // (B1) CHECK
     if (is_array($this->get($sku))) {
       $this->error = "$sku is already registered.";
@@ -55,22 +55,21 @@ class Items extends Core {
     }
 
     // (B2) SAVE
-    return $this->save($sku, $name, $unit, $low, $desc);
+    return $this->save($sku, $name, $unit, $price, $low, $desc);
   }
   
   // (C) DELETE ITEM
-  // WARNING : STOCK MOVEMENT + BATCHES WILL BE REMOVED AS WELL
+  // WARNING : STOCK MOVEMENT WILL BE REMOVED AS WELL
   //  $sku : item SKU
   function del ($sku) {
     $this->DB->start();
     $this->DB->delete("items", "`item_sku`=?", [$sku]);
     $this->DB->delete("item_mvt", "`item_sku`=?", [$sku]);
-    $this->DB->delete("item_batches", "`item_sku`=?", [$sku]);
     $this->DB->end();
     return true;
   }
 
-  // (D) GET/CHECK ITEM BY SKU
+  // (D) GET ITEM BY SKU
   //  $sku : item SKU
   function get ($sku) {
     return $this->DB->fetch("SELECT * FROM `items` WHERE `item_sku`=?", [$sku]);
@@ -102,27 +101,11 @@ class Items extends Core {
 
   // (F) CHECK IF VALID SKU
   //  $sku : item SKU
-  //  $batch : batch name, if any
-  function check ($sku, $batch=null) {
-    // (F1) CHECK SKU
-    if ($this->DB->fetchCol(
-      "SELECT `item_sku` FROM `items` WHERE `item_sku`=?", [$sku]
-    ) == null) {
+  function check ($sku) {
+    if ($this->DB->fetchCol("SELECT `item_sku` FROM `items` WHERE `item_sku`=?", [$sku]) == null) {
       $this->error = "$sku is not a valid item.";
       return false;
     }
-
-    // (F2) CHECK BATCH
-    if ($batch != null) {
-      if ($this->DB->fetchCol(
-        "SELECT `batch_name` FROM `item_batches` WHERE `item_sku`=? AND `batch_name`=?", [$sku, $batch]
-      ) == null) {
-        $this->error = "$sku - $batch is not a valid batch.";
-        return false;
-      }
-    }
-
-    // (F3) VALID
     return true;
   }
 }

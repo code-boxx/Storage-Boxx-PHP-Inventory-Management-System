@@ -47,11 +47,32 @@ class Autocomplete extends Core {
   }
 
   // (E) SUGGEST ITEM  
-  function item ($search) {
-    return $this->query(
-      "SELECT * FROM `items` WHERE `item_name` LIKE ?",
-      ["%$search%"], "item_name"
-    );
+  function item ($search, $more=false) {
+    // (E1) "MORE" - RETURN ALL ITEM DATA
+    if ($more) {
+      $res = [];
+      $this->DB->query(
+        "SELECT `item_sku` s, `item_name` n, `item_unit` u, `item_price` p
+        FROM `items` WHERE `item_name` LIKE ? OR `item_sku` LIKE ?
+        LIMIT " . SUGGEST_LIMIT, ["%$search%", "%$search%"]
+      );
+      $res = [];
+      while ($r = $this->DB->stmt->fetch()) {
+        $res[] = [
+          "n" => sprintf("[%s] %s", $r["s"], $r["n"]),
+          "v" => json_encode($r)
+        ];
+      }
+      return $res;
+    }
+    
+    // (E2) "SIMPLE" - RETURN ITEM NAME ONLY
+    else {
+      return $this->query(
+        "SELECT * FROM `items` WHERE `item_name` LIKE ? OR `item_sku` LIKE ?",
+        ["%$search%", "%$search%"], "item_name"
+      );
+    }
   }
 
   // (F) SUGGEST ITEM NAME/SKU
@@ -72,15 +93,37 @@ class Autocomplete extends Core {
     return $res;
   }
 
-  // (G) SUGGEST BATCH NAME
-  function batch ($search, $sku) {
-    // (G1) NO SKU SPECIFIED
-    if ($sku=="" || $sku==null) { return []; }
+  // (G) SUGGEST CUSTOMER
+  function cus ($search, $more=false) {
+    // (G1) "MORE" - RETURN ALL CUSTOMER DATA
+    if ($more) {
+      $res = [];
+      $this->DB->query(
+        "SELECT `cus_id` i, `cus_name` n, `cus_tel` t, `cus_email` e, `cus_address` a
+        FROM `customers` WHERE `cus_name` LIKE ?
+        LIMIT " . SUGGEST_LIMIT, ["%$search%"]
+      );
+      $res = [];
+      while ($r = $this->DB->stmt->fetch()) {
+        $res[] = ["n" => $r["n"], "v" => json_encode($r)];
+      }
+      return $res;
+    }
+    
+    // (G2) "SIMPLE" - RETURN NAME ONLY
+    else {
+      return $this->query(
+        "SELECT * FROM `customers` WHERE `cus_name` LIKE ?",
+        ["%$search%"], "cus_name"
+      );
+    }
+  }
 
-    // (G2) SEARCH
+  // (H) SUGGEST DELIVERY CUSTOMER
+  function deliver ($search) {
     return $this->query(
-      "SELECT * FROM `item_batches` WHERE `item_sku`=? AND `batch_name` LIKE ?",
-      [$sku, "%$search%"], "batch_name"
+      "SELECT * FROM `deliveries` WHERE `d_name` LIKE ?",
+      ["%$search%"], "d_name"
     );
   }
 }

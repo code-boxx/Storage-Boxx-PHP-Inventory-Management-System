@@ -33,25 +33,4 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   </div>
   <?php }} else { echo '<div class="bg-white border p-3">No items on the watch list.</div>'; } 
 ?></div>
-
-<!-- (C) EXPIRING BATCHES -->
-<div class="fw-bold text-danger mb-4">10 EXPIRING BATCHES</div>
-<div class="mb-4"><?php
-  $items = $_CORE->Report->getExpiry(10);
-  if (is_array($items)) { foreach ($items as $i) { ?>
-  <div class="d-flex align-items-center bg-white border px-3 py-1 mb-1">
-    <div class="flex-grow-1">
-      <div class="fw-bold">
-        [<?=$i["item_sku"]?> - <?=$i["batch_name"]?>] <?=$i["item_name"]?>
-      </div>
-      <div>Stock: <?=$i["batch_qty"]?> <?=$i["item_unit"]?></div>
-      <div>Expire: <?=$i["e"]?></div>
-    </div>
-    <div class="text-center">
-      <div class="display-6"><?=$i["r"]?></div>
-      <div>DAYS</div>
-    </div>
-  </div>
-  <?php }} else { echo '<div class="bg-white border p-3">No expiring batches.</div>'; } 
-?></div>
 <?php require PATH_PAGES . "TEMPLATE-bottom.php"; ?>

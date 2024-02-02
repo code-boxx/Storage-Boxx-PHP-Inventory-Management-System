@@ -7,7 +7,6 @@ $_CORE->Settings->defineN("STOCK_MVT", true);
 if (is_array($move)) { foreach ($move as $m) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="w-50 text-center">
-    <div class="fw-bold"><?=$m["batch_name"]?></div>
     <div class="fw-bold"><?=STOCK_MVT[$m["mvt_direction"]]?></div>
     <div class="display-6"><?=$m["mvt_direction"]=="D"||$m["mvt_direction"]=="O"?"-":""?><?=$m["mvt_qty"]?></div>
   </div>

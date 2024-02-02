@@ -5,8 +5,8 @@ if (isset($_SESSION["user"])) { $_CORE->redirect(); }
 // (B) PART 1 - ENTER EMAIL
 if (!isset($_GET["i"]) && !isset($_GET["h"])) {
 $_PMETA = ["load" => [
-  ["s", HOST_ASSETS."PAGE-forgot.js", "defer"],
-  ["c", HOST_ASSETS."PAGE-login.css"]
+  ["l", HOST_ASSETS."PAGE-login.css"],
+  ["s", HOST_ASSETS."PAGE-forgot.js", "defer"]
 ]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <div class="container">

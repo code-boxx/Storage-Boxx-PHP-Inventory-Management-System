@@ -1,6 +1,6 @@
-BT-123,Bath Towel,White bath towels.,PCS,0
-TB-234,Tooth Brush,Non electric.,BOX,5
-TP-345,Tooth Paste,Not edible.,BOX,10
-TP-456,Toilet Paper,For wiping... things.,ROL,15
-SP-567,Soap,For cleaning... things.,BOX,5
-SP-678,Shampoo,For cleaning... hair.,CTN,10
+BT-123,Bath Towel,White bath towels.,PCS,1.1,0
+TB-234,Tooth Brush,Non electric.,BOX,2.2,5
+TP-345,Tooth Paste,Not edible.,BOX,3.3,10
+TP-456,Toilet Paper,For wiping... things.,ROL,4.4,15
+SP-567,Soap,For cleaning... things.,BOX,5.5,5
+SP-678,Shampoo,For cleaning... hair.,CTN,6.6,10

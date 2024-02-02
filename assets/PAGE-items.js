@@ -4,12 +4,13 @@ var item = {
   find : "", // current search
   list : silent => {
     if (silent!==true) { cb.page(1); }
+    let data = {
+      page : item.pg,
+      search : item.find
+    };
+    if ("NDEFReader" in window) { data.nfc = 1; }
     cb.load({
-      page : "items/list", target : "item-list",
-      data : {
-        page : item.pg,
-        search : item.find
-      }
+      page : "items/list", target : "item-list", data : data
     });
   },
 
@@ -56,6 +57,7 @@ var item = {
       sku : document.getElementById("item-sku").value,
       name : document.getElementById("item-name").value,
       unit : document.getElementById("item-unit").value,
+      price : document.getElementById("item-price").value,
       desc : document.getElementById("item-desc").value,
       low : document.getElementById("item-low").value
     };
@@ -93,6 +95,7 @@ var item = {
       ["Item Name", "name", true],
       ["Item Description", "desc", false],
       ["Unit", "unit", true],
+      ["Unit Price", "price", "N"],
       ["Watch Level", "low", "N"]
     ]
   }),
@@ -124,13 +127,27 @@ var item = {
   suppage : pg => { if (pg!=item.suppg) {
     item.suppg = pg;
     item.suplist();
-  }}
+  }},
+
+  // (L) GENERATE QR CODE
+  qr : sku => {
+    document.getElementById("qrsku").value = sku;
+    document.getElementById("qrform").submit();
+  }
 };
+
+// (M) INIT MANAGE ITEMS
 window.addEventListener("load", () => {
+  // (M1) LIST ITEMS
   item.list();
+
+  // (M2) ATTACH AUTOCOMPLETE
   autocomplete.attach({
     target : document.getElementById("item-search"),
     mod : "autocomplete", act : "item",
     onpick : res => item.search()
   });
+
+  // (M3) ATTACH NFC READER
+  if (("NDEFReader" in window)) { nfc.init(); }
 });

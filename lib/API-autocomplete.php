@@ -6,10 +6,11 @@ $_CORE->ucheck("A");
 $_CORE->autoAPI([
   "sup" => ["Autocomplete", "sup"],
   "supitem" => ["Autocomplete", "supitem"],
+  "cus" => ["Autocomplete", "cus"],
   "user" => ["Autocomplete", "user"],
   "item" => ["Autocomplete", "item"],
   "sku" => ["Autocomplete", "sku"],
-  "batch" => ["Autocomplete", "batch"]
+  "deliver" => ["Autocomplete", "deliver"]
 ]);
 
 // (C) INVALID REQUEST

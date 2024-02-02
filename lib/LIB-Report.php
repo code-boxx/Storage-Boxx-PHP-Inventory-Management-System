@@ -1,21 +1,66 @@
 <?php
 class Report extends Core {
-  // (A) SUPPLIER ITEMS LIST
+  // (A) HELPER - GENERATE HTML TEMPLATE
+  function htop ($load=null) {
+    echo "<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.5'><style>* { font-family: Arial, sans-serif; box-sizing: border-box; }</style>";
+    if (is_array($load)) { foreach ($load as $l) {
+      if ($l[0]=="s") {
+        printf("<script src='%s'%s></script>", $l[1], isset($l[2]) ? " ".$l[2] : "");
+      } else {
+        printf("<link rel='stylesheet' href='%s'>", $l[1]);
+      }
+    }}
+    echo "</head><body>";
+  }
+  function hbottom () { echo "</body></html>"; }
+
+  // (B) GENERATE USER QR LOGIN TOKEN
+  function qr ($id, $for) {
+    switch ($for) {
+      // (B1) INVALID
+      default: exit("Invalid request"); break;
+
+      // (B2) ITEM QR CODE
+      case "item":
+        $this->Core->load("Items");
+        $item = $this->Items->get($id);
+        if (!is_array($item)) { exit("Invalid SKU"); }
+        $qr = $item["item_sku"];
+        break;
+    
+      // (B3) USER QR LOGIN
+      case "user":
+        $this->Core->load("QRIN");
+        $qr = $this->QRIN->add($id);
+        if ($qr===false) { exit("Invalid user"); }
+        break;
+    }
+
+    // (B4) GENERATE QR HTML PAGE
+    $this->htop([
+      ["l", HOST_ASSETS."REPORT-qr.css"],
+      ["s", HOST_ASSETS."qrcode.min.js"]
+    ]);
+    require PATH_PAGES . "REPORT-qr.php";
+    $this->hbottom();
+  }
+
+  // (C) SUPPLIER ITEMS LIST
   function supitems ($id) {
-    // (A1) GET SUPPLIER
+    // (C1) GET SUPPLIER
     $sup = $this->DB->fetch("SELECT * FROM `suppliers` WHERE `sup_id`=?", [$id]);
     
-    // (A2) FORCE DOWNLOAD AS CSV
+    // (C2) FORCE DOWNLOAD AS CSV
     $name = str_replace(" ", "-", $sup["sup_name"]) . ".csv";
     header("Content-Disposition: attachment; filename=$name;");
     $f = fopen("php://output", "w");
 
-    // (A3) HEADER - SUPPLIER
+    // (C3) HEADER - SUPPLIER
     fputcsv($f, [$sup["sup_name"]]);
     fputcsv($f, [$sup["sup_tel"], $sup["sup_email"], $sup["sup_address"]]);
     fputcsv($f, ["SKU", "Supplier SKU", "Name", "Description", "Unit", "Unit Price"]);
 
-    // (A4) SUPPLIER ITEMS
+    // (C4) SUPPLIER ITEMS
     $this->DB->query(
       "SELECT * FROM `suppliers_items`
        LEFT JOIN `items` USING (`item_sku`)
@@ -28,9 +73,9 @@ class Report extends Core {
     fclose($f);
   }
 
-  // (B) STOCK MOVEMENT REPORT
+  // (D) STOCK MOVEMENT REPORT
   function movement ($month, $year, $range) {
-    // (B1) START & END OF MONTH & MOVE DIRECTION
+    // (D1) START & END OF MONTH & MOVE DIRECTION
     $days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
     $month = $month<10 ? "0$month" : $month;
     $start = "$year-$month-01 00:00:00";
@@ -38,13 +83,13 @@ class Report extends Core {
     $this->Core->load("Settings");
     $this->Settings->defineN("STOCK_MVT", true);
 
-    // (B2) OUTPUT CSV HEADERS
+    // (D2) OUTPUT CSV HEADERS
     header("Content-Disposition: attachment; filename=movement-$year-$month.csv;");
     $f = fopen("php://output", "w");
 
-    // (B3) ALL MOVEMENT ENTRIES
+    // (D3) ALL MOVEMENT ENTRIES
     if ($range=="A") {
-      fputcsv($f, ["Date", "Staff", "SKU", "Batch", "Item", "Direction", "Quantity", "Unit", "Notes"]);
+      fputcsv($f, ["Date", "Staff", "SKU", "Item", "Direction", "Quantity", "Unit", "Notes"]);
       $this->DB->query(
         "SELECT m.*, DATE_FORMAT(m.`mvt_date`, '".DT_LONG."') `md`, i.`item_name`, i.`item_unit` 
          FROM `item_mvt` m
@@ -56,16 +101,16 @@ class Report extends Core {
       while ($r = $this->DB->stmt->fetch()) {
         fputcsv($f, [
           $r["md"], $r["user_name"],
-          $r["item_sku"], $r["batch_name"], $r["item_name"],
+          $r["item_sku"], $r["item_name"],
           STOCK_MVT[$r["mvt_direction"]], $r["mvt_qty"], $r["item_unit"],
           $r["mvt_notes"]
         ]);
       }
     }
 
-    // (B4) SUMMARY
+    // (D4) SUMMARY
     else {
-      // (B4-1) FETCH IN/OUT/DISPOSE ENTRIES
+      // (D4-1) FETCH IN/OUT/DISPOSE ENTRIES
       $this->DB->query(
         "SELECT m.`item_sku` `s`, i.`item_name` `n`, i.`item_unit` `u`,
                 m.`mvt_direction` `d`, SUM(m.`mvt_qty`) `q`
@@ -86,7 +131,7 @@ class Report extends Core {
         $data[$r["s"]][$r["d"]] = $r["q"];
       }
 
-      // (B4-2) OUTPUT CSV
+      // (D4-2) OUTPUT CSV
       fputcsv($f, ["SKU", "Name", "Unit", "In", "Out", "Dispose"]);
       if (count($data)>0) { foreach($data as $sku=>$d) {
         fputcsv($f, [
@@ -96,20 +141,20 @@ class Report extends Core {
       }}
     }
 
-    // (B5) THE END
+    // (D5) THE END
     fclose($f);
   }
 
-  // (C) ITEMS LIST
+  // (E) ITEMS LIST
   function items ($range=null) {
-    // (C1) HEADER
+    // (E1) HEADER
     header("Content-Disposition: attachment; filename=items-list.csv;");
     $f = fopen("php://output", "w");
     $now = $this->DB->fetchCol("SELECT DATE_FORMAT(CURRENT_TIMESTAMP(), '".DT_LONG."') `now`");
     fputcsv($f, ["ITEMS LIST AS AT " . strtoupper($now)]);
     fputcsv($f, ["SKU", "Name", "Description", "Quantity", "Unit"]);
 
-    // (C2) ITEMS
+    // (E2) ITEMS
     $sql = "SELECT * FROM `items`";
     if ($range=="M") { $sql .= " WHERE `item_low`>0"; }
     $this->DB->query($sql);
@@ -122,48 +167,20 @@ class Report extends Core {
     fclose($f);
   }
 
-  // (D) GET MONITORED ITEMS
+  // (F) GET MONITORED ITEMS
   function getMonitor () {
-    return $this->DB->fetchAll( "SELECT * FROM `items` WHERE `item_low`>0");
+    return $this->DB->fetchAll("SELECT * FROM `items` WHERE `item_low`>0");
   }
 
-  // (E) GET BATCHES WITH EXPIRY
-  function getExpiry ($limit=null) {
-    $today = date("Y-m-d");
-    return $this->DB->fetchAll(sprintf(
-      "SELECT b.*, i.`item_name`, i.`item_unit`, DATEDIFF(b.`batch_expire`, '%s') `r`, DATE_FORMAT(b.`batch_expire`, '%s') `e`
-       FROM `item_batches` b
-       LEFT JOIN `items` i USING (`item_sku`)
-       WHERE `batch_expire`>='%s'
-       ORDER BY `r`%s",
-      $today, D_LONG, $today, $limit==null?"":" LIMIT 0,$limit"
-    ));
-  }
-
-  // (F) EXPIRING BATCHES
-  function expire () {
-    // (F1) HEADER
-    header("Content-Disposition: attachment; filename=expire-list.csv;");
-    $f = fopen("php://output", "w");
-    fputcsv($f, ["SKU", "Batch", "Name", "Quantity", "Unit", "Expiry", "Remaining"]);
-
-    // (F2) BATCHES
-    $today = date("Y-m-d");
-    $this->DB->query(sprintf(
-      "SELECT b.*, i.`item_name`, i.`item_unit`, DATEDIFF(b.`batch_expire`, '%s') `r`, DATE_FORMAT(b.`batch_expire`, '%s') `e`
-       FROM `item_batches` b
-       LEFT JOIN `items` i USING (`item_sku`)
-       WHERE `batch_expire`>='%s'
-       ORDER BY `r`",
-      $today, D_LONG, $today
-    ));
-    while ($r = $this->DB->stmt->fetch()) {
-      fputcsv($f, [
-        $r["item_sku"], $r["batch_name"], $r["item_name"],
-        $r["batch_qty"], $r["item_unit"],
-        $r["e"], $r["r"]
-      ]);
-    }
-    fclose($f);
+  // (G) DELIVERY ORDER
+  function deliver ($id) {
+    $this->Settings->defineN("DELIVER_STAT", true);
+    $order = $this->DB->fetch("SELECT * FROM `deliveries` WHERE `d_id`=?", [$id]);
+    $items = $this->DB->fetchAll("SELECT * FROM `deliveries_items` WHERE `d_id`=?", [$id]);
+    $this->htop([
+      ["l", HOST_ASSETS."REPORT-deliver.css"]
+    ]);
+    require PATH_PAGES . "REPORT-deliver.php";
+    $this->hbottom();
   }
 }

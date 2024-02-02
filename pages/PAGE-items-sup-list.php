@@ -6,16 +6,13 @@ $sup = $_CORE->autoCall("Suppliers", "getBySKU");
 if (is_array($sup)) { foreach ($sup as $id=>$s) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
-    <strong><?=$s["sup_name"]?></strong><br>
-    <strong>SSKU: <?=$s["sup_sku"]?></strong><br>
+    <strong>[<?=$s["sup_sku"]?>] <?=$s["sup_name"]?></strong><br>
     <small>
-      T: <a href="tel:<?=$s["sup_tel"]?>"><?=$s["sup_tel"]?></a> |
-      E: <a href="mailto:<?=$s["sup_email"]?>"><?=$s["sup_email"]?></a>
-    </small><br>
-    <small><?=$s["sup_address"]?></small>
-  </div>
-  <div class="text-secondary">
-    $<?=$s["unit_price"]?> / <?=$s["item_unit"]?>
+      <span class="badge bg-secondary">tel</span> <a href="tel:<?=$s["sup_tel"]?>"><?=$s["sup_tel"]?></a>
+      <span class="badge bg-secondary">email</span> <a href="mailto:<?=$s["sup_email"]?>"><?=$s["sup_email"]?></a>
+      <br>
+      <span class="badge bg-secondary">price</span> <?=$s["unit_price"]?> / <?=$s["item_unit"]?>
+    </small>
   </div>
 </div>
 <?php }} else { echo "No suppliers for this item"; }

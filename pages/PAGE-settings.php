@@ -3,7 +3,9 @@
 $settings = $_CORE->Settings->getAll();
 
 // (B) SETTINGS LIST
-$_PMETA = ["load" => [["s", HOST_ASSETS."PAGE-settings.js", "defer"]]];
+$_PMETA = ["load" => [
+  ["s", HOST_ASSETS."PAGE-settings.js", "defer"]
+]];
 require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <h3 class="mb-3">SYSTEM SETTINGS</h3>
 <form id="set-list" onsubmit="return save()">

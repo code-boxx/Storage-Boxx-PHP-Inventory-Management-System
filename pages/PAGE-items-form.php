@@ -35,6 +35,11 @@ if ($edit) { $item = $_CORE->autoCall("Items", "get"); }
       </datalist>
     </div>
 
+    <div class="form-floating mb-4">
+      <input type="number" step="0.01" class="form-control" id="item-price" required value="<?=$edit?$item["item_price"]:""?>">
+      <label>Unit Price</label>
+    </div>
+
     <div class="form-floating mb-1">
       <input type="number" step="0.01" class="form-control" id="item-low" required value="<?=$edit?$item["item_low"]:""?>">
       <label>Stock Level Watch</label>

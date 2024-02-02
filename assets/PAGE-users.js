@@ -76,61 +76,28 @@ var usr = {
 
   // (G) SHOW WRITE NFC PAGE
   hnBtn : null, // html write nfc button
-  hnStat : null, // html write nfc button status
   hnNull : null, // html null token button
   nfcShow : id => cb.load({
     page : "users/nfc", target : "cb-page-2",
     data : { id : id },
     onload : () => {
       usr.hnBtn = document.getElementById("nfc-btn");
-      usr.hnStat = document.getElementById("nfc-stat");
       usr.hnNull = document.getElementById("nfc-null");
-      if ("NDEFReader" in window) {
-        usr.hnStat.innerHTML = "Create Login Token";
-        usr.hnBtn.disabled = false;
-      } else {
-        usr.hnStat.innerHTML = "Web NFC not available";
-      }
+      if ("NDEFReader" in window) { usr.hnBtn.disabled = false; }
       cb.page(2);
     }
   }),
 
   // (H) CREATE NEW NFC LOGIN TAG
-  nfcNew : id => {
-    // (H1) DISABLE "WRITE NFC" BUTTON
-    usr.hnBtn.disabled = true;
-
-    // (H2) REGISTER WITH SERVER + GET JWT
-    cb.api({
-      mod : "session", act : "nfcadd",
-      data : { id : id },
-      passmsg : false,
-      onpass : res => {
-        // (H2-1) ENABLE "NULLIFY" BUTTTON
-        usr.hnNull.disabled = false;
-
-        // (H2-2) ON SUCCESSFUL NFC WRITE
-        nfc.onwrite = () => {
-          nfc.standby();
-          cb.modal("Successful", "Login token successfully created.");
-          usr.hnStat.innerHTML = "Done";
-        };
-
-        // (H2-3) ON FAILED NFC WRITE
-        nfc.onerror = err => {
-          nfc.stop();
-          console.error(err);
-          cb.modal("ERROR", err.message);
-          usr.hnStat.innerHTML = "ERROR!";
-          usr.hnBtn.disabled = false;
-        };
-
-        // (H2-4) START NFC WRITE
-        nfc.write(res.data);
-        usr.hnStat.innerHTML = "Tap NFC tag to write";
-      }
-    })
-  },
+  nfcNew : id => cb.api({
+    mod : "session", act : "nfcadd",
+    data : { id : id },
+    passmsg : false,
+    onpass : res => {
+      usr.hnNull.disabled = false;
+      nfc.write(res.data);
+    }
+  }),
 
   // (I) NULLIFY NFC TOKEN
   nfcNull : id => cb.api({
@@ -140,13 +107,7 @@ var usr = {
     onpass : res => usr.hnNull.disabled = true
   }),
 
-  // (J) END WRITE NFC SESSION
-  nfcBack : () => {
-    nfc.stop();
-    cb.page(1);
-  },
-
-  // (K) SHOW WRITE QR PAGE
+  // (J) SHOW WRITE QR PAGE
   hqNull : null, // html null token button
   qrShow : id => cb.load({
     page : "users/qr", target : "cb-page-2",
@@ -157,7 +118,7 @@ var usr = {
     }
   }),
 
-  // (L) NULLIFY QR TOKEN
+  // (K) NULLIFY QR TOKEN
   qrNull : id => cb.api({
     mod : "session", act : "qrdel",
     data : { id : id },
@@ -165,7 +126,7 @@ var usr = {
     onpass : res => usr.hqNull.disabled = true
   }),
 
-  // (M) IMPORT USERS
+  // (L) IMPORT USERS
   import : () => im.init({
     name : "USERS",
     at : 2, back : 1,
@@ -180,11 +141,18 @@ var usr = {
   })
 };
 
+// (M) INIT MANAGE USERS
 window.addEventListener("load", () => {
+  // (M1) LIST USERS
   usr.list();
+
+  // (M2) ATTACH AUTOCOMPLETE
   autocomplete.attach({
     target : document.getElementById("user-search"),
     mod : "autocomplete", act : "user",
     onpick : res => usr.search()
   });
+
+  // (M3) ATTACH NFC READER
+  if (("NDEFReader" in window)) { nfc.init(); }
 });

@@ -80,4 +80,6 @@ var pusher = {
     onpass : () => pusher.msg("Push notification successfully registered.", 1)
   })
 };
+
+// (F) INIT PUSH
 window.addEventListener("load", pusher.init);

@@ -12,3 +12,4 @@ STORAGE BOXX TO DO / WISH LIST
 * item_mvt clean up - Remove item_left? Does not make much sense, not useful.
 * item_mvt add item_name and mvt_unit - Data integrity.
 * More reports - delivery/sales, purchases.
+* DO/PO - sortable items.

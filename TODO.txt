@@ -1,0 +1,12 @@
+STORAGE BOXX TO DO / WISH LIST
+==============================
+* Add PO
+* Print QR/NFC after import items
+* Items > supplier > purchase
+* Home page widgets
+* Settigns - add company info - Use in PO/DO
+* Directly email PO/DO
+* Add tutorial videos
+* Movement - Auto save after click on suggested SKU
+* item_mvt clean up - Remove item_left? Does not make much sense, not useful.
+* item_mvt add item_name and mvt_unit - Data integrity.

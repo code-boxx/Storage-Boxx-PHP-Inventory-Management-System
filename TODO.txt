@@ -1,12 +1,17 @@
 STORAGE BOXX TO DO / WISH LIST
 ==============================
 * Add PO
-* Items > supplier > purchase
-* Auto-create PO for items low on stock
+* Links
+  * Suppliers > PO
+  * Customers > DO
+  * Items > Suppliers > Purchase
+* Check Item > Add More Info > Suppliers + Purchase + Projected In/Out > 
+* Auto-create PO for all items low on stock
 * Home page widgets
 * Settings - add company info - Use in PO/DO/Invoice/documents
 * Directly email PO/DO
 * PO - sortable items.
+* LIB-Items > function save > also update PO items.
 * More reports - delivery/sales, purchases.
 * Print QR/NFC after import items
-* Add tutorial videos
+* Add tutorial videos.

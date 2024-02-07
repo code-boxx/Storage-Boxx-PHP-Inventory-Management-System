@@ -64,7 +64,8 @@ if ($edit) { $dlv = $_CORE->autoCall("Delivery", "get"); }
   </div>
 
   <!-- (B3) ITEMS LIST -->
-  <div class="fw-bold text-danger mb-2">ITEMS</div>
+  <div class="fw-bold text-danger">ITEMS</div>
+  <div class="text-secondary mb-2">* Drag-and-drop to sort.</div>
   <div id="dlv-items" class="bg-white border p-4 mb-3 zebra">
     <?php
     if ($edit) {

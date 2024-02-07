@@ -175,12 +175,8 @@ class Report extends Core {
   // (G) DELIVERY ORDER
   function deliver ($id) {
     $this->Settings->defineN("DELIVER_STAT", true);
-    $order = $this->DB->fetch("SELECT * FROM `deliveries` WHERE `d_id`=?", [$id]);
-    $items = $this->DB->fetchAll(
-      "SELECT d.`item_sku`, d.`item_price`, d.`item_qty`, i.`item_unit`, i.`item_name`
-      FROM `deliveries_items` d
-      LEFT JOIN `items` i USING (`item_sku`)
-      WHERE `d_id`=?", [$id]);
+    $this->Core->load("Delivery");
+    $order = $this->Delivery->get($id);
     $this->htop([
       ["l", HOST_ASSETS."REPORT-deliver.css"]
     ]);

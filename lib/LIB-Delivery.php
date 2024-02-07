@@ -39,13 +39,14 @@ class Delivery extends Core {
 
     // (A4) ADD ITEMS
     $items = json_decode($items, true);
-    $data = []; $sku = [];
+    $data = []; $sku = []; $n = 0;
     foreach ($items as $i) {
-      $data = array_merge($data, [$id], $i);
+      $data = array_merge($data, [$id, $n], $i);
       $sku[] = "\"$i[0]\"";
+      $n++;
     }
     $this->DB->insert("deliveries_items",
-      ["d_id", "item_sku", "item_price", "item_qty"],
+      ["d_id", "item_sort", "item_sku", "item_price", "item_qty"],
       $data
     );
 
@@ -103,7 +104,8 @@ class Delivery extends Core {
       "SELECT d.`item_sku` s, i.`item_name` n, i.`item_unit` u, d.`item_price` p, d.`item_qty` q
        FROM `deliveries_items` d
        LEFT JOIN `items` i USING (`item_sku`)
-       WHERE `d_id`=?", [$id]
+       WHERE `d_id`=?
+       ORDER BY `item_sort`", [$id]
     );
     $d["items"] = [];
     while ($r = $this->DB->stmt->fetch(PDO::FETCH_NUM)) {

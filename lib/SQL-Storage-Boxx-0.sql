@@ -169,8 +169,10 @@ CREATE TABLE `deliveries_items` (
   `d_id` bigint(20) NOT NULL,
   `item_sku` varchar(255) NOT NULL,
   `item_price` decimal(12,2) NOT NULL DEFAULT 0.00,
-  `item_qty` decimal(12,2) NOT NULL
+  `item_qty` decimal(12,2) NOT NULL,
+  `item_sort` bigint(20) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `deliveries_items`
-  ADD PRIMARY KEY (`d_id`,`item_sku`);
+  ADD PRIMARY KEY (`d_id`,`item_sku`),
+  ADD KEY `item_sort` (`item_sort`);

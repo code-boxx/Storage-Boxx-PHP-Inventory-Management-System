@@ -38,12 +38,12 @@
     <th>Unit Price</th>
     <th>Amount</th>
   </tr></thead>
-  <tbody><?php foreach ($items as $i) { ?>
+  <tbody><?php foreach ($order["items"] as $i) { ?>
   <tr>
-    <td><?=$i["item_qty"]?> <?=$i["item_unit"]?></td>
-    <td>[<?=$i["item_sku"]?>] <?=$i["item_name"]?></td>
-    <td><?=$i["item_price"]?></td>
-    <td><?=$i["item_price"]?></td>
+    <td><?=$i[3]?> <?=$i[2]?></td>
+    <td>[<?=$i[0]?>] <?=$i[1]?></td>
+    <td><?=$i[4]?></td>
+    <td><?=$i[3] * $i[4]?></td>
   </tr>
   <?php } ?></tbody>
 </table>

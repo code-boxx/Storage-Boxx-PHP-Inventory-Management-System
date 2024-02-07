@@ -4,7 +4,14 @@ $edit = isset($_POST["sku"]) && $_POST["sku"]!="";
 if ($edit) { $item = $_CORE->autoCall("Items", "get"); }
 
 // (B) ITEM FORM ?>
-<h3 class="mb-3"><?=$edit?"EDIT":"ADD"?> ITEM</h3>
+<h3 class="m-0"><?=$edit?"EDIT":"ADD"?> ITEM</h3>
+<div class="text-danger fw-bold mb-3">
+  <?php if ($edit) { ?>
+  * All movement history, suppier items, and orders will also be updated if you change the SKU/name/unit.
+  This can potentially mess things up, do so with extra care.
+  <?php } ?>
+</div>
+
 <form onsubmit="return item.save()">
   <div class="bg-white border p-4 mb-3">
     <div class="form-floating mb-1">

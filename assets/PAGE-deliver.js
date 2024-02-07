@@ -97,45 +97,80 @@ var dlv = {
     
     // (E2) ADD NEW ROW
     else {
+      // (E2-1) ITEM ROW HTML
       let row = document.createElement("div");
-      row.innerHTML = `<div class="iRow d-flex align-items-center border p-2">
-        <i class="text-danger icon-cross p-3" onclick="dlv.delItem(this, '${sku}')"></i>
-        <div class="flex-grow-1">
-          <strong class="iSKU">${sku}</strong>
-          <div class="iName">${name}</div>
-        </div>
-        <div class="form-floating">
-          <input class="form-control mx-1 iQty" type="number" step="0.01" min="0.01" required value="${qty}">
-          <label class="iUnit">${unit}</label>
-        </div>
-        <div class="form-floating">
-          <input class="form-control iPrice" type="number" step="0.01" min="0" required value="${price}">
-          <label>PRICE</label>
-        </div>
+      row.className = "iRow d-flex align-items-center border p-2";
+      row.innerHTML = 
+      `<i class="text-danger icon-cross p-3" onclick="dlv.delItem(this, '${sku}')"></i>
+      <div class="flex-grow-1">
+        <strong class="iSKU">${sku}</strong>
+        <div class="iName">${name}</div>
+      </div>
+      <div class="form-floating">
+        <input class="form-control mx-1 iQty" type="number" step="0.01" min="0.01" required value="${qty}">
+        <label class="iUnit">${unit}</label>
+      </div>
+      <div class="form-floating">
+        <input class="form-control iPrice" type="number" step="0.01" min="0" required value="${price}">
+        <label>PRICE</label>
       </div>`;
+
+      // (E2-2) SORTABLE
+      row.draggable = true;
+      row.ondragstart = () => dlv.ddfrom = row;
+      row.ondragover = e => e.preventDefault();
+      row.ondrop = dlv.isort;
+
+      // (E2-3) APPEND TO LIST
       document.getElementById("dlv-items").appendChild(row);
       dlv.iList[sku] = 1;
     }
   },
 
-  // (F) REMOVE ITEM ROW
+  // (F) DRAG-N-DROP SORT ITEM
+  ddfrom : null, // current item being dragged
+  ddto : null, // dropped at this item
+  ddget : r => r.classList.contains("iRow") ? r : dlv.ddget(r.parentElement), // get proper drop target
+  isort : e => {
+    // (F1) GET ELEMENTS
+    e.preventDefault();
+    let iList = document.getElementById("dlv-items"),
+        iAll = iList.querySelectorAll(".iRow");
+    dlv.ddto = dlv.ddget(e.target);
+
+    // (F2) REORDER ITEM
+    if (iAll.length>1 && dlv.ddfrom!=dlv.ddto) {
+      let currentpos = 0, droppedpos = 0;
+      for (let i=0; i<iAll.length; i++) {
+        if (dlv.ddfrom == iAll[i]) { currentpos = i; }
+        if (dlv.ddto == iAll[i]) { droppedpos = i; }
+      }
+      if (currentpos < droppedpos) {
+        iList.insertBefore(dlv.ddfrom, dlv.ddto.nextSibling);
+      } else {
+        iList.insertBefore(dlv.ddfrom, dlv.ddto);
+      }
+    }
+  },
+
+  // (G) REMOVE ITEM ROW
   delItem : (row, sku) => {
     row.parentElement.remove();
     delete dlv.iList[sku];
   },
 
-  // (G) GET ITEM FROM SERVER & ADD TO LIST
+  // (H) GET ITEM FROM SERVER & ADD TO LIST
   addGet : sku => cb.api({
     mod : "items", act : "get",
     data : { sku : sku },
     passmsg : false,
     onpass : res => {
-      // (G1) INVALID SKU
+      // (H1) INVALID SKU
       if (res.data==null) {
         cb.modal("Invalid Item", `${sku} is not found in the database.`);
       }
 
-      // (G2) OK - ADD ITEM
+      // (H2) OK - ADD ITEM
       else {
         let i = res.data;
         dlv.addItem(i.item_sku, i.item_name, i.item_unit, i.item_price, 1);
@@ -143,15 +178,15 @@ var dlv = {
     }
   }),
 
-  // (H) ADD ITEM WITH QR CODE
+  // (I) ADD ITEM WITH QR CODE
   addQR : () => {
     if (qrscan.scanner==null) { qrscan.init(dlv.addGet); }
     qrscan.show();
   },
 
-  // (I) SAVE DELIVERY
+  // (J) SAVE DELIVERY
   save : () => {
-    // (I1) GET DATA
+    // (J1) GET DATA
     var data = {
       name : document.getElementById("d-name").value,
       tel : document.getElementById("d-tel").value,
@@ -166,26 +201,24 @@ var dlv = {
       data.stat = document.getElementById("d-stat").value;
     }
 
-    // (I2) GET ITEMS
+    // (J2) GET ITEMS
     let items = document.querySelectorAll("#dlv-items .iRow");
     if (items.length==0) {
       cb.modal("No Items", "Please add at least one item.");
       return false;
     }
     data.items = [];
-    // sku | name | unit | price | qty
+    // sku | price | qty
     for (let i of items) {
       data.items.push([
         i.querySelector(".iSKU").innerHTML,
-        i.querySelector(".iName").innerHTML,
-        i.querySelector(".iUnit").innerHTML,
         i.querySelector(".iPrice").value,
         i.querySelector(".iQty").value
       ]);
     }
     data.items = JSON.stringify(data.items);
 
-    // (I3) AJAX
+    // (J3) AJAX
     cb.api({
       mod : "delivery", act : "save",
       data : data,
@@ -195,22 +228,22 @@ var dlv = {
     return false;
   },
 
-  // (J) PRINT DELIVERY ORDER
+  // (K) PRINT DELIVERY ORDER
   print : id => {
     document.getElementById("dlv-print-id").value = id;
     document.getElementById("dlv-print").submit();
   }
 };
 
-// (K) INIT MANAGE DELIVERIES
+// (L) INIT MANAGE DELIVERIES
 window.addEventListener("load", () => {
-  // (K1) EXTRA STYLES FOR "ADD/EDIT ITEMS LIST"
+  // (L1) EXTRA STYLES FOR "ADD/EDIT ITEMS LIST"
   document.head.appendChild(document.createElement("style")).innerHTML=".iQty,.iPrice{width:80px}";
 
-  // (K2) LIST DELIVERIES
+  // (L2) LIST DELIVERIES
   dlv.list();
 
-  // (K3) ATTACH AUTOCOMPLETE
+  // (L3) ATTACH AUTOCOMPLETE
   autocomplete.attach({
     target : document.getElementById("dlv-search"),
     mod : "autocomplete", act : "deliver",

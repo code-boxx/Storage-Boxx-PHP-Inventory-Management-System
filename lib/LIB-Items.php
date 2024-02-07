@@ -38,6 +38,7 @@ class Items extends Core {
       if ($sku!=$osku) {
         $this->DB->update("item_mvt", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
         $this->DB->update("suppliers_items", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
+        $this->DB->update("deliveries_items", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
       }
     }
 

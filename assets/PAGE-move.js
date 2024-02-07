@@ -30,7 +30,11 @@ var move = {
     // (B3) INIT AUTOCOMPLETE
     autocomplete.attach({
       target : document.getElementById("mvt-sku"),
-      mod : "autocomplete", act : "sku"
+      mod : "autocomplete", act : "sku",
+      onpick : () => {
+        if (move.hForm.checkValidity()) { move.save(); }
+        else { move.hForm.reportValidity(); }
+      }
     });
   },
 

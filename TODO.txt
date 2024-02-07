@@ -1,15 +1,12 @@
 STORAGE BOXX TO DO / WISH LIST
 ==============================
 * Add PO
-* Print QR/NFC after import items
 * Items > supplier > purchase
 * Auto-create PO for items low on stock
 * Home page widgets
 * Settings - add company info - Use in PO/DO/Invoice/documents
 * Directly email PO/DO
-* Add tutorial videos
-* Movement - Auto save after click on suggested SKU
-* item_mvt clean up - Remove item_left? Does not make much sense, not useful.
-* item_mvt add item_name and mvt_unit - Data integrity.
+* PO - sortable items.
 * More reports - delivery/sales, purchases.
-* DO/PO - sortable items.
+* Print QR/NFC after import items
+* Add tutorial videos

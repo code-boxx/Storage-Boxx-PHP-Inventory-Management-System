@@ -45,7 +45,7 @@ class Delivery extends Core {
       $sku[] = "\"$i[0]\"";
     }
     $this->DB->insert("deliveries_items",
-      ["d_id", "item_sku", "item_name", "item_unit", "item_price", "item_qty"],
+      ["d_id", "item_sku", "item_price", "item_qty"],
       $data
     );
 
@@ -100,8 +100,10 @@ class Delivery extends Core {
 
     // (B2) ORDER ITEMS
     $this->DB->query(
-      "SELECT `item_sku` s, `item_name` n, `item_unit` u, `item_price` p, `item_qty` q
-       FROM `deliveries_items` WHERE `d_id`=?", [$id]
+      "SELECT d.`item_sku` s, i.`item_name` n, i.`item_unit` u, d.`item_price` p, d.`item_qty` q
+       FROM `deliveries_items` d
+       LEFT JOIN `items` i USING (`item_sku`)
+       WHERE `d_id`=?", [$id]
     );
     $d["items"] = [];
     while ($r = $this->DB->stmt->fetch(PDO::FETCH_NUM)) {

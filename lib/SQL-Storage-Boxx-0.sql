@@ -168,8 +168,6 @@ ALTER TABLE `deliveries`
 CREATE TABLE `deliveries_items` (
   `d_id` bigint(20) NOT NULL,
   `item_sku` varchar(255) NOT NULL,
-  `item_name` varchar(255) NOT NULL,
-  `item_unit` varchar(255) NOT NULL,
   `item_price` decimal(12,2) NOT NULL DEFAULT 0.00,
   `item_qty` decimal(12,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

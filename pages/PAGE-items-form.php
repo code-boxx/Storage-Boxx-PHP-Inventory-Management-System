@@ -7,7 +7,8 @@ if ($edit) { $item = $_CORE->autoCall("Items", "get"); }
 <h3 class="m-0"><?=$edit?"EDIT":"ADD"?> ITEM</h3>
 <div class="text-danger fw-bold mb-3">
   <?php if ($edit) { ?>
-  * All movement history, suppier items, and orders will also be updated if you change the SKU/name/unit.
+  * If you change the SKU/name/unit - 
+  All movement history, supplier items, and orders will also be updated.
   This can potentially mess things up, do so with extra care.
   <?php } ?>
 </div>

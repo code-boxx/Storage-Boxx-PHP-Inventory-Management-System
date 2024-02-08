@@ -14,4 +14,5 @@ STORAGE BOXX TO DO / WISH LIST
 * LIB-Items > function save > also update PO items.
 * More reports - delivery/sales, purchases.
 * Print QR/NFC after import items
+* Window.print() > QR and DO
 * Add tutorial videos.

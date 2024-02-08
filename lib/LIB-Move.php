@@ -73,7 +73,7 @@ class Move extends Core {
       $this->Core->load("Push");
       $this->Push->send("[{$sku}] {$qnow["item_name"]}",
         "Item is low on stock - {$qnew} {$qnow["item_unit"]}",
-        HOST_ASSETS . "favicon.png", HOST_ASSETS . "head-storage-boxx.webp"
+        HOST_ASSETS . "favicon.png", HOST_ASSETS . "banner.webp"
       );
     }
 

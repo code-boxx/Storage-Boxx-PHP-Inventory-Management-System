@@ -21,7 +21,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
   </div>
 
   <div class="form-floating mb-4">
-    <input type="text" class="form-control" id="push_img" required value="<?=HOST_ASSETS?>head-storage-boxx.webp">
+    <input type="text" class="form-control" id="push_img" required value="<?=HOST_ASSETS?>banner.webp">
     <label>Cover Image</label>
   </div>
 

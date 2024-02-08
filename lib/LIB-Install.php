@@ -227,7 +227,11 @@ class Install extends Core {
 
   // (PHASE G) CLEAN UP
   function G () {
-    // (G1) SWAP OUT INDEX
+    // (G1) GENERATE LIST OF ASSET FILES FOR CLIENTS TO CACHE
+    $this->Core->load("CCache");
+    $this->CCache->init();
+
+    // (G2) SWAP OUT INDEX
     file_put_contents(PATH_BASE . "index.php", <<<EOF
     <?php
     require __DIR__ . DIRECTORY_SEPARATOR . "lib" . DIRECTORY_SEPARATOR . "CORE-Go.php";
@@ -235,7 +239,7 @@ class Install extends Core {
     \$_CORE->Route->run();
     EOF);
 
-    // (G2) INSTALL COMPLETE!
+    // (G3) INSTALL COMPLETE!
     if (defined("I_RELOAD")) { $this->Core->redirect(); }
     exit("OK");
   }

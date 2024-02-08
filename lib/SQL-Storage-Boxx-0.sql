@@ -12,6 +12,7 @@ ALTER TABLE `settings`
 
 INSERT INTO `settings` (`setting_name`, `setting_description`, `setting_value`, `setting_group`) VALUES
 ('APP_VER', 'App version', 1, 0),
+('CACHE_VER', 'Client storage cache timestamp', 0, 1),
 ('EMAIL_FROM', 'System email from', 'sys@site.com', 1),
 ('PAGE_PER', 'Number of entries per page', 20, 1),
 ('SUGGEST_LIMIT', 'Autocomplete suggestion limit', 5, 1),

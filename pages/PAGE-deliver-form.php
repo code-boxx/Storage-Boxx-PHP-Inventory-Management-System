@@ -60,10 +60,12 @@ if ($edit) { $dlv = $_CORE->autoCall("Delivery", "get"); }
       <input type="text" id="d-address" class="form-control" required value="<?=$edit?$dlv["d_address"]:""?>">
       <label>Address</label>
     </div>
-   <div class="form-floating mb-4">
+
+    <div class="form-floating mb-4">
       <input type="date" id="d-date" class="form-control" required value="<?=$edit?$dlv["d_date"]:""?>">
       <label>Date</label>
     </div>
+
     <div class="form-floating">
       <textarea id="d-notes" class="form-control"><?=$edit?$dlv["d_notes"]:""?></textarea>
       <label>Notes (If Any)</label>

@@ -47,23 +47,26 @@ var dlv = {
       }
 
       // (D3) ATTACH CUSTOMER AUTOCOMPLETE
-      autocomplete.attach({
-        target : document.getElementById("d-name"),
-        mod : "autocomplete", act : "cus",
-        data : { more : 1 },
-        onpick : cus => {
-          document.getElementById("d-name").value = cus.n;
-          cus.v = JSON.parse(cus.v);
-          [
-            ["d-tel", "t"],
-            ["d-email", "e"],
-            ["d-address", "a"],
-          ].forEach(r => {
-            let field = document.getElementById(r[0]);
-            if (field.value=="") { field.value = cus.v[r[1]]; }
-          });
-        }
-      });
+      var hcusname = document.getElementById("cus-name");
+      if (!hcusname.disabled) {
+        autocomplete.attach({
+          target : hcusname,
+          mod : "autocomplete", act : "cus",
+          data : { more : 1 },
+          onpick : cus => {
+            dlv.ccus(false);
+            hcusname.value = cus.n;
+            cus.v = JSON.parse(cus.v);
+            [
+              ["cus-id", "i"],
+              ["d-name", "n"],
+              ["d-tel", "t"],
+              ["d-email", "e"],
+              ["d-address", "a"],
+            ].forEach(r => document.getElementById(r[0]).value = cus.v[r[1]]);
+          }
+        });
+      }
 
       // (D4) ATTACH ADD ITEM AUTOCOMPLETE
       autocomplete.attach({
@@ -88,16 +91,34 @@ var dlv = {
     }
   }),
 
-  // (E) ADD ITEM ROW
+  // (E) TOGGLE CUSTOMER CHANGE
+  ccus : reset => {
+    // (E1) GET HTML ELEMENTS
+    let n = document.getElementById("cus-name"),
+        i = document.getElementById("cus-id"),
+        c = document.getElementById("cus-change");
+    // @TODO
+    if (reset) {
+      n.value = "";
+      n.disabled = false;
+      i.value = "";
+      c.classList.add("d-none");
+    } else {
+      n.disabled = true;
+      c.classList.remove("d-none");
+    }
+  },
+
+  // (F) ADD ITEM ROW
   addItem : (sku, name, unit, price, qty) => {
-    // (E1) CHECK DUPLICATE ITEM
+    // (F1) CHECK DUPLICATE ITEM
     if (dlv.iList[sku]) {
       cb.modal("Already Added", `[${sku}] ${name} is already added.`);
     }
     
-    // (E2) ADD NEW ROW
+    // (F2) ADD NEW ROW
     else {
-      // (E2-1) ITEM ROW HTML
+      // (F2-1) ITEM ROW HTML
       let row = document.createElement("div");
       row.className = "iRow d-flex align-items-center border p-2";
       row.innerHTML = 
@@ -115,30 +136,30 @@ var dlv = {
         <label>PRICE</label>
       </div>`;
 
-      // (E2-2) SORTABLE
+      // (F2-2) SORTABLE
       row.draggable = true;
       row.ondragstart = () => dlv.ddfrom = row;
       row.ondragover = e => e.preventDefault();
       row.ondrop = dlv.isort;
 
-      // (E2-3) APPEND TO LIST
+      // (F2-3) APPEND TO LIST
       document.getElementById("dlv-items").appendChild(row);
       dlv.iList[sku] = 1;
     }
   },
 
-  // (F) DRAG-N-DROP SORT ITEM
+  // (G) DRAG-N-DROP SORT ITEM
   ddfrom : null, // current item being dragged
   ddto : null, // dropped at this item
   ddget : r => r.classList.contains("iRow") ? r : dlv.ddget(r.parentElement), // get proper drop target
   isort : e => {
-    // (F1) GET ELEMENTS
+    // (G1) GET ELEMENTS
     e.preventDefault();
     let iList = document.getElementById("dlv-items"),
         iAll = iList.querySelectorAll(".iRow");
     dlv.ddto = dlv.ddget(e.target);
 
-    // (F2) REORDER ITEM
+    // (G2) REORDER ITEM
     if (iAll.length>1 && dlv.ddfrom!=dlv.ddto) {
       let currentpos = 0, droppedpos = 0;
       for (let i=0; i<iAll.length; i++) {
@@ -153,24 +174,24 @@ var dlv = {
     }
   },
 
-  // (G) REMOVE ITEM ROW
+  // (H) REMOVE ITEM ROW
   delItem : (row, sku) => {
     row.parentElement.remove();
     delete dlv.iList[sku];
   },
 
-  // (H) GET ITEM FROM SERVER & ADD TO LIST
+  // (I) GET ITEM FROM SERVER & ADD TO LIST
   addGet : sku => cb.api({
     mod : "items", act : "get",
     data : { sku : sku },
     passmsg : false,
     onpass : res => {
-      // (H1) INVALID SKU
+      // (I1) INVALID SKU
       if (res.data==null) {
         cb.modal("Invalid Item", `${sku} is not found in the database.`);
       }
 
-      // (H2) OK - ADD ITEM
+      // (I2) OK - ADD ITEM
       else {
         let i = res.data;
         dlv.addItem(i.item_sku, i.item_name, i.item_unit, i.item_price, 1);
@@ -178,16 +199,17 @@ var dlv = {
     }
   }),
 
-  // (I) ADD ITEM WITH QR CODE
+  // (J) ADD ITEM WITH QR CODE
   addQR : () => {
     if (qrscan.scanner==null) { qrscan.init(dlv.addGet); }
     qrscan.show();
   },
 
-  // (J) SAVE DELIVERY
+  // (K) SAVE DELIVERY
   save : () => {
-    // (J1) GET DATA
+    // (K1) GET DATA
     var data = {
+      cid : document.getElementById("cus-id").value,
       name : document.getElementById("d-name").value,
       tel : document.getElementById("d-tel").value,
       email : document.getElementById("d-email").value,
@@ -195,13 +217,17 @@ var dlv = {
       date : document.getElementById("d-date").value,
       notes : document.getElementById("d-notes").value
     };
+    if (data.cid=="") {
+      cb.modal("No customer specified", "Please select a customer.");
+      return false;
+    }
     var id = document.getElementById("d-id").value;
     if (id!="") {
       data.id = id;
       data.stat = document.getElementById("d-stat").value;
     }
 
-    // (J2) GET ITEMS
+    // (K2) GET ITEMS
     let items = document.querySelectorAll("#dlv-items .iRow");
     if (items.length==0) {
       cb.modal("No Items", "Please add at least one item.");
@@ -218,7 +244,7 @@ var dlv = {
     }
     data.items = JSON.stringify(data.items);
 
-    // (J3) AJAX
+    // (K3) AJAX
     cb.api({
       mod : "delivery", act : "save",
       data : data,
@@ -228,22 +254,22 @@ var dlv = {
     return false;
   },
 
-  // (K) PRINT DELIVERY ORDER
+  // (L) PRINT DELIVERY ORDER
   print : id => {
     document.getElementById("dlv-print-id").value = id;
     document.getElementById("dlv-print").submit();
   }
 };
 
-// (L) INIT MANAGE DELIVERIES
+// (M) INIT MANAGE DELIVERIES
 window.addEventListener("load", () => {
-  // (L1) EXTRA STYLES FOR "ADD/EDIT ITEMS LIST"
+  // (M1) EXTRA STYLES FOR "ADD/EDIT ITEMS LIST"
   document.head.appendChild(document.createElement("style")).innerHTML=".iQty,.iPrice{width:80px}";
 
-  // (L2) LIST DELIVERIES
+  // (M2) LIST DELIVERIES
   dlv.list();
 
-  // (L3) ATTACH AUTOCOMPLETE
+  // (M3) ATTACH AUTOCOMPLETE
   autocomplete.attach({
     target : document.getElementById("dlv-search"),
     mod : "autocomplete", act : "deliver",

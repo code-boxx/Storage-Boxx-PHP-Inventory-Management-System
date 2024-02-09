@@ -53,3 +53,7 @@
   <div class="subtitle">NOTES</div>
   <?=nl2br($order["d_notes"])?>
 </div>
+
+<script>
+window.addEventListener("load", window.print);
+</script>

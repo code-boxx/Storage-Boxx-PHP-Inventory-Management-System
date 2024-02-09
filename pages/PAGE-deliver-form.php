@@ -8,7 +8,38 @@ if ($edit) { $dlv = $_CORE->autoCall("Delivery", "get"); }
 <h3 class="mb-3"><?=$edit?"EDIT":"ADD"?> DELIVERY</h3>
 <form onsubmit="return dlv.save()">
   <!-- (B1) CUSTOMER -->
-  <div class="fw-bold text-danger mb-2">CUSTOMER</div>
+  <div class="fw-bold text-danger mb-2">CUSTOMER &amp; ORDER</div>
+  <div class="bg-white border p-4 mb-3">
+    <input type="hidden" id="d-id" value="<?=$edit?$dlv["d_id"]:""?>">
+
+    <div class="form-floating">
+      <input type="text" id="cus-name" class="form-control" <?=$edit?" disabled ":""?>value="<?=$edit?$dlv["cus_name"]:""?>">
+      <label>Company Name</label>
+    </div>
+    <div id="cus-change" class="d-none text-secondary" onclick="dlv.ccus(true)">* Click here to change customer</div>
+    <input type="hidden" id="cus-id" value="<?=$edit?$dlv["cus_id"]:""?>">
+
+    <?php if ($edit) { ?>
+    <div class="form-floating mt-4 mb-1">
+      <select id="d-stat" class="form-select"><?php
+        foreach (DELIVER_STAT as $i=>$n) {
+          printf("<option %svalue='%s'>%s</option>",
+            $i==$dlv["d_status"] ? " selected " : "",
+            $i, $n
+          );
+        }
+      ?></select>
+      <label>Status</label>
+    </div>
+    <div class="text-secondary">
+      * Order cannot be edited once completed or cancelled.<br>
+      * Stock will be automatically deducted on complete.
+    </div>
+    <?php } ?>
+  </div>
+
+  <!-- (B2) DELIVER TO -->
+  <div class="fw-bold text-danger mb-2">DELIVER TO</div>
   <div class="bg-white border p-4 mb-3">
     <div class="form-floating mb-4">
       <input type="text" id="d-name" class="form-control" required value="<?=$edit?$dlv["d_name"]:""?>">
@@ -20,37 +51,13 @@ if ($edit) { $dlv = $_CORE->autoCall("Delivery", "get"); }
       <label>Telephone</label>
     </div>
 
-    <div class="form-floating mb-0">
+    <div class="form-floating mb-4">
       <input type="email" id="d-email" class="form-control" required value="<?=$edit?$dlv["d_email"]:""?>">
       <label>Email</label>
     </div>
-  </div>
-
-  <!-- (B2) DELIVERY -->
-  <div class="fw-bold text-danger mb-2">DELIVERY</div>
-  <div class="bg-white border p-4 mb-3">
-    <input type="hidden" id="d-id" value="<?=$edit?$dlv["d_id"]:""?>">
-
-    <?php if ($edit) { ?>
-    <div class="form-floating mb-1">
-      <select id="d-stat" class="form-select"><?php
-        foreach (DELIVER_STAT as $i=>$n) {
-          printf("<option %svalue='%s'>%s</option>",
-            $i==$dlv["d_status"] ? " selected " : "",
-            $i, $n
-          );
-        }
-      ?></select>
-      <label>Status</label>
-    </div>
-    <div class="text-secondary mb-4">
-      * Order cannot be edited once completed or cancelled.<br>
-      * Stock will be automatically deducted on complete.
-    </div>
-    <?php } ?>
 
     <div class="form-floating mb-4">
-      <input type="text" id="d-address" class="form-control" value="<?=$edit?$dlv["d_address"]:""?>">
+      <input type="text" id="d-address" class="form-control" required value="<?=$edit?$dlv["d_address"]:""?>">
       <label>Address</label>
     </div>
    <div class="form-floating mb-4">

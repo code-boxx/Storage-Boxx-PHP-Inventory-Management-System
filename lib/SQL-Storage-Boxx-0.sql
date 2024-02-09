@@ -149,6 +149,7 @@ ALTER TABLE `customers`
 -- (J) DELIVERIES
 CREATE TABLE `deliveries` (
   `d_id` bigint(20) NOT NULL,
+  `cus_id` bigint(20) NOT NULL,
   `d_name` varchar(255) NOT NULL,
   `d_tel` varchar(32) NOT NULL,
   `d_email` varchar(255) NOT NULL,
@@ -160,6 +161,7 @@ CREATE TABLE `deliveries` (
 
 ALTER TABLE `deliveries`
   ADD PRIMARY KEY (`d_id`),
+  ADD KEY `cus_id` (`cus_id`),
   ADD KEY `d_name` (`d_name`);
 
 ALTER TABLE `deliveries`

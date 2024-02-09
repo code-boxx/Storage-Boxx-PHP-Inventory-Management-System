@@ -2,6 +2,7 @@
 class Delivery extends Core {
   // (A) ADD OR UPDATE DELIVERY ORDER
   //  * ADAPTS USER FROM SESSION!
+  //  $cid : customer id
   //  $name : customer name
   //  $tel : customer tel
   //  $email : customer email
@@ -11,16 +12,16 @@ class Delivery extends Core {
   //  $note : delivery notes
   //  $stat : delivery status
   //  $id : delivery id, update only
-  function save ($name, $tel, $email, $address, $date, $items, $notes=null, $stat=0, $id=null) {
+  function save ($cid, $name, $tel, $email, $address, $date, $items, $notes=null, $stat=0, $id=null) {
     // (A1) START & DATA
     $this->DB->start();
-    $data = [$name, $tel, $email, $address, $notes, $date];
+    $data = [$cid, $name, $tel, $email, $address, $notes, $date];
 
     // (A2) NEW DELIVERY ORDER
     if ($id==null) {
       $data[] = 0;
       $this->DB->insert("deliveries",
-        ["d_name", "d_tel", "d_email", "d_address", "d_notes", "d_date", "d_status"],
+        ["cus_id", "d_name", "d_tel", "d_email", "d_address", "d_notes", "d_date", "d_status"],
         $data
       );
       $id = $this->DB->lastID;
@@ -31,7 +32,7 @@ class Delivery extends Core {
       $data[] = $stat;
       $data[] = $id;
       $this->DB->update("deliveries",
-        ["d_name", "d_tel", "d_email", "d_address", "d_notes", "d_date", "d_status"],
+        ["cus_id", "d_name", "d_tel", "d_email", "d_address", "d_notes", "d_date", "d_status"],
         "`d_id`=?", $data
       );
       $this->DB->delete("deliveries_items", "`d_id`=?", [$id]);
@@ -92,10 +93,13 @@ class Delivery extends Core {
   function get ($id) {
     // (B1) MAIN ORDER
     $d = $this->DB->fetch(
-      "SELECT * FROM `deliveries` WHERE `d_id`=?", [$id]
+      "SELECT d.*, c.`cus_name`
+       FROM `deliveries` d
+       LEFT JOIN `customers` c USING (`cus_id`)
+       WHERE `d_id`=?", [$id]
     );
     if (!is_array($d)) {
-      $this->error = "Invalid delivery";
+      $this->error = "Invalid delivery order";
       return false;
     }
 
@@ -116,12 +120,12 @@ class Delivery extends Core {
     return $d;
   }
 
-  // (C) GET ALL OR SEARCH DELIVERIES
+  // (C) GET ALL OR SEARCH DELIVERY ORDERS
   //  $search : optional, customer name
   //  $page : optional, current page number
   function getAll ($search=null, $page=null) {
     // (C1) PARITAL DELIVERIES SQL + DATA
-    $sql = "FROM `deliveries`";
+    $sql = "FROM `deliveries` d LEFT JOIN `customers` c USING (`cus_id`)";
     $data = null;
     if ($search != null) {
       $sql .= " WHERE `d_name` LIKE ?";
@@ -137,6 +141,6 @@ class Delivery extends Core {
     }
 
     // (C3) RESULTS
-    return $this->DB->fetchAll("SELECT * $sql", $data, "d_id");
+    return $this->DB->fetchAll("SELECT d.*, c.`cus_name` $sql", $data, "d_id");
   }
 }

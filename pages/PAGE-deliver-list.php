@@ -8,7 +8,7 @@ $colors = ["secondary", "primary", "danger"];
 if (is_array($dlv)) { foreach ($dlv as $id=>$d) { ?>
 <div class="d-flex align-items-center border p-2">
   <div class="flex-grow-1">
-    <strong><?=$d["d_name"]?></strong><br>
+    <strong><?=$d["cus_name"]?></strong><br>
     <small>
       <span class="badge bg-secondary">#</span> <?=$d["d_id"]?>
       <br>

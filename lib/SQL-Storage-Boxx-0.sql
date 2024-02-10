@@ -21,6 +21,7 @@ INSERT INTO `settings` (`setting_name`, `setting_description`, `setting_value`, 
 ('DT_LONG', 'MYSQL date time format (long)', '%e %M %Y %l:%i:%S %p', 1),
 ('DT_SHORT', 'MYSQL date time format (short)', '%Y-%m-%d %H:%i:%S', 1),
 ('DELIVER_STAT', 'Delivery status code', '[\"Processing\",\"Completed\",\"Cancelled\"]', 2),
+('PURCHASE_STAT', 'Purchase status code', '[\"Processing\",\"Completed\",\"Cancelled\"]', 2),
 ('STOCK_MVT', 'Stock movement code', '{\"I\":\"Stock In (Receive)\",\"O\":\"Stock Out (Dispatch)\",\"T\":\"Stock Take (Audit)\",\"D\":\"Stock Discard (Dispose)\"}', 2);
 
 -- (B) USERS
@@ -129,7 +130,41 @@ ALTER TABLE `suppliers_items`
   ADD PRIMARY KEY (`sup_id`,`item_sku`),
   ADD KEY `sup_sku` (`sup_sku`);
 
--- (I) CUSTOMERS
+-- (I) PURCHASES
+CREATE TABLE `purchases` (
+  `p_id` bigint(20) NOT NULL,
+  `sup_id` bigint(20) NOT NULL,
+  `p_name` varchar(255) NOT NULL,
+  `p_tel` varchar(32) NOT NULL,
+  `p_email` varchar(255) NOT NULL,
+  `p_address` varchar(255) NOT NULL,
+  `p_notes` text DEFAULT NULL,
+  `p_date` date NOT NULL DEFAULT current_timestamp(),
+  `p_status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `purchases`
+  ADD PRIMARY KEY (`p_id`),
+  ADD KEY `cus_id` (`sup_id`),
+  ADD KEY `p_name` (`p_name`);
+
+ALTER TABLE `purchases`
+  MODIFY `p_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+-- (J) PURCHASE ORDERS ITEMS
+CREATE TABLE `purchases_items` (
+  `p_id` bigint(20) NOT NULL,
+  `item_sku` varchar(255) NOT NULL,
+  `item_price` decimal(12,2) NOT NULL DEFAULT 0.00,
+  `item_qty` decimal(12,2) NOT NULL,
+  `item_sort` bigint(20) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `purchases_items`
+  ADD PRIMARY KEY (`p_id`,`item_sku`),
+  ADD KEY `item_sort` (`item_sort`);
+
+-- (K) CUSTOMERS
 CREATE TABLE `customers` (
   `cus_id` bigint(20) NOT NULL,
   `cus_name` varchar(255) NOT NULL,
@@ -146,7 +181,7 @@ ALTER TABLE `customers`
 ALTER TABLE `customers`
   MODIFY `cus_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
--- (J) DELIVERIES
+-- (L) DELIVERY ORDERS
 CREATE TABLE `deliveries` (
   `d_id` bigint(20) NOT NULL,
   `cus_id` bigint(20) NOT NULL,
@@ -167,7 +202,7 @@ ALTER TABLE `deliveries`
 ALTER TABLE `deliveries`
   MODIFY `d_id` bigint(20) NOT NULL AUTO_INCREMENT;
 
--- (K) DELIVERY ITEMS
+-- (M) DELIVERY ORDERS ITEMS
 CREATE TABLE `deliveries_items` (
   `d_id` bigint(20) NOT NULL,
   `item_sku` varchar(255) NOT NULL,

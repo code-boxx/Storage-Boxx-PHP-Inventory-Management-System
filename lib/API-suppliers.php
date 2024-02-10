@@ -7,6 +7,7 @@ $_CORE->autoAPI([
   "save" => ["Suppliers", "save"],
   "del" => ["Suppliers", "del"],
   "import" => ["Suppliers", "import"],
+  "getItem" => ["Suppliers", "getItem"],
   "saveItem" => ["Suppliers", "saveItem"],
   "delItem" => ["Suppliers", "delItem"],
   "importItem" => ["Suppliers", "importItem"]

@@ -16,7 +16,7 @@ var items = {
     });
   },
 
-  // (B) LIST () : SHOW SUPPLIER ITEMS
+  // (B) LIST : SHOW SUPPLIER ITEMS
   list : silent => {
     if (silent!==true) { cb.page(2); }
     cb.load({
@@ -29,7 +29,8 @@ var items = {
       onload : () => autocomplete.attach({
         target : document.getElementById("item-search"),
         mod : "autocomplete", act : "supitem",
-        onpick : res => items.search()
+        data : { sid : items.id },
+        onpick : items.search
       })
     });
   },

@@ -178,9 +178,21 @@ class Report extends Core {
     $this->Core->load("Delivery");
     $order = $this->Delivery->get($id);
     $this->htop([
-      ["l", HOST_ASSETS."REPORT-deliver.css"]
+      ["l", HOST_ASSETS."REPORT-order.css"]
     ]);
     require PATH_PAGES . "REPORT-deliver.php";
+    $this->hbottom();
+  }
+
+  // (H) PURCHASE ORDER
+  function purchase ($id) {
+    $this->Settings->defineN("PURCHASE_STAT", true);
+    $this->Core->load("Purchase");
+    $order = $this->Purchase->get($id);
+    $this->htop([
+      ["l", HOST_ASSETS."REPORT-order.css"]
+    ]);
+    require PATH_PAGES . "REPORT-purchase.php";
     $this->hbottom();
   }
 }

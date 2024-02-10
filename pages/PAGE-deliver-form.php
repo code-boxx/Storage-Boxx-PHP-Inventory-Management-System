@@ -57,7 +57,7 @@ if ($edit) { $dlv = $_CORE->autoCall("Delivery", "get"); }
     </div>
 
     <div class="form-floating mb-4">
-      <input type="text" id="d-address" class="form-control" required value="<?=$edit?$dlv["d_address"]:""?>">
+      <textarea id="d-address" class="form-control" required><?=$edit?$dlv["d_address"]:""?></textarea>
       <label>Address</label>
     </div>
 
@@ -87,7 +87,7 @@ if ($edit) { $dlv = $_CORE->autoCall("Delivery", "get"); }
   <div class="bg-white border p-4 mb-3">
     <div class="form-floating mb-2">
       <input type="text" class="form-control" id="add-item">
-      <label>Item SKU</label>
+      <label>Item SKU/Name</label>
     </div>
     <button type="button" class="btn btn-primary d-flex-inline" onclick="dlv.addQR()">
       <i class="ico-sm icon-qrcode"></i> Scan

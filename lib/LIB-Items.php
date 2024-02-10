@@ -58,7 +58,7 @@ class Items extends Core {
     // (B2) SAVE
     return $this->save($sku, $name, $unit, $price, $low, $desc);
   }
-  
+
   // (C) DELETE ITEM
   // WARNING : STOCK MOVEMENT WILL BE REMOVED AS WELL
   //  $sku : item SKU

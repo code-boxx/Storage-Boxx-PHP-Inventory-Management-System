@@ -97,13 +97,17 @@ var dlv = {
     let n = document.getElementById("cus-name"),
         i = document.getElementById("cus-id"),
         c = document.getElementById("cus-change");
-    // @TODO
+
+    // (E2) RESET CUSTOMER
     if (reset) {
       n.value = "";
       n.disabled = false;
       i.value = "";
       c.classList.add("d-none");
-    } else {
+    }
+
+    // (E3) SET CUSTOMER
+    else {
       n.disabled = true;
       c.classList.remove("d-none");
     }

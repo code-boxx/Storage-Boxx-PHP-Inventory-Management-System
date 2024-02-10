@@ -1,24 +1,24 @@
-<div class="title mb">DELIVERY ORDER</div>
+<div class="title mb">PURCHASE ORDER</div>
 
 <!-- (A) HEADER -->
 <div class="flex mb">
   <!-- (A2) FROM & TO -->
   <div class="grow box">
-    <div class="subtitle">DELIVER FROM</div>
-    <div><?=CO_NAME?></div>
-    <div><?=nl2br(CO_ADDRESS)?></div>
+    <div class="subtitle">VENDOR</div>
+    <div><?=$order["sup_name"]?></div>
+    <div><?=nl2br($order["sup_address"])?></div>
     <div>
-      T: <?=CO_TEL?>
-      E: <?=CO_EMAIL?>
+    T: <?=$order["sup_tel"]?>
+      E: <?=$order["sup_email"]?>
     </div>
     <br>
 
-    <div class="subtitle">DELIVER TO</div>
-    <div><?=$order["d_name"]?></div>
-    <div><?=nl2br($order["d_address"])?></div>
+    <div class="subtitle">SHIP TO</div>
+    <div><?=$order["p_name"]?></div>
+    <div><?=nl2br($order["p_address"])?></div>
     <div>
-      T: <?=$order["d_tel"]?>
-      E: <?=$order["d_email"]?>
+      T: <?=$order["p_tel"]?>
+      E: <?=$order["p_email"]?>
     </div>
   </div>
 
@@ -26,15 +26,15 @@
   <div>
     <div class="box">
       <div class="subtitle">ORDER #</div>
-      <?=$order["d_id"]?>
+      <?=$order["p_id"]?>
     </div>
     <div class="box">
-      <div class="subtitle">DELIVERY DATE</div>
-      <?=$order["d_date"]?>
+      <div class="subtitle">PURCHASE DATE</div>
+      <?=$order["p_date"]?>
     </div>
     <div class="box">
       <div class="subtitle">STATUS</div>
-      <?=DELIVER_STAT[$order["d_status"]]?>
+      <?=PURCHASE_STAT[$order["p_status"]]?>
     </div>
   </div>
 </div>
@@ -49,10 +49,10 @@
   </tr></thead>
   <tbody><?php foreach ($order["items"] as $i) { ?>
   <tr>
-    <td><?=$i[3]?> <?=$i[2]?></td>
-    <td>[<?=$i[0]?>] <?=$i[1]?></td>
+    <td><?=$i[5]?> <?=$i[3]?></td>
+    <td>[<?=$i[1]?>] <?=$i[2]?></td>
     <td><?=$i[4]?></td>
-    <td><?=$i[3] * $i[4]?></td>
+    <td><?=$i[4] * $i[5]?></td>
   </tr>
   <?php } ?></tbody>
 </table>
@@ -60,7 +60,7 @@
 <!-- (C) NOTES -->
 <div class="box">
   <div class="subtitle">NOTES</div>
-  <?=nl2br($order["d_notes"])?>
+  <?=nl2br($order["p_notes"])?>
 </div>
 
 <script>

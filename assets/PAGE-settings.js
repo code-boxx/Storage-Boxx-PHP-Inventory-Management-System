@@ -1,7 +1,7 @@
 function save () {
   // (A) GET ALL DATA
   let data = {};
-  for (let i of document.querySelectorAll("#set-list input[type=text]")) {
+  for (let i of document.querySelectorAll("#set-list .form-control")) {
     data[i.name] = i.value;
   }
 

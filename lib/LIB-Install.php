@@ -1,30 +1,31 @@
 <?php
 // (PHASE A) BASE SETTINGS
-// (A1) MODULES
-define("I_USER", defined("USR_LVL")); // user module
-define("I_PUSH", defined("PUSH_PUBLIC")); // push notifications module
+// @TODO - ADD FILES, SQL, PHP VERSION, REQUIRED MODULES AS YOUR PROJECT NEEDS
 
-// (A2) FILES & FOLDERS THAT REQUIRE READ/WRITE PERMISSION
+// (A1) FILES & FOLDERS THAT REQUIRE READ/WRITE PERMISSION
 define("I_ALL", [
-  // @TODO - ADD AS REQUIRED
   PATH_BASE, PATH_ASSETS, PATH_LIB, PATH_PAGES, // PATH_UPLOADS,
   PATH_LIB . "CORE-Config.php",
   PATH_BASE . "index.php",
   PATH_BASE . "CB-manifest.json"
 ]);
 
-// (A3) SQL FILES - FROM OLDEST TO NEWEST VERSIONS
-// @TODO - SET AS REQUIRED
+// (A2) SQL FILES - FROM OLDEST TO NEWEST VERSIONS
 define("I_SQL", ["SQL-Storage-Boxx-0.sql"]);
 
-// (A4) MINIMUM APACHE VERSION + PHP VERSION + EXTENSIONS
-define("I_MIN_PHP", "8.0.0");
-define("I_PDO", extension_loaded("pdo_mysql"));
-define("I_OPENSSL", extension_loaded("openssl"));
+// (A3) APACHE + PHP + EXTENSIONS
 define("I_APACHE", strpos(strtolower($_SERVER["SERVER_SOFTWARE"]), "apache")!==false);
+define("I_MIN_PHP", "8.0.0");
 define("I_REWRITE", I_APACHE && function_exists("apache_get_version")
   ? in_array("mod_rewrite", apache_get_modules()) : false
 );
+define("I_PDO", extension_loaded("pdo_mysql"));
+define("I_OPENSSL", extension_loaded("openssl"));
+
+// (A4) CORE BOXX MODULES & SETTINGS
+define("I_USER", defined("USR_LVL")); // user module
+define("I_PUSH", defined("PUSH_PUBLIC")); // push notifications module
+define("I_CO", true); // include company name, address, tel, email
 
 class Install extends Core {
   // (PHASE B) BASE REQUIREMENTS & SYSTEM CHECK
@@ -108,7 +109,7 @@ class Install extends Core {
     exit($check=="installer/test/" ? "OK" : "INVALID HOST URL");
   }
 
-  // (PHASE F) VERIFY HTACCESS FILE + INSTALL
+  // (PHASE F) INSTALL
   function F () {
     // (F1) ALLOWED API CORS DOMAINS
     if ($_POST["apicors"]==1 && $_POST["corsallow"]!="") {
@@ -166,7 +167,20 @@ class Install extends Core {
       exit("Error setting email from - " . $ex->getMessage());
     }
 
-    // (F6) CREATE ADMIN USER
+    // (F6) COMPANY INFO
+    if (I_CO) { try {
+      $stmt = $pdo->prepare("REPLACE INTO `settings` (`setting_name`, `setting_description`, `setting_value`, `setting_group`) VALUES (?,?,?,?), (?,?,?,?), (?,?,?,?), (?,?,?,?)");
+      $stmt->execute([
+        "CO_NAME", "Company Name", $_POST["coname"], 1,
+        "CO_EMAIL", "Company Email", $_POST["coemail"], 1,
+        "CO_TEL", "Company Telephone", $_POST["cotel"], 1,
+        "CO_ADDRESS", "Company Address", $_POST["coaddr"], 1
+      ]);
+    } catch (Exception $ex) {
+      exit("Error updating company info - " . $ex->getMessage());
+    }}
+
+    // (F7) CREATE ADMIN USER
     if (I_USER) { try {
       $stmt = $pdo->prepare("REPLACE INTO `users` (`user_name`, `user_email`, `user_level`, `user_password`) VALUES (?,?,?,?)");
       $stmt->execute([$_POST["aname"], $_POST["aemail"], "A", password_hash($_POST["apass"], PASSWORD_DEFAULT)]);
@@ -175,13 +189,13 @@ class Install extends Core {
     }}
     $stmt = null; $pdo = null;
 
-    // (F7) TIMEZONE
+    // (F8) TIMEZONE
     date_default_timezone_set($_POST["timezone"]);
     $now = ["o" => (new DateTime())->getOffset()];
     $now["h"] = floor(abs($now["o"]) / 3600);
     $now["m"] = floor((abs($now["o"]) - ($now["h"] * 3600)) / 60);
 
-    // (F8) CORE_CONFIG.PHP SETTINGS TO UPDATE
+    // (F9) CORE_CONFIG.PHP SETTINGS TO UPDATE
     $hbase = ($_POST["https"]=="1" ? "https://" : "http://") . $_POST["host"];
     $hbase = rtrim($hbase, "/\\") . "/";
     $replace = [
@@ -205,12 +219,12 @@ class Install extends Core {
     }
     unset($_POST); unset($now); unset($hbase);
 
-    // (F9) BACKUP LIB/CORE-CONFIG.PHP
+    // (F10) BACKUP LIB/CORE-CONFIG.PHP
     if (!copy(PATH_LIB . "CORE-Config.php", PATH_LIB . "CORE-Config.old")) {
       exit("Failed to backup config file - " . PATH_LIB . "CORE-Config.old");
     }
 
-    // (F10) UPDATE LIB/CORE-CONFIG.PHP
+    // (F11) UPDATE LIB/CORE-CONFIG.PHP
     $cfg = file(PATH_LIB . "CORE-Config.php") or exit("Cannot read". PATH_LIB ."CORE-Config.php");
     foreach ($cfg as $j=>$line) { foreach ($replace as $k=>$v) { if (strpos($line, "\"$k\"") !== false) {
       if ($k!="API_HTTPS" && $k!="API_CORS") { $v = "\"$v\""; }
@@ -221,7 +235,7 @@ class Install extends Core {
     try { file_put_contents(PATH_LIB . "CORE-Config.php", implode("", $cfg)); }
     catch (Exception $ex) { exit("Error writing to ". PATH_LIB ."CORE-Config.php"); }
 
-    // (F11) ALMOST DONE...
+    // (F12) ALMOST DONE...
     return "G";
   }
 

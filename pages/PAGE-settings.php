@@ -11,8 +11,12 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 <form id="set-list" onsubmit="return save()">
   <?php foreach ($settings as $o) { if ($o["setting_name"]!="CACHE_VER") { ?>
   <div class="form-floating mb-3">
+    <?php if ($o["setting_name"]!="CACHE_VER") { ?>
+    <textarea class="form-control" required name="<?=$o["setting_name"]?>"><?=$o["setting_value"]?></textarea>
+    <?php } else { ?>
     <input type="text" class="form-control" required
            name="<?=$o["setting_name"]?>" value="<?=$o["setting_value"]?>">
+    <?php } ?>
     <label><?=$o["setting_description"]?></label>
   </div>
   <?php }} ?>

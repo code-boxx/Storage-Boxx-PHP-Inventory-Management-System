@@ -125,11 +125,9 @@
           <a class="nav-link ms-1" href="<?=HOST_BASE?>sup">
             <i class="text-secondary ico-sm icon-address-book"></i> Suppliers
           </a>
-          <!--
           <a class="nav-link ms-1" href="<?=HOST_BASE?>purchase">
-            <i class="text-secondary ico-sm icon-file-text2"></i> Orders -x
+            <i class="text-secondary ico-sm icon-file-text2"></i> Orders
           </a>
-          -->
           <hr>
         </li>
         <li class="nav-item">

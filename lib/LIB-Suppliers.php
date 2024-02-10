@@ -156,7 +156,10 @@ class Suppliers extends Core {
   //  $sku : item sku
   function getItem ($id, $sku) {
     return $this->DB->fetch(
-      "SELECT * FROM `suppliers_items` WHERE `sup_id`=? AND `item_sku`=?",
+      "SELECT i.`item_sku`, s.`sup_sku`, i.`item_name`, i.`item_desc`, i.`item_unit`, s.`unit_price`
+       FROM `suppliers_items` s
+       LEFT JOIN `items` i USING (`item_sku`)
+       WHERE s.`sup_id`=? AND s.`item_sku`=?",
       [$id, $sku]
     );
   }

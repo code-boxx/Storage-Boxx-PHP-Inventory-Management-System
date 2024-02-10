@@ -25,7 +25,7 @@ if ($edit) { $cus = $_CORE->autoCall("Customers", "get"); }
     </div>
 
     <div class="form-floating">
-      <input type="text" id="cus-address" class="form-control" value="<?=$edit?$cus["cus_address"]:""?>">
+      <textarea id="cus-address" class="form-control"><?=$edit?$cus["cus_address"]:""?></textarea>
       <label>Customer Address (If Any)</label>
     </div>
   </div>

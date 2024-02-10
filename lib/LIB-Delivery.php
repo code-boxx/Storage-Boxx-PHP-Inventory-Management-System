@@ -3,15 +3,15 @@ class Delivery extends Core {
   // (A) ADD OR UPDATE DELIVERY ORDER
   //  * ADAPTS USER FROM SESSION!
   //  $cid : customer id
-  //  $name : customer name
-  //  $tel : customer tel
-  //  $email : customer email
-  //  $address : delivery address
+  //  $name : deliver to name (customer name)
+  //  $tel : deliver to tel (customer tel)
+  //  $email : deliver to email (customer email)
+  //  $address : deliver to address (customer address)
   //  $date : delivery date
   //  $items : delivery items - nested array of [sku, name, unit, price, qty]
   //  $note : delivery notes
   //  $stat : delivery status
-  //  $id : delivery id, update only
+  //  $id : delivery order id, update only
   function save ($cid, $name, $tel, $email, $address, $date, $items, $notes=null, $stat=0, $id=null) {
     // (A1) START & DATA
     $this->DB->start();
@@ -63,9 +63,9 @@ class Delivery extends Core {
   
       // (A5-2) INSERT MOVEMENT
       foreach ($items as $i) {
-        $sku[$i[0]] = $sku[$i[0]] - $i[4]; // new remaining quantity
+        $sku[$i[0]] = $sku[$i[0]] - $i[2]; // new remaining quantity
         $data = array_merge($data, [
-          $i[0], "O", $i[4], $sku[$i[0]], $_SESSION["user"]["user_name"], $id
+          $i[0], "O", $i[2], $sku[$i[0]], $_SESSION["user"]["user_name"], $id
         ]);
       }
       $this->DB->insert("item_mvt",
@@ -89,7 +89,7 @@ class Delivery extends Core {
   }
 
   // (B) GET DELIVERY ORDER
-  //  $id : delivery id
+  //  $id : delivery order id
   function get ($id) {
     // (B1) MAIN ORDER
     $d = $this->DB->fetch(

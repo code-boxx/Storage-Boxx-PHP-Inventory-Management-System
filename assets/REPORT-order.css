@@ -1,0 +1,44 @@
+/* (A) WHOLE PAGE */
+body {
+  max-width: 800px;
+  padding: 20px;
+}
+
+/* (B) TEXT */
+.title {
+  font-size: 28px; font-weight: 700;
+}
+.subtitle {
+  font-size: 14px; font-weight: 700;
+  color: #bdbdbd;
+  margin-bottom: 5px;
+}
+.bold { font-weight: 700; }
+
+/* (C) LAYOUT */
+.flex { display: flex; }
+.grow { flex-grow: 1; }
+.mb { margin-bottom: 20px; }
+.box {
+  padding: 10px; margin: 5px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+}
+
+/* (D) ITEMS LIST */
+.list {
+  width: 100%;
+  border-collapse: collapse;
+}
+.list th, .list td {
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+}
+.list thead {
+  text-align: left;
+  color: #fff;
+  background: #000;
+}
+.list tbody tr:nth-child(even) {
+  background: #f8f8f8;
+}

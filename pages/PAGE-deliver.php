@@ -16,7 +16,7 @@ require PATH_PAGES . "TEMPLATE-top.php"; ?>
 
 <!-- (B2) SEARCH BAR -->
 <form class="d-flex align-items-stretch head border mb-3 p-2" onsubmit="return dlv.search()">
-  <input type="text" id="dlv-search" placeholder="Customer Name" class="form-control form-control-sm">
+  <input type="text" id="dlv-search" placeholder="Deliver To" class="form-control form-control-sm">
   <button type="submit" class="btn btn-primary p-3 mx-1 ico-sm icon-search"></button>
   <button class="btn btn-primary p-3 ico-sm icon-plus" type="button" onclick="dlv.addEdit()"></button>
 </form>

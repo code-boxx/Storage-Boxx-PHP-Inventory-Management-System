@@ -10,7 +10,8 @@ $_CORE->autoAPI([
   "user" => ["Autocomplete", "user"],
   "item" => ["Autocomplete", "item"],
   "sku" => ["Autocomplete", "sku"],
-  "deliver" => ["Autocomplete", "deliver"]
+  "deliver" => ["Autocomplete", "deliver"],
+  "purchase" => ["Autocomplete", "purchase"]
 ]);
 
 // (C) INVALID REQUEST

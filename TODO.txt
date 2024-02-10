@@ -1,17 +1,29 @@
 STORAGE BOXX TO DO / WISH LIST
 ==============================
-* Add PO
+
+PRIORITY
+========
+*) Edit/Delete item > deal with cascade effects
+*) Edit/Delete customer > deal with cascade effects
+*) Edit/Delete supplier > deal with cascade effects
+
+
+GOOD TO HAVE
+============
+* Check Item update, add More Info
+  * Suppliers 
+  * Purchases + Projected In/Out
+* Items list update
+  * Remove Suppliers from dropdown options
+  * Rename "movement" to "check" (replace suppliers with check)
 * Links
   * Suppliers > PO
   * Customers > DO
   * Items > Suppliers > Purchase
-* Check Item > Add More Info > Suppliers + Purchase + Projected In/Out > 
 * Auto-create PO for all items low on stock
 * Home page widgets
-* Settings - add company info - Use in PO/DO/Invoice/documents
 * Directly email PO/DO
-* PO - sortable items.
-* LIB-Items > function save > also update PO items.
 * More reports - delivery/sales, purchases.
-* Print QR/NFC after import items
+* Print QR/NFC after import items.
+* Customer "address book"? Different branches/departments - For DO.
 * Add tutorial videos.

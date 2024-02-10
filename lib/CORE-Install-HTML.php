@@ -151,25 +151,31 @@ if (I_PUSH && I_OPENSSL) {
         </div>
       </div>
 
-      <!-- (C3-5) JWT -->
-      <h4 class="text-danger mb-3">JSON WEB TOKEN</h4>
+      <!-- (C3-5) COMPANY -->
+      <?php if (I_CO) { ?>
+      <h4 class="text-danger mb-3">COMPANY</h4>
       <div class="bg-light border p-3 mb-3">
         <div class="form-floating mb-2">
-          <input type="text" name="jwtkey" class="form-control" required>
-          <label>Secret Key</label>
-        </div>
-        <div class="text-secondary mb-2" onclick="install.rnd()">
-          * Click here to generate random key.
+          <input type="text" name="coname" class="form-control" required>
+          <label>Company Name</label>
         </div>
 
         <div class="form-floating mb-2">
-          <input type="text" name="jwyiss" class="form-control" required value="<?=$_SERVER["HTTP_HOST"]?>">
-          <label>Issuer</label>
+          <input type="text" name="coemail" class="form-control" required>
+          <label>Company Email</label>
         </div>
-        <div class="text-secondary">
-          * Your company name or domain name.
+
+        <div class="form-floating mb-2">
+          <input type="text" name="cotel" class="form-control" required>
+          <label>Company Tel</label>
+        </div>
+
+        <div class="form-floating mb-2">
+          <textarea name="coaddr" class="form-control" required></textarea>
+          <label>Company Address</label>
         </div>
       </div>
+      <?php } ?>
 
       <!-- (C3-6) ADMIN USER -->
       <?php if (I_USER) { ?>
@@ -181,7 +187,7 @@ if (I_PUSH && I_OPENSSL) {
         </div>
 
         <div class="form-floating mb-2">
-          <input type="text" name="aemail" class="form-control" required value="admin@site.com">
+          <input type="text" name="aemail" class="form-control" required>
           <label>Email</label>
         </div>
 
@@ -198,7 +204,27 @@ if (I_PUSH && I_OPENSSL) {
       </div>
       <?php } ?>
 
-      <!-- (C3-7) PUSH NOTIFICATION -->
+      <!-- (C3-7) JWT -->
+      <h4 class="text-danger mb-3">JSON WEB TOKEN</h4>
+      <div class="bg-light border p-3 mb-3">
+        <div class="form-floating mb-2">
+          <input type="text" name="jwtkey" class="form-control" required>
+          <label>Secret Key</label>
+        </div>
+        <div class="text-secondary mb-2" onclick="install.rnd()">
+          * Click here to regenerate a random key.
+        </div>
+
+        <div class="form-floating mb-2">
+          <input type="text" name="jwyiss" class="form-control" required value="<?=$_SERVER["HTTP_HOST"]?>">
+          <label>Issuer</label>
+        </div>
+        <div class="text-secondary">
+          * Your company name or domain name.
+        </div>
+      </div>
+
+      <!-- (C3-8) PUSH NOTIFICATION -->
       <?php if (I_PUSH) { ?>
       <h4 class="text-danger mb-3">WEB PUSH VAPID KEYS</h4>
       <div class="bg-light border p-3 mb-3">
@@ -219,7 +245,7 @@ if (I_PUSH && I_OPENSSL) {
       </div>
       <?php } ?>
 
-      <!-- (C3-8) GO! -->
+      <!-- (C3-9) GO! -->
       <input id="gobtn" type="submit" class="btn btn-primary" value="Go!" disabled>
     </form>
   </div></body>

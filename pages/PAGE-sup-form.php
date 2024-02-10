@@ -25,7 +25,7 @@ if ($edit) { $sup = $_CORE->autoCall("Suppliers", "get"); }
     </div>
 
     <div class="form-floating">
-      <input type="text" id="sup-address" class="form-control" value="<?=$edit?$sup["sup_address"]:""?>">
+      <textarea id="sup-address" class="form-control"><?=$edit?$sup["sup_address"]:""?></textarea>
       <label>Supplier Address (If Any)</label>
     </div>
   </div>

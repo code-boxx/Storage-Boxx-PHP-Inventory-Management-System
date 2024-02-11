@@ -22,9 +22,24 @@ class Customers extends Core {
   }
 
   // (B) DELETE CUSTOMER
+  //  DANGER - CASCADE DELETE!
   //  $id : customer id
   function del ($id) {
+    $this->DB->start();
+    $this->DB->query(
+      "DELETE `item_mvt`
+       FROM `item_mvt`
+       LEFT JOIN `deliveries` USING (`d_id`) 
+       WHERE `cus_id`=?", [$id]
+    );
+    $this->DB->query(
+      "DELETE `deliveries`, `deliveries_items`
+       FROM `deliveries_items`
+       LEFT JOIN `deliveries` USING (`d_id`) 
+       WHERE `cus_id`=?", [$id]
+    );
     $this->DB->delete("customers", "`cus_id`=?", [$id]);
+    $this->DB->end();
     return true;
   }
 

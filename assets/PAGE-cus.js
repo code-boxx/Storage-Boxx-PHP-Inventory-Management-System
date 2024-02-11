@@ -60,12 +60,16 @@ var cus = {
 
   // (F) DELETE CUSTOMER
   //  id : customer id
-  del : id => cb.modal("Please confirm", `Delete customer? This customer will be lost, but orders will remain.`, () => cb.api({
-    mod : "customers", act : "del",
-    data : { id : id },
-    passmsg : "Customer deleted",
-    onpass : cus.list
-  })),
+  del : id => cb.modal(
+    `<i class="icon icon-warning"></i> Delete Customer?`,
+    `<strong class="text-danger">This customer will be removed. All related orders and movement history will be deleted as well.</strong>`,
+    () => cb.api({
+      mod : "customers", act : "del",
+      data : { id : id },
+      passmsg : "Customer deleted",
+      onpass : cus.list
+    })
+  ),
 
   // (H) IMPORT CUSTOMERS
   import : () => im.init({

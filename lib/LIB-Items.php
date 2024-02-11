@@ -30,6 +30,7 @@ class Items extends Core {
     }
 
     // (A4) UPDATE ITEM
+    // DANGER - CASCADE UPDATE!
     else {
       $this->DB->update(
         "items", ["item_sku", "item_name", "item_desc", "item_unit", "item_price", "item_low"], 
@@ -39,6 +40,7 @@ class Items extends Core {
         $this->DB->update("item_mvt", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
         $this->DB->update("suppliers_items", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
         $this->DB->update("deliveries_items", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
+        $this->DB->update("purchases_items", ["item_sku"], "`item_sku`=?", [$sku, $osku]);
       }
     }
 
@@ -60,12 +62,15 @@ class Items extends Core {
   }
 
   // (C) DELETE ITEM
-  // WARNING : STOCK MOVEMENT WILL BE REMOVED AS WELL
+  //  DANGER - CASCADE DELETE!
   //  $sku : item SKU
   function del ($sku) {
     $this->DB->start();
-    $this->DB->delete("items", "`item_sku`=?", [$sku]);
     $this->DB->delete("item_mvt", "`item_sku`=?", [$sku]);
+    $this->DB->delete("suppliers_items", "`item_sku`=?", [$sku]);
+    $this->DB->delete("deliveries_items", "`item_sku`=?", [$sku]);
+    $this->DB->delete("purchases_items", "`item_sku`=?", [$sku]);
+    $this->DB->delete("items", "`item_sku`=?", [$sku]);
     $this->DB->end();
     return true;
   }

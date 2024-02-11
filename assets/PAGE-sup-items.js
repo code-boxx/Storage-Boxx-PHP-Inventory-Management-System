@@ -96,7 +96,9 @@ var items = {
 
   // (G) DELETE ITEM
   //  sku : item sku
-  del : sku => cb.modal("Please confirm", `Remove this item from the supplier?`, () => cb.api({
+  del : sku => cb.modal(
+    `<i class="icon icon-warning"></i> Remove Item?`, 
+    `<strong class="text-danger">Item will also be removed from all related PO and movement history.</strong>`, () => cb.api({
     mod : "suppliers", act : "delItem",
     data : { id : items.id, sku : sku },
     passmsg : "Supplier item deleted",

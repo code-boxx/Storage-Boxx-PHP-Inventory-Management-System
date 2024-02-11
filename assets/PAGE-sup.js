@@ -60,12 +60,16 @@ var sup = {
 
   // (F) DELETE SUPPLIER
   //  id : supplier id
-  del : id => cb.modal("Please confirm", `Delete supplier? This supplier and its items will be lost!`, () => cb.api({
-    mod : "suppliers", act : "del",
-    data : { id : id },
-    passmsg : "Supplier deleted",
-    onpass : sup.list
-  })),
+  del : id => cb.modal(
+    `<i class="icon icon-warning"></i> Delete Supplier?`, 
+    `<strong class="text-danger">This supplier will be deleted. Along with all related orders, items, and movement history.`,
+    () => cb.api({
+      mod : "suppliers", act : "del",
+      data : { id : id },
+      passmsg : "Supplier deleted",
+      onpass : sup.list
+    })
+  ),
 
   // (G) SUPPLIER ITEMS CSV DOWNLOAD
   csv : id => {

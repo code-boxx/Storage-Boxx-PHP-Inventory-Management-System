@@ -22,11 +22,25 @@ class Suppliers extends Core {
   }
 
   // (B) DELETE SUPPLIER
+  //  DANGER - CASCADE DELETE!
   //  $id : supplier id
   function del ($id) {
     $this->DB->start();
-    $this->DB->delete("suppliers", "`sup_id`=?", [$id]);
+    $this->DB->query(
+      "DELETE `item_mvt`
+       FROM `item_mvt`
+       LEFT JOIN `purchases` USING (`p_id`) 
+       WHERE `sup_id`=?", [$id]
+    );
+    $this->DB->query(
+      "DELETE `purchases_items`
+       FROM `purchases_items`
+       LEFT JOIN `purchases` USING (`p_id`) 
+       WHERE `sup_id`=?", [$id]
+    );
+    $this->DB->delete("purchases", "`sup_id`=?", [$id]);
     $this->DB->delete("suppliers_items", "`sup_id`=?", [$id]);
+    $this->DB->delete("suppliers", "`sup_id`=?", [$id]);
     $this->DB->end();
     return true;
   }
@@ -121,10 +135,25 @@ class Suppliers extends Core {
   }
 
   // (G) DELETE ITEM FROM SUPPLIER
+  //  DANGER - CASCADE DELETE!
   //  $id : supplier id
   //  $sku : item sku
   function delItem ($id, $sku) {
+    $this->DB->start();
+    $this->DB->query(
+      "DELETE `item_mvt`
+       FROM `item_mvt`
+       LEFT JOIN `purchases` USING (`p_id`) 
+       WHERE `sup_id`=? AND `item_sku`=?", [$id, $sku]
+    );
+    $this->DB->query(
+      "DELETE `purchases_items`
+       FROM `purchases_items`
+       LEFT JOIN `purchases` USING (`p_id`) 
+       WHERE `sup_id`=? AND `item_sku`=?", [$id, $sku]
+    );
     $this->DB->delete("suppliers_items", "`sup_id`=? AND `item_sku`=?", [$id, $sku]);
+    $this->DB->end();
     return true;
   }
 

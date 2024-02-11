@@ -76,12 +76,16 @@ var item = {
 
   // (G) DELETE ITEM
   //  sku : item SKU
-  del : sku => cb.modal("Please confirm", `Delete ${sku}? All movement history will be lost!`, () => cb.api({
-    mod : "items", act : "del",
-    data : { sku : sku },
-    passmsg : "Item Deleted",
-    onpass : item.list
-  })),
+  del : sku => cb.modal(
+    `<i class="icon icon-warning"></i> Delete ${sku}?`, 
+    `<strong class="text-danger">All movement history for this item will be deleted, item will also be removed from all orders and suppliers.</strong>`,
+    () => cb.api({
+      mod : "items", act : "del",
+      data : { sku : sku },
+      passmsg : "Item Deleted",
+      onpass : item.list
+    })
+  ),
 
   // (H) IMPORT ITEMS
   import : () => im.init({

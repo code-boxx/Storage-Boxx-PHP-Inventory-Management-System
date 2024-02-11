@@ -1,15 +1,6 @@
 STORAGE BOXX TO DO / WISH LIST
 ==============================
 
-PRIORITY
-========
-*) Edit/Delete item > deal with cascade effects
-*) Edit/Delete customer > deal with cascade effects
-*) Edit/Delete supplier > deal with cascade effects
-
-
-GOOD TO HAVE
-============
 * Check Item update, add More Info
   * Suppliers 
   * Purchases + Projected In/Out

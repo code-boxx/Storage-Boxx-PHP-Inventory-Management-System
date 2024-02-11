@@ -6,9 +6,10 @@ Storage Boxx is an open-source PHP Inventory Management System. With a built-in 
 1) Generate item QR code, built-in QR code scanner.
 2) Create item NFC tags, built-in NFC scanner.
 3) Passwordless login - QR, NFC, Web Authentication (Biometric, PIN, Face Recognition).
-4) Stock level monitoring, push notifications on low stock.
+4) Stock monitoring, push notifications on low stock.
 5) Customers and delivery order management.
-6) Installable progressive web app.
+6) Suppliers and purchase order management.
+7) Installable progressive web app.
 <br><br>
 
 ## :camera: SCREENSHOTS

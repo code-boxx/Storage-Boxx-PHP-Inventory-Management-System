@@ -17,7 +17,7 @@ if (I_PUSH && I_OPENSSL) {
   }
 }
 
-// (C) HTML ?>
+// (C) INSTALLATION PAGE HTML ?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -26,30 +26,31 @@ if (I_PUSH && I_OPENSSL) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="<?=HOST_ASSETS?>bootstrap.min.css">
+    <link rel="stylesheet" href="<?=HOST_ASSETS?>PAGE-cb.css">
+    <script defer src="<?=HOST_ASSETS?>tsparticles.confetti.bundle.min.js"></script>
     <script defer src="<?=HOST_ASSETS?>bootstrap.bundle.min.js"></script>
     <?php require PATH_LIB . "CORE-Install-JS.php"; ?>
   </head>
   <body><div class="container p-4">
-    <?php if (I_APACHE === false || I_REWRITE === false) { ?>
-    <!-- (C1) WARNINGS -->
-    <div class="bg-danger text-white p-2 mb-2">
-      If you are running Apache Web Server - Please enable <code class="text-white">MOD_REWRITE</code>.
-    </div>
-    <div class="bg-danger text-white p-2">
-      If you are not running Apache Web Server, you can still try to proceed.
-      After the installation, "translate" your own <code class="text-white">.htaccess</code> file.
-    </div>
-    <?php } ?>
-
-    <!-- (C2) HEADER -->
-    <div class="d-flex align-items-center mb-3">
-      <img src="assets/favicon.png" class="me-2">
-      <h1><?=strtoupper(SITE_NAME)?> INSTALLATION</h1>
-    </div>
-
-    <!-- (C3) INSTALLATION FORM -->
     <form id="iForm" onsubmit="return false">
-      <!-- (C3-1) HOST URL -->
+      <?php if (I_APACHE === false || I_REWRITE === false) { ?>
+      <!-- (C1) WARNINGS -->
+      <div class="bg-danger text-white p-2 mb-2">
+        If you are running Apache Web Server - Please enable <code class="text-white">MOD_REWRITE</code>.
+      </div>
+      <div class="bg-danger text-white p-2">
+        If you are not running Apache Web Server, you can still try to proceed.
+        After the installation, "translate" your own <code class="text-white">.htaccess</code> file.
+      </div>
+      <?php } ?>
+
+      <!-- (C2) HEADER -->
+      <div class="d-flex align-items-center mb-3">
+        <img src="assets/favicon.png" class="me-2">
+        <h1><?=strtoupper(SITE_NAME)?> INSTALLATION</h1>
+      </div>
+
+      <!-- (C3) HOST URL -->
       <h4 class="text-danger mb-3">HOST URL</h4>
       <div class="bg-light border p-3 mb-3">
         <div class="form-floating mb-2">
@@ -70,7 +71,7 @@ if (I_PUSH && I_OPENSSL) {
         </div>
       </div>
 
-      <!-- (C3-2) API ENDPOINT -->
+      <!-- (C4) API ENDPOINT -->
       <h4 class="text-danger mb-3">API ENDPOINT</h4>
       <div class="bg-light border p-3 mb-3">
         <div class="form-floating mb-2">
@@ -110,7 +111,7 @@ if (I_PUSH && I_OPENSSL) {
         </div>
       </div>
 
-      <!-- (C3-3) DATABASE -->
+      <!-- (C5) DATABASE -->
       <h4 class="text-danger mb-3">DATABASE</h4>
       <div class="bg-light border p-3 mb-3">
         <div class="form-floating mb-2">
@@ -134,7 +135,7 @@ if (I_PUSH && I_OPENSSL) {
         </div>
       </div>
 
-      <!-- (C3-4) EMAIL & TIMEZONE -->
+      <!-- (C6) EMAIL & TIMEZONE -->
       <h4 class="text-danger mb-3">SYSTEM DEFAULTS</h4>
       <div class="bg-light border p-3 mb-3">
         <div class="form-floating mb-2">
@@ -151,7 +152,7 @@ if (I_PUSH && I_OPENSSL) {
         </div>
       </div>
 
-      <!-- (C3-5) COMPANY -->
+      <!-- (C7) COMPANY -->
       <?php if (I_CO) { ?>
       <h4 class="text-danger mb-3">COMPANY</h4>
       <div class="bg-light border p-3 mb-3">
@@ -177,7 +178,7 @@ if (I_PUSH && I_OPENSSL) {
       </div>
       <?php } ?>
 
-      <!-- (C3-6) ADMIN USER -->
+      <!-- (C8) ADMIN USER -->
       <?php if (I_USER) { ?>
       <h4 class="text-danger mb-3">ADMIN USER</h4>
       <div class="bg-light border p-3 mb-3">
@@ -204,7 +205,7 @@ if (I_PUSH && I_OPENSSL) {
       </div>
       <?php } ?>
 
-      <!-- (C3-7) JWT -->
+      <!-- (C9) JWT -->
       <h4 class="text-danger mb-3">JSON WEB TOKEN</h4>
       <div class="bg-light border p-3 mb-3">
         <div class="form-floating mb-2">
@@ -224,7 +225,7 @@ if (I_PUSH && I_OPENSSL) {
         </div>
       </div>
 
-      <!-- (C3-8) PUSH NOTIFICATION -->
+      <!-- (C10) PUSH NOTIFICATION -->
       <?php if (I_PUSH) { ?>
       <h4 class="text-danger mb-3">WEB PUSH VAPID KEYS</h4>
       <div class="bg-light border p-3 mb-3">
@@ -245,8 +246,56 @@ if (I_PUSH && I_OPENSSL) {
       </div>
       <?php } ?>
 
-      <!-- (C3-9) GO! -->
+      <!-- (C11) GO! -->
       <input id="gobtn" type="submit" class="btn btn-primary" value="Go!" disabled>
     </form>
+
+    <!-- (C12) DONE -->
+    <!-- @TODO - UPDATE LINKS FOR YOUR PROJECT -->
+    <div id="iCelebrate" class="d-none">
+      <h1 class="my-4">INSTALLATION COMPLETE</h1>
+
+      <h4 class="text-danger mb-3">QUICKSTART</h4>
+      <div class="bg-light border p-3 mb-3">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/T-4FxpHE5xU?si=e6R2Cx_o6JFdOP3F" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+
+      <h4 class="text-danger m-0">A FEW LINKS</h4>
+      <div class="text-secondary mb-3"><small>
+        * These links can be accessed in the "Help/About" section of the admin panel.
+      </small></div>
+      <div class="bg-light border p-3 mb-3"><ul class="list-group">
+        <li class="list-group-item d-flex align-items-center">
+          <a class="btn btn-danger" href="https://code-boxx.com/storage-boxx-php-inventory-system/" target="_blank">
+            <i class="ico-sm icon-home3"></i> Official
+          </a>
+          <div class="ms-2">Official Storage Boxx Page (Documentation &amp; Stuff).</div>
+        </li>
+        <li class="list-group-item d-flex align-items-center">
+          <a class="btn btn-danger" href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/issues/new/choose" target="_blank">
+            <i class="ico-sm icon-bug"></i> Report
+          </a>
+          <div class="ms-2">Report a bug / Feature Request.</div>
+        </li>
+        <li class="list-group-item d-flex align-items-center">
+          <a class="btn btn-danger" href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
+            <i class="ico-sm icon-star-full"></i> Star
+          </a>
+          <div class="ms-2">Just give a star to Storage Boxx on GitHub - It's free.</div>
+        </li>
+        <li class="list-group-item d-flex align-items-center">
+          <a class="btn btn-danger" href="https://github.com/sponsors/code-boxx?frequency=one-time" target="_blank">
+            <i class="ico-sm icon-heart"></i> Donate
+          </a>
+          <div class="ms-2">Buy a malnourished developer some food. Even a small one-time amount helps.</div>
+        </li>
+        <li class="list-group-item d-flex align-items-center">
+          <a class="btn btn-danger" id="iDone">
+            <i class="ico-sm icon-checkmark"></i> Done
+          </a>
+          <div class="ms-2">To the home page.</div>
+        </li>
+      </ul></div>
+    </div>
   </div></body>
 </html>

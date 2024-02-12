@@ -113,17 +113,26 @@ var install = {
       // (E8) VERIFY HTACCESS
       install.ajax(url + "installer/test/", "E2", () => {
         // (E9) PROCEED INSTALLATION
-        install.ajax(url, "F", () => {
-          alert("Installation complete, this page will now reload.");
-          location.href = url;
-        });
+        install.ajax(url, "F", () => install.celebrate(url));
       });
     });
     return false;
+  },
+
+  // (F) INSTALLATION COMPLETE - CELEBRATE!
+  celebrate : url => {
+    document.getElementById("iForm").innerHTML = "";
+    document.getElementById("iDone").href = url;
+    document.getElementById("iCelebrate").classList.remove("d-none");
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
   }
 };
 
-// (F) GENERATE RANDOM JWT KEY + ENABLE INSTALL FORM ON WINDOW LOAD
+// (G) GENERATE RANDOM JWT KEY + ENABLE INSTALL FORM ON WINDOW LOAD
 window.onload = () => {
   install.rnd();
   install.toggle(true);

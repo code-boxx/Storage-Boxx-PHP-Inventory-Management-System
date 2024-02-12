@@ -8,9 +8,7 @@
   <i class="ico-sm icon-question"></i> HOW TO USE
 </h5>
 <div class="bg-white border p-4 mb-4">
-  <a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-use" target="_blank">
-    Quick Tutorial
-  </a>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/T-4FxpHE5xU?si=e6R2Cx_o6JFdOP3F" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
 <h5 class="text-danger mb-0">
@@ -19,17 +17,32 @@
 <div class="text-secondary mb-2"><small>
   * Help keep Storage Boxx alive, even if it is just a little bit.
 </small></div>
-<div class="bg-white border p-4 mb-4">
-  <a class="my-1 btn btn-danger d-flex-inline" href="https://www.paypal.com/paypalme/wstoh/5" target="_blank">
-    <i class="ico-sm icon-mug"></i> Buy me a coffee
-  </a>
-  <a class="my-1 btn btn-danger d-flex-inline" href="https://github.com/sponsors/code-boxx" target="_blank">
-    <i class="ico-sm icon-heart"></i> GitHub Sponsor
-  </a>
-  <a class="my-1 btn btn-danger d-flex-inline" href="https://payhip.com/codeboxx" target="_blank">
-    <i class="ico-sm icon-cart"></i> Code Boxx Store
-  </a>
-</div>
+<div class="bg-white border p-4 mb-4"><ul class="list-group">
+  <li class="list-group-item d-flex align-items-center">
+    <a class="btn btn-danger" href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
+      <i class="ico-sm icon-star-full"></i> Star
+    </a>
+    <div class="ms-2">Just give a star to Storage Boxx on GitHub - It's free.</div>
+  </li>
+  <li class="list-group-item d-flex align-items-center">
+    <a class="btn btn-danger" href="https://www.paypal.com/paypalme/wstoh/5" target="_blank">
+      <i class="ico-sm icon-mug"></i> Coffee
+    </a>
+    <div class="ms-2">Buy me a coffee.</div>
+  </li>
+  <li class="list-group-item d-flex align-items-center">
+    <a class="btn btn-danger" href="https://github.com/sponsors/code-boxx?frequency=one-time" target="_blank">
+      <i class="ico-sm icon-heart"></i> Donate
+    </a>
+    <div class="ms-2">Buy a malnourished developer some food. Even a small one-time amount helps.</div>
+  </li>
+  <li class="list-group-item d-flex align-items-center">
+    <a class="btn btn-danger" href="https://payhip.com/codeboxx" target="_blank">
+      <i class="ico-sm icon-cart"></i> Shop
+    </a>
+    <div class="ms-2">Buy an eBook from the Code Boxx Store.</div>
+  </li>
+</ul></div>
 
 <h5 class="text-danger mb-0">
   <i class="ico-sm icon-power-cord"></i> RECOMMENDED EQUIPMENT
@@ -77,9 +90,6 @@
     </a></li>
     <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev" target="_blank">
       Developer Notes
-    </a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
-      Storage Boxx GitHub
     </a></li>
     <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/issues/new/choose" target="_blank">
       Report a bug / Feature Request

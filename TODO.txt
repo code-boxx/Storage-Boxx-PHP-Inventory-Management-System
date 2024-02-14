@@ -1,6 +1,7 @@
 STORAGE BOXX TO DO / WISH LIST
 ==============================
 
+* Rename to Inventory MANAGEMENT System for SEO.
 * Check Item page update, add more info.
   * Suppliers > Purchase
   * Projected In/Out

@@ -2,6 +2,7 @@ STORAGE BOXX TO DO / WISH LIST
 ==============================
 
 * Rename to Inventory MANAGEMENT System for SEO.
+* Installer > Stop installer if DB exist + cannot update > Prompt user to manual remove or change index.php
 * Check Item page update, add more info.
   * Suppliers > Purchase
   * Projected In/Out

@@ -19,7 +19,7 @@
 </small></div>
 <div class="bg-white border p-4 mb-4"><ul class="list-group">
   <li class="list-group-item d-flex align-items-center">
-    <a class="btn btn-danger" href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System" target="_blank">
+    <a class="btn btn-danger" href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-Management-System" target="_blank">
       <i class="ico-sm icon-star-full"></i> Star
     </a>
     <div class="ms-2">Just give a star to Storage Boxx on GitHub - It's free.</div>
@@ -91,7 +91,7 @@
     <li><a href="https://code-boxx.com/storage-boxx-php-inventory-system/#sec-dev" target="_blank">
       Developer Notes
     </a></li>
-    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-System/issues/new/choose" target="_blank">
+    <li><a href="https://github.com/code-boxx/Storage-Boxx-PHP-Inventory-Management-System/issues/new/choose" target="_blank">
       Report a bug / Feature Request
     </a></li>
   </ul>

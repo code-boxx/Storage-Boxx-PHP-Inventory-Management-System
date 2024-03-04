@@ -32,27 +32,33 @@ class Install extends Core {
   function B () {
     // (B1) PHP VERSION
     if (version_compare(PHP_VERSION, I_MIN_PHP, "<")) {
-      exit("At least PHP ".I_MIN_PHP." is required. You are using ".PHP_VERSION);
+      $this->html("At least PHP ".I_MIN_PHP." is required, you are using ".PHP_VERSION.".");
     }
 
     // (B2) MOD REWRITE
-    if (I_APACHE && !I_REWRITE) { exit("Please enable Apache MOD_REWRITE"); }
+    if (I_APACHE && !I_REWRITE) {
+      $this->html("Please enable Apache MOD_REWRITE.");
+    }
 
     // (B3) MYSQL PDO
-    if (I_PDO===false) { exit("PDO MYSQL extension is not enabled."); }
+    if (I_PDO===false) {
+      $this->html("PDO MYSQL extension is not enabled.");
+    }
 
     // (B4) OPENSSL
-    if (I_PUSH && I_OPENSSL===false) { exit("OPENSSL extension is not enabled."); }
+    if (I_PUSH && I_OPENSSL===false) {
+      $this->html("OPENSSL extension is not enabled.");
+    }
 
     // (B5) FILES & FOLDERS - READ/WRITE PERMISSIONS
     foreach (I_ALL as $p) {
-      if (!file_exists($p)) { exit("$p does not exist!"); }
-      if (!is_readable($p)) { exit("Please give PHP read permission to $p"); }
-      if (!is_writable($p)) { exit("Please give PHP write permission to $p"); }
+      if (!file_exists($p)) { $this->html("$p does not exist!"); }
+      if (!is_readable($p)) { $this->html("Please give PHP read permission to $p"); }
+      if (!is_writable($p)) { $this->html("Please give PHP write permission to $p"); }
     }
     foreach (I_SQL as $p) {
-      if (!file_exists(PATH_LIB . $p)) { exit("$p does not exist!"); }
-      if (!is_readable(PATH_LIB . $p)) { exit("Please give PHP read permission to $p"); }
+      if (!file_exists(PATH_LIB . $p)) { $this->html("$p does not exist!"); }
+      if (!is_readable(PATH_LIB . $p)) { $this->html("Please give PHP read permission to $p"); }
     }
 
     // (B6) ALL GREEN
@@ -63,32 +69,80 @@ class Install extends Core {
   function C () {
     // (C1) TRY TO CONNECT TO DATABASE
     try { $this->Core->load("DB"); }
-    catch (Exception $ex) { return "D"; }
+    catch (Exception $ex) { return "D"; } // fresh installation
 
-    // (C2) IF CONNECT OK - VERSION CHECK
-    $ver = $this->DB->fetchCol(
-      "SELECT `setting_value` FROM `settings` WHERE `setting_name`=?",
-      ["APP_VER"]
-    );
-    $all = count(I_SQL);
+    // (C2) IF CONNECT OK - VERSION CHECK + ATTEMPT TO UPDATE
+    try {
+      // (C2-1) GET DATABASE VERSION
+      $ver = $this->DB->fetchCol(
+        "SELECT `setting_value` FROM `settings` WHERE `setting_name`=?",
+        ["APP_VER"]
+      );
+      $all = count(I_SQL);
 
-    // (C3) AUTO UPDATE
-    if ($ver < $all) { for ($i=$ver; $i < $all; $i++) {
-      $this->DB->query(file_get_contents(PATH_LIB . I_SQL[$i]));
-    }}
-    $this->DB->update(
-      "settings", ["setting_value"], "`setting_name`=?", [$all, "APP_VER"]
-    );
+      // (C2-2) UPDATE DATABASE
+      if ($ver < $all) {
+        for ($i=$ver; $i < $all; $i++) {
+          $this->DB->query(file_get_contents(PATH_LIB . I_SQL[$i]));
+        }
+        $this->DB->update(
+          "settings", ["setting_value"], "`setting_name`=?", [$all, "APP_VER"]
+        );
+      } else { throw new Exception("Unable to update database."); }
+    }
 
-    // (C4) DONE
+    // (C3) ERROR - UPDATE FAILED
+    catch (Exception $ex) {
+      $this->html(
+        "<div class='mb-2'>An existing ".DB_NAME." database has been detected, but failed to update.</div>
+         <form method='post' id='iform'><ul>
+          <li>For a fresh installation, manually delete or rename the database.</li>
+          <li>
+            <input type='hidden' name='phase' value='G'>
+            <input type='hidden' name='reload' value='1'>
+            <strong onclick=\"document.getElementById('iform').submit()\">Click here</strong> to ignore and proceed with the existing database.
+          </li>
+        </ul></form>"
+      );
+    }
+
+    // (C4) UPDATE OK
     define("I_RELOAD", true);
     return "G";
   }
 
   // (PHASE D) INSTALLATION HTML PAGE
   function D () {
-    require PATH_LIB . "CORE-Install-HTML.php";
-    exit();
+    // (D1) URL YOGA
+    $uHOST = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $uIDX = strpos($uHOST, "index.php");
+    if ($uIDX!==false) { $uHOST = substr($uHOST, 0, $uIDX); }
+    $uHOST = rtrim($uHOST, "/") . "/";
+    define("I_HTTPS", isset($_SERVER["HTTPS"]));
+    define("I_HOST", $uHOST);
+    unset($uHOST); unset($uIDX);
+
+    // (D2) PUSH NOTIFICATION VAPID KEYS
+    if (I_PUSH && I_OPENSSL) {
+      require PATH_LIB . "webpush/autoload.php";
+      try {
+        define("I_VAPID", Minishlink\WebPush\VAPID::createVapidKeys());
+      } catch (Exception $e) {
+        $this->html(
+          "Failed to generate VAPID keys, please make sure OpenSSL is enabled and properly configured -
+           https://code-boxx.com/core-boxx-php-framework/#sec-faq"
+        );
+      }
+      if (I_VAPID==null || I_VAPID==false || I_VAPID=="") {
+        $this->html(
+          "Failed to generate VAPID keys, please make sure OpenSSL is enabled and properly configured -
+           https://code-boxx.com/core-boxx-php-framework/#sec-faq"
+        );
+      }
+    }
+
+    // (D3) SHOW INSTALLATION FORM
+    $this->html();
   }
 
   // (PHASE E1) GENERATE HTACCESS FILE
@@ -254,7 +308,34 @@ class Install extends Core {
     EOF);
 
     // (G3) INSTALL COMPLETE!
-    if (defined("I_RELOAD")) { $this->Core->redirect(); }
+    if (defined("I_RELOAD") || isset($_POST["reload"])) { $this->Core->redirect(); }
     exit("OK");
   }
+
+  // (HTML) OUTPUT HTML
+  //  $error : error message
+  function html ($error=null) { ?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Installation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="<?=HOST_ASSETS?>bootstrap.min.css">
+    <link rel="stylesheet" href="<?=HOST_ASSETS?>PAGE-cb.css">
+    <script defer src="<?=HOST_ASSETS?>bootstrap.bundle.min.js"></script>
+    <?php if ($error===null) { ?>
+    <script defer src="<?=HOST_ASSETS?>tsparticles.confetti.bundle.min.js"></script>
+    <?php require PATH_LIB . "CORE-Install-JS.php"; ?>
+    <?php } ?>
+  </head>
+  <body><div class="container p-4">
+    <?php if ($error) { ?>
+    <h1>ERROR</h1>
+    <div class="bg-light border p-3"><?=$error?></div>
+    <?php } else { require PATH_LIB . "CORE-Install-HTML.php"; } ?>
+  </div></body>
+</html>
+  <?php exit(); }
 }

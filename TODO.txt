@@ -1,9 +1,6 @@
 STORAGE BOXX TO DO / WISH LIST
 ==============================
 
-* Rename to Inventory MANAGEMENT System for SEO.
-* Installer > Stop installer if DB exist + cannot update > Prompt user to manual remove or change index.php
-* CORE-Install-HTML.php > Verify Minishlink\WebPush\VAPID::createVapidKeys() > Use try-catch. 
 * Check Item page update, add more info.
   * Suppliers > Purchase
   * Projected In/Out

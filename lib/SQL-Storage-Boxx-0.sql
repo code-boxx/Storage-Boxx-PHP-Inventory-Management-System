@@ -139,7 +139,7 @@ CREATE TABLE `purchases` (
   `p_email` varchar(255) NOT NULL,
   `p_address` varchar(255) NOT NULL,
   `p_notes` text DEFAULT NULL,
-  `p_date` date NOT NULL DEFAULT current_timestamp(),
+  `p_date` datetime NOT NULL DEFAULT current_timestamp(),
   `p_status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -190,7 +190,7 @@ CREATE TABLE `deliveries` (
   `d_email` varchar(255) NOT NULL,
   `d_address` varchar(255) NOT NULL,
   `d_notes` text DEFAULT NULL,
-  `d_date` date NOT NULL DEFAULT current_timestamp(),
+  `d_date` datetime NOT NULL DEFAULT current_timestamp(),
   `d_status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
